@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "notes": "Формулы, новые карточки результатов, остановка в настройках",
+  "version": "1.2.0",
+  "notes": "Запуски, аккаунты и общий доступ команды",
   "date": "2026-10-22",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"

@@ -5,6 +5,7 @@ Planner and tracker for in-line inspection runs (Interscan tools: Geometry EGT, 
 ## Source layout (edit `src/`, never `index.html`)
 - `src/index.template.html`: page markup. Contains `{{STYLE}}`, `{{CORE}}`, `{{APP}}`, `{{VLAD}}` placeholders.
 - `src/style.css`: all CSS.
+- `src/cloud.js`: team cloud adapter (Firebase Auth + Firestore, loaded from CDN; `?mock=uid:Name:role` test mode). Config in `tools/config.json` (siteUrl, teamId, firebase). Rules in `firestore.rules`, setup in `FIREBASE.md`, publishing in `PUBLISH.md`.
 - `src/core.js`: physics (`PSC.calc`, correlations, time <-> position profile).
 - `src/app.js`: UI, diagram drawing, valves, run tracking, menus (one IIFE, ~650 lines).
 - `src/vlad.png`: the "Vlad" tool picture (embedded as base64 by the build).
@@ -34,3 +35,6 @@ Planner and tracker for in-line inspection runs (Interscan tools: Geometry EGT, 
 - Show the preview pane first, a hidden pane throttles animation.
 - `localStorage` keys: `pigSpeedCalc.v2` (state), `.sections.v1`, `.history.v1`, `.run.v1` (a running pig survives reloads).
 - The diagram style (Classic / Glass / Blueprint) is a string substitution on the generated SVG (`themed()` in `app.js`), so new fixed colours in `drawDiagram` need an entry in `SW1`/`SW2`.
+
+- Restart `npm run dev` after changing `tools/build.js` (it is loaded once).
+- `npm run release -- --bump=minor --notes="..."` also fills `docs/` (GitHub Pages); commit and push to publish.

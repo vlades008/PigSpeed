@@ -1,5 +1,12 @@
 {
   "siteUrl": "https://vlades008.github.io/PigSpeed/",
-  "firebase": null,
+  "firebase": {
+    "apiKey": "AIzaSyCY6h3tUaDRJNzLEvkxNzXbiEoMj3VEbWc",
+    "authDomain": "pigspeed-2e2ae.firebaseapp.com",
+    "projectId": "pigspeed-2e2ae",
+    "storageBucket": "pigspeed-2e2ae.firebasestorage.app",
+    "messagingSenderId": "338853079170",
+    "appId": "1:338853079170:web:5c4d2fb71587da4226ec9b"
+  },
   "teamId": "main"
 }
