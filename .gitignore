@@ -8,3 +8,4 @@ android/*
 # old copies
 index.before-redesign.html
 style-previews/
+!docs/downloads/*

@@ -8,6 +8,7 @@
 <style>{{STYLE}}</style>
 </head>
 <body>
+<div class="updbar" id="updBar"><span id="updTxt"></span><a class="add" id="updGo" href="#"><span>Update</span></a><button type="button" class="link" id="updNo">Later</button></div>
 <div class="app">
   <header class="bar">
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
@@ -37,6 +38,7 @@
         <div class="gh">Display</div>
         <label class="pl"><span>Diagram style</span><select id="dstyle"><option value="0">Classic</option><option value="1">Glass</option><option value="2">Blueprint</option></select></label>
         <label class="pl"><span>Text size in diagram</span><input type="range" id="tscale" min="60" max="220" step="5"><b id="tscaleV">100%</b></label>
+        <div class="gver" id="ver"></div>
         <div class="gfoot"><span>Values are saved in this browser.</span><button class="link" id="reset" type="button">Reset to defaults</button></div>
       </div>
     </div>

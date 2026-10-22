@@ -8,6 +8,20 @@ const build = require('./build');
 
 const root = path.join(__dirname, '..');
 const noApk = process.argv.includes('--no-apk');
+const arg = (n) => { const a = process.argv.find(x => x.startsWith('--' + n + '=')); return a ? a.slice(n.length + 3) : null; };
+const bump = process.argv.includes('--bump') ? 'patch' : arg('bump');
+const notes = arg('notes') || '';
+const pkgPath = path.join(root, 'package.json');
+const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+if (bump) {
+  const v = pkg.version.split('.').map(Number);
+  if (bump === 'major') { v[0]++; v[1] = 0; v[2] = 0; } else if (bump === 'minor') { v[1]++; v[2] = 0; } else v[2]++;
+  pkg.version = v.join('.');
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+  const mp = path.join(root, 'apk', 'AndroidManifest.xml');
+  fs.writeFileSync(mp, fs.readFileSync(mp, 'utf8').replace(/android:versionCode="\d+"/, 'android:versionCode="' + (v[0] * 10000 + v[1] * 100 + v[2]) + '"').replace(/android:versionName="[^"]*"/, 'android:versionName="' + pkg.version + '"'));
+  console.log('version ' + pkg.version);
+}
 const t0 = Date.now();
 
 function run(label, cmd, args) {
@@ -28,6 +42,16 @@ run('PigSpeedCalc.exe', 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\cs
   ['/nologo', '/target:winexe', '/win32icon:launcher\\PigSpeedCalc.ico', '/out:PigSpeedCalc.exe', '/resource:index.html,index.html', 'launcher\\PigSpeedCalc.cs']);
 run('android/ web package', process.execPath, ['launcher/make-pwa.js']);
 if (!noApk) run('PigSpeedCalc.apk', 'powershell', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'apk\\build-apk.ps1']);
+
+// publish folder for GitHub Pages (Settings > Pages > main / docs)
+const docs = path.join(root, 'docs');
+fs.mkdirSync(path.join(docs, 'downloads'), { recursive: true });
+for (const f of fs.readdirSync(path.join(root, 'android'))) if (!f.endsWith('.md')) fs.copyFileSync(path.join(root, 'android', f), path.join(docs, f));
+fs.writeFileSync(path.join(docs, '.nojekyll'), '');
+for (const f of ['PigSpeedCalc.exe', 'PigSpeedCalc.apk']) if (fs.existsSync(path.join(root, f))) fs.copyFileSync(path.join(root, f), path.join(docs, 'downloads', f));
+const prev = (() => { try { return JSON.parse(fs.readFileSync(path.join(docs, 'version.json'), 'utf8')); } catch (e) { return {}; } })();
+fs.writeFileSync(path.join(docs, 'version.json'), JSON.stringify({ version: pkg.version, notes: notes || (prev.version === pkg.version ? prev.notes : '') || '', date: new Date().toISOString().slice(0, 10), apk: 'downloads/PigSpeedCalc.apk', exe: 'downloads/PigSpeedCalc.exe' }, null, 2) + '\n');
+console.log('docs/ ... ok (v' + pkg.version + ')');
 
 for (const f of ['index.html', 'PigSpeedCalc.exe', 'PigSpeedCalc.apk']) {
   const p = path.join(root, f);
