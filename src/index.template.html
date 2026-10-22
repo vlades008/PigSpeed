@@ -26,6 +26,7 @@
       <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
       <div class="gpanel" id="gpanel">
         <div class="gh">Run</div>
+        <button type="button" class="add stopb" id="stopBtn" disabled><span>Stop the run</span></button>
         <label class="pl"><span>Playback speed</span><select id="pbSel"><option value="1">×1 (real time)</option><option value="10">×10</option><option value="60">×60</option><option value="600">×600</option></select></label>
         <div class="gtool"><label class="chk"><input type="checkbox" id="alert"><span>Reminders before valves and arrival</span></label>
           <select id="leadSel"><option value="1">1 min</option><option value="2">2 min</option><option value="5">5 min</option><option value="10">10 min</option></select></div>
@@ -124,6 +125,7 @@
   </div>
 </div>
 
+<div class="mdl" id="arrDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>End the run?</h3><p>This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.</p><div class="mbt"><button type="button" class="add" id="arrNo"><span>Cancel</span></button><button type="button" class="add okb2" id="arrYes"><span>Yes, end the run</span></button></div></div></div>
 <div class="toast" id="toast"></div>
 <script id="img">{{VLAD}}</script>
 <script id="core">{{CORE}}</script>

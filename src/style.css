@@ -238,3 +238,13 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 .cat button.wn{border:0;font:inherit;font-size:12px;padding:3px 10px;border-radius:99px;cursor:pointer;background:rgba(245,166,35,.18);color:#a86400}
 .cat .wl{flex-basis:100%;font-size:12px;color:#a86400;display:grid;gap:2px;padding:2px 6px}
 .kpi .hint#rrange{margin-top:2px}
+
+/* stop lives in settings; accepted-at-receiver asks first */
+.runbar .add.okb{align-self:stretch;min-height:52px;font-size:15px;font-weight:600}
+.add.stopb{background:rgba(229,72,77,.14);color:#c0282d;font-weight:600}.add.stopb:disabled{opacity:.45}
+.mdl{display:none;position:fixed;inset:0;z-index:50;background:rgba(10,20,35,.5);align-items:center;justify-content:center;padding:16px}
+.mdl.open{display:flex}
+.mbox{background:var(--card);color:var(--ink);border-radius:14px;padding:18px 18px 14px;max-width:380px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.mbox h3{margin:0 0 8px;font-size:17px}.mbox p{margin:0 0 14px;font-size:14px;line-height:1.45;color:var(--muted)}
+.mbt{display:flex;gap:8px;justify-content:flex-end}
+.add.okb2{background:#2e9e5b;color:#fff;font-weight:600}
