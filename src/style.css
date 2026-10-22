@@ -166,14 +166,18 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 .kic.ic-flow{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%209c3%200%203%202%206%202s3-2%206-2%203%202%206%202M3%2015c3%200%203%202%206%202s3-2%206-2%203%202%206%202%22%2F%3E%3C%2Fsvg%3E")}
 
 /* global view: stops on the line + departure board */
-#dg .vg .b{fill:#5d6674}#dg .vg.passed .b,#dg .brow.passed .b{fill:#1D9E75}#dg .vg.next .b,#dg .brow.next .b{fill:#378ADD}
+#dg .vg .b{fill:#5d6674}#dg .vg.passed .b{fill:#1D9E75}#dg .vg.next .b{fill:#378ADD}
 #dg .bn{fill:#fff;font:600 13px system-ui,sans-serif;pointer-events:none}
 #dg .vg .ring{opacity:0}#dg .vg.next .ring{opacity:1}#dg .vg.passed .ring{opacity:0}
 #dg .vcd{fill:#378ADD}#dg.st2 .vcd{fill:#7fe8ff}
-#dg .bdpanel{fill:var(--soft)}#dg.st1 .bdpanel{fill:#fff;fill-opacity:.65}#dg.st2 .bdpanel{fill:#0c2a45;fill-opacity:.75}
-#dg .bpill{fill:transparent}#dg .brow.next .bpill{fill:#378ADD;fill-opacity:.2}
-#dg .brow.passed text.t{fill:#1b7f46}#dg.st2 .brow.passed text.t{fill:#5ff29a}
-#dg .brow.next .bm{font-weight:700}
-#dg .bt{font-size:calc(14px*(1 + (var(--ts,1) - 1)*0.4))}
 #clkd{color:var(--ink);font-weight:600;font-size:13px}
 #dg .pigd{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-opacity:.85;stroke-linejoin:round}#dg.st2 .pigd{stroke:#071524}
+
+/* valve list inside the diagram card */
+.vsec{margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+.vt th:nth-child(4),.vt td:nth-child(4){display:none}
+.vbd{width:30px;padding-right:4px!important}
+.vb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#5d6674;color:#fff;font-size:12px;font-weight:600}
+.vt tr.passed .vb{background:#1D9E75}.vt tr.next .vb{background:#378ADD}
+.vt tr.next .vrem{background:rgba(55,138,221,.18);border-radius:12px;padding:2px 8px;font-weight:600}
+.vt input.bad{border-color:var(--bad);background:var(--badbg)}

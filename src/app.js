@@ -48,7 +48,8 @@
     var box=$('vlist');box.innerHTML='';
     S.valves.forEach(function(p,i){
       var d=document.createElement('tr');
-      d.innerHTML='<td><input class="vname" autocomplete="off"></td><td><input inputmode="decimal" autocomplete="off"><span class="vu"></span></td><td><b class="veta">–</b></td><td class="varr">–</td><td class="vrem">–</td><td><button type="button" class="vlog">✓</button></td><td><button type="button" class="x" aria-label="Remove">×</button></td>';
+      d.innerHTML='<td class="vbd"><span class="vb"></span></td><td><input class="vname" autocomplete="off"></td><td><input inputmode="decimal" autocomplete="off"><span class="vu"></span></td><td><b class="veta">–</b></td><td class="varr">–</td><td class="vrem">–</td><td><button type="button" class="vlog">✓</button></td><td><button type="button" class="x" aria-label="Remove">×</button></td>';
+      d.querySelector('.vb').textContent=i+1;
       var nm=d.querySelector('.vname');nm.value=S.vnames[i]||'';nm.placeholder=tr('Valve')+' '+(i+1);
       nm.addEventListener('input',function(){var v=this.value;keepRun(function(){S.vnames[i]=v;save();update()})});
       var lg=d.querySelector('.vlog');lg.title=tr('Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.');
@@ -133,19 +134,14 @@
       if(ta)ta.textContent=ok?' · '+arr:'';
       if(tb)tb.textContent=ok?(passed?' · ✓':' · '+tr('left')+' '+fmtRem(rem)):'';
     });
-    if(!g.local){                                                    // global view: next stop and the departure board
-      var nextI='end',nextTf=2;
-      g.valves.forEach(function(v){if(v.ok&&!(obs[v.i]||p>=v.tf)&&v.tf<nextTf){nextTf=v.tf;nextI=v.i}});
-      g.valves.forEach(function(v){
-        var okv=v.ok,lg=okv&&obs[v.i],pass=okv&&(lg||p>=v.tf),isNext=(v.i===nextI);
-        var br=svg.querySelector('.brow[data-i="'+v.i+'"]'),vg=svg.querySelector('.vg[data-v="'+v.i+'"]'),cd=svg.querySelector('.vcd[data-i="'+v.i+'"]');
-        if(br){br.querySelector('.ba').textContent=okv?fmtClock(lg?obs[v.i]:base+v.tf*T)+(lg?' ✓':''):'–';br.querySelector('.bm').textContent=pass?'✓':fmtRem(v.tf*T-p*T);br.classList.toggle('passed',pass);br.classList.toggle('next',isNext)}
-        if(vg)vg.classList.toggle('next',isNext);
-        if(cd)cd.textContent=(isNext&&!pass)?fmtRem(v.tf*T-p*T):'';
-      });
-      var be=svg.querySelector('.brow[data-i="end"]');
-      if(be){be.querySelector('.ba').textContent=fmtClock(base+T);be.querySelector('.bm').textContent=p>=1?'✓':fmtRem(T-p*T);be.classList.toggle('passed',p>=1);be.classList.toggle('next',nextI==='end')}
-    }
+    var nextI='end',nextTf=2;                                         // next stop: ring on the line, highlighted row in the list
+    g.valves.forEach(function(v){if(v.ok&&!(obs[v.i]||p>=v.tf)&&v.tf<nextTf){nextTf=v.tf;nextI=v.i}});
+    g.valves.forEach(function(v){
+      var pass=v.ok&&(obs[v.i]||p>=v.tf),isNext=(v.i===nextI),vg=svg.querySelector('.vg[data-v="'+v.i+'"]'),cd=svg.querySelector('.vcd[data-i="'+v.i+'"]'),row=rows[v.i];
+      if(vg)vg.classList.toggle('next',isNext);
+      if(cd)cd.textContent=(isNext&&!pass)?fmtRem(v.tf*T-p*T):'';
+      if(row){row.classList.toggle('passed',!!pass);row.classList.toggle('next',isNext)}
+    });
     var end=$('clk2');
     if(end)end.textContent=(run?'':tr('If launched now')+': ')+tr('Arrival at receiver')+' '+fmtClock(base+T)+' · '+tr('left')+' '+fmtRem(T-p*T);
     if(run&&!run.done&&anim)$('clk').textContent=tr('Launched')+' '+fmtClock(run.launch).split(' ')[0]+' · '+PSC.fmtDur(p*T/3.6e6)+' / '+PSC.fmtDur(T/3.6e6);
@@ -359,7 +355,7 @@
    'm/s':'м/с','mph':'миль/ч','km/h':'км/ч','°R (Rankine)':'°R (Ранкин)','Km³/day':'тыс. м³/сут','MMSCF/day':'млн фут³/сут','MMSCM/day':'млн м³/сут','Km³/h':'тыс. м³/ч','MMSCF/h':'млн фут³/ч','MMSCM/h':'млн м³/ч',
    'm³/day':'м³/сут','BBL/day':'барр/сут','m³/h':'м³/ч','BBL/h':'барр/ч','SCF/BBL':'фут³/барр','Gas flow rate':'Расход газа','Oil flow rate':'Расход нефти','Oil flow rate (gas follows from GOR)':'Расход нефти (газ — по GOR)',
    'Enter a number':'Введите число','Must be greater than zero':'Должно быть больше нуля','Wrong Outer Diameter or Wall Thickness':'Неверный наружный диаметр или толщина стенки',
-   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the catalogue minimum':'Скорость ниже минимума каталога','Speed above the catalogue maximum':'Скорость выше максимума каталога','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the catalogue range':'Давление вне диапазона каталога','Gas pressure below the catalogue minimum':'Давление газа ниже минимума каталога','Temperature outside the catalogue range':'Температура вне диапазона каталога','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within the limits of the tool catalogue':'В пределах ограничений каталога снарядов','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
+   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the catalogue minimum':'Скорость ниже минимума каталога','Speed above the catalogue maximum':'Скорость выше максимума каталога','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the catalogue range':'Давление вне диапазона каталога','Gas pressure below the catalogue minimum':'Давление газа ниже минимума каталога','Temperature outside the catalogue range':'Температура вне диапазона каталога','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within the limits of the tool catalogue':'В пределах ограничений каталога снарядов','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
   function tr(s){return S.lang==='ru'&&RU[s]||s}
   function applyLang(){
     document.documentElement.lang=S.lang;
@@ -386,7 +382,7 @@
     var pa=px0+LB+RD, pb=px1-LB-RD;
     svg.dataset.x0=x0;svg.dataset.x1=x1;
     svg.style.setProperty('--ts',(+S.tscale||100)/100);
-    var DW=px1+30,VWd=gl?DW:Math.min(DW,1000),DH=Math.round(gl?(cy+58*tsf+30*(1+(tsf-1)*0.4)*(nV+2)+20):(335+ro+(tsf-1)*40));if(dgDim!==DW+'x'+DH+'x'+VWd){dgDim=DW+'x'+DH+'x'+VWd;if(window.dgBase)window.dgBase(DW,DH,VWd)}
+    var DW=px1+30,VWd=gl?DW:Math.min(DW,1000),DH=Math.round(gl?(cy+54*tsf+16):(335+ro+(tsf-1)*40));if(dgDim!==DW+'x'+DH+'x'+VWd){dgDim=DW+'x'+DH+'x'+VWd;if(window.dgBase)window.dgBase(DW,DH,VWd)}
     var col=f===0?'#8ec5ff':f===1?'#c98a2b':null;
     o.push('<rect x="'+pa+'" y="'+top+'" width="'+(pb-pa)+'" height="'+H+'" fill="#8b95a3"/>');
     if(f===2)o.push('<rect x="'+pa+'" y="'+(top+wpx)+'" width="'+(pb-pa)+'" height="'+ih/2+'" fill="#8ec5ff"/><rect x="'+pa+'" y="'+cy+'" width="'+(pb-pa)+'" height="'+ih/2+'" fill="#c98a2b"/>');
@@ -467,33 +463,14 @@
     }
     if(gl){
       var lenTxt=(isFinite(vals.len)?+vals.len.toFixed(2):'?')+' '+tr(['km','m'][+S.lenu]);
+      o.push('<g id="ghost" style="display:none;pointer-events:none"><circle r="12" fill="none" stroke="#378ADD" stroke-width="1.5" stroke-dasharray="3 3"/><text y="6" text-anchor="middle" font-size="18" fill="#378ADD">+</text><text class="t tl ghl" y="'+(34*tsf)+'" text-anchor="middle" style="fill:#378ADD"></text></g>');
       o.push('<text class="t tm bt" x="'+x0+'" y="'+(cy-46*tsf)+'">'+tr('Launch')+'</text><text class="t tm bt" x="'+x1+'" y="'+(cy-46*tsf)+'" text-anchor="end">'+tr('Receiver')+'</text>');
       o.push('<text class="t tm bt" x="'+x0+'" y="'+(cy+34*tsf)+'" text-anchor="middle">0</text><text class="t tm bt" x="'+x1+'" y="'+(cy+34*tsf)+'" text-anchor="middle">'+lenTxt+'</text>');
-      var rowsB=(vals.valves||[]).map(function(v,i){return {v:v,i:i}}).filter(function(e){return e.v.ok}).sort(function(a,b){return a.v.frac-b.v.frac});
-      var bx=px0,bw=px1-px0,by=cy+58*tsf,tb=1+(tsf-1)*0.4,rh=30*tb,cD=bx+bw*0.42,cA=bx+bw*0.68,cR=bx+bw-16;
-      o.push('<rect class="bdpanel" x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+(rh*(rowsB.length+2)+6)+'" rx="12"/>');
-      o.push('<text class="t tm bt" x="'+(bx+16)+'" y="'+(by+rh*0.7)+'">'+tr('Valve')+'</text><text class="t tm bt" x="'+cD+'" y="'+(by+rh*0.7)+'" text-anchor="end">'+tr('Distance')+'</text><text class="t tm bt" x="'+cA+'" y="'+(by+rh*0.7)+'" text-anchor="end">'+tr('Arrival')+'</text><text class="t tm bt" x="'+cR+'" y="'+(by+rh*0.7)+'" text-anchor="end">'+tr('Remaining')+'</text>');
-      o.push('<path class="dl" d="M'+(bx+12)+' '+(by+rh*0.95)+'H'+(bx+bw-12)+'"/>');
-      var brow=function(key,k,label,dist,badge){
-        var y=by+rh*(k+1)+rh*0.8;
-        return '<g class="brow" data-i="'+key+'">'+badge
-          +'<text class="t tl bt" x="'+(bx+50)+'" y="'+y+'">'+label+'</text>'
-          +'<text class="t bt" x="'+cD+'" y="'+y+'" text-anchor="end">'+dist+'</text>'
-          +'<text class="t ba bt" x="'+cA+'" y="'+y+'" text-anchor="end"></text>'
-          +'<rect class="bpill" x="'+(cR-92)+'" y="'+(y-rh*0.6)+'" width="100" height="'+(rh*0.78)+'" rx="'+(rh*0.39)+'"/>'
-          +'<text class="t bm bt" x="'+cR+'" y="'+y+'" text-anchor="end"></text></g>';
-      };
-      rowsB.forEach(function(e,k){
-        var by2=by+rh*(k+1)+rh*0.8;
-        o.push(brow(e.i,k,esc(vName(e.i)),(+(e.v.frac*vals.len).toFixed(2))+' '+tr(['km','m'][+S.lenu]),'<circle class="b" cx="'+(bx+28)+'" cy="'+(by2-5)+'" r="10"/><text class="bn" x="'+(bx+28)+'" y="'+(by2-1)+'" text-anchor="middle">'+(e.i+1)+'</text>'));
-      });
-      var ke=rowsB.length,ye=by+rh*(ke+1)+rh*0.8;
-      o.push(brow('end',ke,tr('Receiver'),lenTxt,'<rect class="b" x="'+(bx+19)+'" y="'+(ye-14)+'" width="18" height="18" rx="4"/>'));
     }
     var outS=o.join('');if(ds){outS=themeBg(ds,DW,DH,pa,pb,cy,HB,gl)+themed(outS,ds)}
     svg.classList.remove('st1','st2');if(ds)svg.classList.add('st'+ds);
     svg.innerHTML=outS;
-    window.__p=0;window.__xf=0;window.__dg={DW:DW,local:!gl,x0:x0,x1:x1,tw:tw,hours:(r&&r.hours>0)?r.hours:null,prof:(r&&r.prof)||null,vavg:(r&&r.v>0)?r.v/3.6:0,od:vals.od,valves:(vals.valves||[]).map(function(v,i){return {i:i,frac:v.frac,tf:v.tf,ok:v.ok}})};
+    window.__p=0;window.__xf=0;window.__dg={cy:cy,DW:DW,local:!gl,x0:x0,x1:x1,tw:tw,hours:(r&&r.hours>0)?r.hours:null,prof:(r&&r.prof)||null,vavg:(r&&r.v>0)?r.v/3.6:0,od:vals.od,valves:(vals.valves||[]).map(function(v,i){return {i:i,frac:v.frac,tf:v.tf,ok:v.ok}})};
     $('clk').textContent='000:00:00 / '+(window.__dg.hours?PSC.fmtDur(window.__dg.hours):'–');
     $('clkd').textContent='';
     $('startBtn').disabled=!window.__dg.hours;
@@ -510,6 +487,7 @@
       else{o.ok=true;o.frac=pos/len;o.tf=PSC.tAt(r&&r.prof,o.frac);if(r&&r.hours!==null)o.eta=PSC.fmtDur(r.hours*o.tf)}
       var el=rows[i]&&rows[i].querySelector('.veta');
       if(el){el.textContent=o.ok?(o.eta||'–'):o.msg;el.classList.toggle('bad',!o.ok&&o.msg!=='–'&&p!=='')}
+      var pin=rows[i]&&rows[i].querySelector('input:not(.vname)');if(pin){var badv=!o.ok&&o.msg!=='–'&&p!=='';pin.classList.toggle('bad',badv);pin.title=badv?o.msg:''}
       return o;
     });
   }
@@ -669,15 +647,33 @@
       var len=num('len');if(!(len>0))return;
       var x0=+svg.dataset.x0,x1=+svg.dataset.x1,fr=Math.max(0,Math.min(1,(pt(e).x-x0)/(x1-x0)));
       S.valves[vd]=String(+(fr*len).toFixed(3));
-      var row=$('vlist').children[vd];if(row)row.querySelector('input').value=S.valves[vd];
+      var row=$('vlist').children[vd];if(row)row.querySelector('input:not(.vname)').value=S.valves[vd];
       update();
     }
     svg.addEventListener('pointerdown',function(e){
       var g=e.target.closest&&e.target.closest('.vg');
       if(g&&!anim){vd=+g.dataset.v;window.__vdrag=vd;svg.setPointerCapture(e.pointerId);e.preventDefault();return}
+      if(!g&&ghostOn){addAt(ghostFrac);ghostOn=false;e.preventDefault();return}
       if(!g&&BW>VW+1){pd={x:e.clientX,vx:VB.x};window.__userPan=true;svg.setPointerCapture(e.pointerId);svg.classList.add('drag')}
     });
+    var ghostOn=false,ghostFrac=0;
+    function addAt(fr){
+      var len=num('len');if(!(len>0))return;
+      S.valves.push(String(+(fr*len).toFixed(2)));S.vt.push(1);S.vnames.push('');save();renderValves();update();sortValves();
+    }
+    function ghostUpdate(e){
+      var gh=svg.querySelector('#ghost'),dg=window.__dg;
+      if(!gh||!dg||dg.local||anim||vd!==null||pd||(e.target.closest&&e.target.closest('.vg'))){ghostOn=false;if(gh)gh.style.display='none';svg.style.cursor='';return}
+      var r=svg.getBoundingClientRect(),x=pt(e).x,y=(e.clientY-r.top)/r.height*BH,len=num('len');
+      var near=Math.abs(y-dg.cy)<44&&x>=dg.x0-6&&x<=dg.x1+6&&len>0;
+      if(!near){ghostOn=false;gh.style.display='none';svg.style.cursor='';return}
+      ghostFrac=Math.max(0,Math.min(1,(x-dg.x0)/(dg.x1-dg.x0)));ghostOn=true;
+      gh.setAttribute('transform','translate('+(dg.x0+ghostFrac*(dg.x1-dg.x0))+' '+dg.cy+')');gh.style.display='';
+      gh.querySelector('.ghl').textContent=fmt(ghostFrac*len,2)+' '+tr(['km','m'][+S.lenu])+' · '+tr('click to add');svg.style.cursor='copy';
+    }
+    svg.addEventListener('pointerleave',function(){ghostOn=false;var gh=svg.querySelector('#ghost');if(gh)gh.style.display='none';svg.style.cursor=''});
     svg.addEventListener('pointermove',function(e){
+      ghostUpdate(e);
       if(vd!==null){vmove(e);return}
       if(pd){var r=svg.getBoundingClientRect();VB.x=pd.vx-(e.clientX-pd.x)/r.width*VW;apply()}
     });
