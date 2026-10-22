@@ -1,0 +1,10 @@
+# built binaries and generated output (rebuilt by `npm run release`)
+*.exe
+*.apk
+*.idsig
+*.tmp
+android/*
+!android/INSTALL-ANDROID.md
+# old copies
+index.before-redesign.html
+style-previews/

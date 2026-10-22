@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pig Speed Calculator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20130%20130'%3E%3Crect%20width%3D'130'%20height%3D'130'%20rx%3D'28'%20fill%3D'%2317304f'%2F%3E%3Crect%20x%3D'12'%20y%3D'42'%20width%3D'106'%20height%3D'46'%20fill%3D'%238cbcff'%20stroke%3D'%23e8f1ff'%20stroke-width%3D'4'%2F%3E%3Crect%20x%3D'40'%20y%3D'55'%20width%3D'44'%20height%3D'20'%20rx%3D'9'%20fill%3D'%2317304f'%2F%3E%3Crect%20x%3D'31'%20y%3D'47'%20width%3D'7'%20height%3D'36'%20rx%3D'3'%20fill%3D'%232a66d8'%2F%3E%3Crect%20x%3D'86'%20y%3D'47'%20width%3D'7'%20height%3D'36'%20rx%3D'3'%20fill%3D'%232a66d8'%2F%3E%3Cpath%20d%3D'M93%2056L110%2065L93%2074Z'%20fill%3D'%23e8f1ff'%2F%3E%3Ccircle%20cx%3D'62'%20cy%3D'65'%20r%3D'3'%20fill%3D'%236ee7a8'%2F%3E%3C%2Fsvg%3E">
+<style>{{STYLE}}</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
+    <button type="button" id="saveBtn" class="gbtn nocaret" title="Save"><span>Save</span></button>
+    <div class="sec">
+      <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Pipe sections</span></button>
+      <div class="gpanel wide" id="secPanel">
+        <div class="srow"><button type="button" class="add" id="secSave">Save current</button><span class="hint" id="secMsg"></span></div>
+        <div id="secList"></div>
+        <div class="gh">History of runs</div>
+        <div id="histList"></div>
+        <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
+      </div>
+    </div>
+    <div class="gear">
+      <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
+      <div class="gpanel" id="gpanel">
+        <div class="gh">Run</div>
+        <label class="pl"><span>Playback speed</span><select id="pbSel"><option value="1">×1 (real time)</option><option value="10">×10</option><option value="60">×60</option><option value="600">×600</option></select></label>
+        <div class="gtool"><label class="chk"><input type="checkbox" id="alert"><span>Reminders before valves and arrival</span></label>
+          <select id="leadSel"><option value="1">1 min</option><option value="2">2 min</option><option value="5">5 min</option><option value="10">10 min</option></select></div>
+        <div class="gh">Calculation</div>
+        <label class="chk"><input type="checkbox" id="atm"><span>Pressure is gauge (add atmosphere)</span></label>
+        <label class="pl"><span>Standard conditions</span><select id="std"><option value="0">60 °F, 14.696 psia</option><option value="1">15 °C, 101.325 kPa</option><option value="2">20 °C, 101.325 kPa</option></select></label>
+        <label class="pl" data-ti="Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip."><span>Pig speed / flow speed, %</span><input id="slip" inputmode="decimal" autocomplete="off"></label>
+        <div class="gh">Display</div>
+        <label class="pl"><span>Diagram style</span><select id="dstyle"><option value="0">Classic</option><option value="1">Glass</option><option value="2">Blueprint</option></select></label>
+        <label class="pl"><span>Text size in diagram</span><input type="range" id="tscale" min="60" max="220" step="5"><b id="tscaleV">100%</b></label>
+        <div class="gfoot"><span>Values are saved in this browser.</span><button class="link" id="reset" type="button">Reset to defaults</button></div>
+      </div>
+    </div>
+    <div class="seg lang" id="lang"><button type="button" data-v="en">EN</button><button type="button" data-v="ru">RU</button></div>
+  </header>
+  <div class="phead" id="phead"></div>
+
+  <div class="layout">
+    <section class="card inp">
+      <div class="seg" id="fluid"><button type="button" data-v="0">Gas</button><button type="button" data-v="1">Oil</button><button type="button" data-v="2">Mix (oil + gas)</button></div>
+      <div class="gt">Pipe</div>
+      <div class="fg">
+        <div class="field full"><label for="name">Line name</label><input id="name" autocomplete="off"></div>
+        <div class="field full" data-f="od"><label for="od">Outside diameter</label><select id="od" style="width:100%"></select><div class="msg"></div></div>
+        <div class="field" data-f="wt"><label for="wt">Wall thickness</label><div class="row"><input id="wt" inputmode="decimal" autocomplete="off"><select id="wtu"><option>mm</option><option>inch</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="len"><label for="len">Line length</label><div class="row"><input id="len" inputmode="decimal" autocomplete="off"><select id="lenu"><option>km</option><option>m</option></select></div><div class="msg"></div></div>
+      </div>
+      <div class="gt">Conditions</div>
+      <div class="fg">
+        <div class="field" data-f="p" id="pF"><label for="p" id="pL" data-ti="Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.">Pressure (absolute)</label><div class="row"><input id="p" inputmode="decimal" autocomplete="off"><select id="pu"><option>kPa</option><option>MPa</option><option>psi</option><option>bar</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="pout" id="poutF"><label for="pout" data-ti="Pressure at the receiver end. Leave empty if the pressure does not change along the line.">Outlet pressure</label><div class="row"><input id="pout" inputmode="decimal" autocomplete="off"><span class="unitnote" id="poutU"></span></div><div class="msg"></div></div>
+        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu"><option value="0">°C</option><option value="1">°R (Rankine)</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="sg" id="sgF"><label for="sg" data-ti="Gas density relative to air, usually 0.55–0.75.">Gas specific gravity (air = 1)</label><div class="row"><input id="sg" inputmode="decimal" autocomplete="off"></div><div class="msg"></div></div>
+        <div class="field" data-f="api" id="apiF"><label for="api" data-ti="Oil API gravity: about 35 is a medium oil, a higher number is lighter.">Oil gravity</label><div class="row"><input id="api" inputmode="decimal" autocomplete="off"><select disabled><option>°API</option></select></div><div class="msg"></div></div>
+        <div class="field full" data-f="gor" id="gF"><label for="gor" data-ti="Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.">Gas-oil ratio (GOR), per stock-tank bbl</label><div class="row"><input id="gor" inputmode="decimal" autocomplete="off"><select disabled><option>SCF/BBL</option></select></div><div class="msg"></div></div>
+      </div>
+      <div class="gt">Flow</div>
+      <div class="fg">
+        <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
+      </div>
+    </section>
+
+    <main class="main">
+      <div class="warn" id="warn"></div>
+      <div class="kpis">
+        <div class="kpi main"><div class="k"><span class="kic ic-vel">Pig speed</span><select id="velu" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="v" id="vel">–</div></div>
+        <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">HHH:MM:SS</div></div>
+        <div class="kpi tgt">
+          <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
+          <div class="v" id="rflow">–</div>
+          <div class="tin field" data-f="rv"><label for="rv" data-ti="The speed you want the pig to have. The app shows the flow that gives it.">Target pig speed</label><div class="row"><input id="rv" inputmode="decimal" autocomplete="off"><select id="rvu"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="msg"></div></div>
+        </div>
+      </div>
+      <div class="info"><div class="cat" id="cat"></div><span class="hint" id="rrange"></span><span class="hint" id="note"></span></div>
+
+      <section class="card diag">
+        <div class="dhead">
+          <div class="seg sm" id="viewSeg"><button type="button" data-v="0">Local</button><button type="button" data-v="1">Global</button></div>
+          <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
+        </div>
+        <svg id="dg" viewBox="0 0 900 235" role="img" aria-label="Pipeline diagram"></svg>
+        <svg id="mm" viewBox="0 0 1000 44" preserveAspectRatio="none" role="img" aria-label="Whole pipeline overview"></svg>
+        <div class="runbar">
+          <button type="button" class="add start" id="startBtn"><span id="startL">Start</span></button>
+          <button type="button" class="add okb" id="arrBtn"><span>✓ Accepted at receiver</span></button>
+          <div class="clks"><div class="clk" id="clk">000:00:00 / –</div><div class="clk" id="clk2"></div><div class="clk loginfo" id="logInfo"></div></div>
+        </div>
+      </section>
+
+      <section class="card valves">
+        <div class="vhead">
+          <h2>Valves</h2>
+          <div class="vbtns">
+            <button type="button" class="add" id="vadd">+ Add valve</button>
+            <div class="rep"><button type="button" class="add" id="repBtn"><span>Report</span></button><div class="gpanel" id="repPanel"><button type="button" class="add" id="repPrint"><span>Print / PDF</span></button><button type="button" class="add" id="repCsv"><span>Download CSV</span></button></div></div>
+          </div>
+        </div>
+        <div class="tw"><table class="vt">
+          <thead><tr><th>Valve</th><th>Position</th><th>Time to reach</th><th>Arrival</th><th>Remaining</th><th></th><th></th></tr></thead>
+          <tbody id="vlist"></tbody>
+        </table></div>
+        <div class="warn" id="runWarn">Run already started. The new valve distance is applied to the current run.</div>
+        <div class="hint" id="vempty">No valves yet. Press "+ Add valve" to add one.</div>
+        <div class="logpop" id="logPop">
+          <div class="lt" id="logTitle"></div>
+          <label class="lr" id="logLaunchRow"><span>Launch time</span><input id="logLaunch" inputmode="numeric" autocomplete="off" placeholder="HH:MM:SS"></label>
+          <label class="lr"><span>Passed at</span><input id="logAt" inputmode="numeric" autocomplete="off" placeholder="HH:MM:SS"></label>
+          <div class="lerr" id="logErr"></div>
+          <div class="lb2"><button type="button" class="add" id="logOk"><span>Apply</span></button><button type="button" class="add" id="logCancel">×</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script id="img">{{VLAD}}</script>
+<script id="core">{{CORE}}</script>
+
+<script>{{APP}}</script>
+</body>
+</html>

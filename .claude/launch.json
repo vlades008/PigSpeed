@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "pigspeed", "runtimeExecutable": "node", "runtimeArgs": ["tools/dev.js"], "port": 8790 }
+  ]
+}
