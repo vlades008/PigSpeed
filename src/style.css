@@ -303,3 +303,6 @@ body.ro .robar{display:flex}
 .idea{border-top:1px solid var(--line);padding:8px 0}.idea .ihead{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.idea .itxt{margin:4px 0;white-space:pre-wrap;font-size:14px}
 .idea .ithumb{max-width:100%;max-height:150px;border-radius:8px;border:1px solid var(--line);cursor:zoom-in;display:block;margin:4px 0}.idea .irow{display:flex;gap:8px;align-items:center}
 #lightbox{z-index:60;cursor:zoom-out}#lightbox img{max-width:96vw;max-height:92vh;border-radius:8px;background:#fff}
+
+.fabn{display:none;position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;border-radius:10px;padding:0 5px;box-sizing:border-box;background:#e5484d;color:#fff;font:700 12px/20px system-ui,sans-serif;font-style:normal;text-align:center}
+#ideaInbox{max-height:70vh;overflow:auto}

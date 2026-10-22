@@ -139,10 +139,11 @@
   <div id="authStat" style="display:none"><p id="authMsg"></p><div class="mbt" id="authBtns"></div></div>
   <div class="mbt"><span class="grow"></span><button type="button" class="link" id="authX">Close</button></div>
 </div></div>
-<button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡</button>
+<button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡<i class="fabn" id="fabN"></i></button>
 <div class="mdl" id="ideaDlg" role="dialog" aria-modal="true"><div class="mbox wide">
-  <h3>Your idea</h3>
+  <h3 id="ideaT">Your idea</h3>
   <div id="ideaNeed" style="display:none"><p>Sign in to send ideas.</p><div class="mbt"><span class="grow"></span><button type="button" class="link" id="ideaX2">Close</button><button type="button" class="add okb2" id="ideaIn"><span>Sign in</span></button></div></div>
+  <div id="ideaInbox" style="display:none"></div>
   <div id="ideaForm">
     <div class="atabs" id="ideaType"><button type="button" data-t="idea" class="on">Idea</button><button type="button" data-t="bug">Bug</button><button type="button" data-t="question">Question</button></div>
     <textarea id="ideaText" rows="5" placeholder="What would make the app better?"></textarea>
