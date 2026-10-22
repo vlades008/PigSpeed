@@ -92,6 +92,14 @@ window.Cloud = (function () {
     saveRun: function (r) { var o = JSON.parse(JSON.stringify(r)); delete o.team; return T().collection('runs').doc(r.id).set(o); },
     deleteRun: function (id) { return T().collection('runs').doc(id).delete(); },
 
+    sendIdea: function (o) { return T().collection('ideas').add(o); },
+    watchIdeas: function (admin, uid, fn) {
+      var q = T().collection('ideas'); if (!admin) q = q.where('uid', '==', uid);
+      return q.onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.id = d.id; a.push(m); }); a.sort(function (x, y) { return y.at - x.at; }); fn(a); }, function () {});
+    },
+    setIdeaStatus: function (id, st) { return T().collection('ideas').doc(id).update({ status: st }); },
+    delIdea: function (id) { return T().collection('ideas').doc(id).delete(); },
+
     watchMembers: function (fn) {
       return T().collection('members').onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.uid = d.id; a.push(m); }); fn(a); }, function () {});
     },
@@ -110,11 +118,11 @@ window.Cloud = (function () {
 function mockCloud(spec) {
   var p = spec.split(':'), uid = p[0], name = p[1] || uid, role = p[2] || 'engineer', K = 'psc.mock.v1', fns = [];
   var user = { uid: uid, name: name, email: uid + '@mock.test', verified: true };
-  function load() { try { return JSON.parse(localStorage.getItem(K)) || { runs: {}, members: {}, invites: {} }; } catch (e) { return { runs: {}, members: {}, invites: {} }; } }
+  function load() { var d = null; try { d = JSON.parse(localStorage.getItem(K)); } catch (e) {} d = d || {}; d.runs = d.runs || {}; d.members = d.members || {}; d.invites = d.invites || {}; d.ideas = d.ideas || {}; return d; }
   function put(d) { localStorage.setItem(K, JSON.stringify(d)); fire(); }
   function fire() { fns.slice().forEach(function (f) { f(); }); }
   window.addEventListener('storage', function (e) { if (e.key === K) fire(); });
-  function watch(kind, fn) { var f = function () { var d = load()[kind]; fn(Object.keys(d).map(function (k) { var o = JSON.parse(JSON.stringify(d[k])); if (kind === 'runs') o.team = true; if (kind === 'members') o.uid = k; if (kind === 'invites') o.email = k; return o; }), []); }; fns.push(f); setTimeout(f, 0); return function () { fns = fns.filter(function (x) { return x !== f; }); }; }
+  function watch(kind, fn) { var f = function () { var d = load()[kind]; fn(Object.keys(d).map(function (k) { var o = JSON.parse(JSON.stringify(d[k])); if (kind === 'runs') o.team = true; if (kind === 'members') o.uid = k; if (kind === 'invites') o.email = k; if (kind === 'ideas') o.id = k; return o; }), []); }; fns.push(f); setTimeout(f, 0); return function () { fns = fns.filter(function (x) { return x !== f; }); }; }
   var cb = function () {}, st = { status: 'member', user: user, role: role };
   return {
     available: function () { return true; },
@@ -126,6 +134,10 @@ function mockCloud(spec) {
     watchRuns: function (fn) { return watch('runs', fn); },
     saveRun: function (r) { var d = load(), o = JSON.parse(JSON.stringify(r)); delete o.team; d.runs[r.id] = o; put(d); return Promise.resolve(); },
     deleteRun: function (id) { var d = load(); delete d.runs[id]; put(d); return Promise.resolve(); },
+    sendIdea: function (o) { var d = load(); d.ideas['i' + Date.now()] = o; put(d); return Promise.resolve(); },
+    watchIdeas: function (admin, uid, fn) { return watch('ideas', function (a) { a = a.filter(function (x) { return admin || x.uid === uid; }); a.sort(function (x, y) { return y.at - x.at; }); fn(a); }); },
+    setIdeaStatus: function (id, st) { var d = load(); if (d.ideas[id]) d.ideas[id].status = st; put(d); return Promise.resolve(); },
+    delIdea: function (id) { var d = load(); delete d.ideas[id]; put(d); return Promise.resolve(); },
     watchMembers: function (fn) { return watch('members', fn); },
     setRole: function (u, r) { var d = load(); if (d.members[u]) d.members[u].role = r; put(d); return Promise.resolve(); },
     removeMember: function (u) { var d = load(); delete d.members[u]; put(d); return Promise.resolve(); },

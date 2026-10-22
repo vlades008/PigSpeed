@@ -139,6 +139,20 @@
   <div id="authStat" style="display:none"><p id="authMsg"></p><div class="mbt" id="authBtns"></div></div>
   <div class="mbt"><span class="grow"></span><button type="button" class="link" id="authX">Close</button></div>
 </div></div>
+<button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡</button>
+<div class="mdl" id="ideaDlg" role="dialog" aria-modal="true"><div class="mbox wide">
+  <h3>Your idea</h3>
+  <div id="ideaNeed" style="display:none"><p>Sign in to send ideas.</p><div class="mbt"><span class="grow"></span><button type="button" class="link" id="ideaX2">Close</button><button type="button" class="add okb2" id="ideaIn"><span>Sign in</span></button></div></div>
+  <div id="ideaForm">
+    <div class="atabs" id="ideaType"><button type="button" data-t="idea" class="on">Idea</button><button type="button" data-t="bug">Bug</button><button type="button" data-t="question">Question</button></div>
+    <textarea id="ideaText" rows="5" placeholder="What would make the app better?"></textarea>
+    <div class="srow"><button type="button" class="add" id="ideaShot"><span>📷 Capture this screen</span></button><span class="hint" id="ideaMsg"></span></div>
+    <div id="ideaPrev" class="iprev"></div>
+    <div class="mbt"><span class="grow"></span><button type="button" class="link" id="ideaX">Close</button><button type="button" class="add okb2" id="ideaSend"><span>Send</span></button></div>
+    <div id="ideaMine"></div>
+  </div>
+</div></div>
+<div class="mdl" id="lightbox"><img id="lbImg" alt=""></div>
 <div class="mdl" id="arrDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>End the run?</h3><p>This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.</p><div class="mbt"><button type="button" class="add" id="arrNo"><span>Cancel</span></button><button type="button" class="add okb2" id="arrYes"><span>Yes, end the run</span></button></div></div></div>
 <div class="toast" id="toast"></div>
 <script id="img">{{VLAD}}</script>

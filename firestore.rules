@@ -32,6 +32,14 @@ service cloud.firestore {
         allow write: if admin(t);
       }
 
+      match /ideas/{i} {
+        allow create: if member(t) && request.resource.data.uid == request.auth.uid
+                      && request.resource.data.text.size() < 4000
+                      && (!('shot' in request.resource.data) || request.resource.data.shot.size() < 900000);
+        allow read: if admin(t) || (member(t) && resource.data.uid == request.auth.uid);
+        allow update, delete: if admin(t);
+      }
+
       match /runs/{r} {
         allow read: if member(t);
         allow create: if writer(t) && request.resource.data.owner.uid == request.auth.uid;
