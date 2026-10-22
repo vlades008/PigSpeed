@@ -85,7 +85,6 @@ svg{width:100%;height:auto;display:block}
 #dg,#dg *,#mm,#mm *{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}#dg{touch-action:pan-y}#dg.pan{cursor:grab}
 #mm{display:none;height:36px;margin-top:6px;cursor:pointer;touch-action:none}
 .runbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:8px}
-.clks{min-width:0;flex:1 1 220px}
 .clk{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}.loginfo{color:#1d8a4d}
 .vg{cursor:ew-resize;touch-action:none}
 .vhl{fill:var(--accent);fill-opacity:0;stroke:var(--accent);stroke-opacity:0;stroke-width:1.5;transition:fill-opacity .12s,stroke-opacity .12s}
@@ -170,7 +169,6 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 #dg .bn{fill:#fff;font:600 13px system-ui,sans-serif;pointer-events:none}
 #dg .vg .ring{opacity:0}#dg .vg.next .ring{opacity:1}#dg .vg.passed .ring{opacity:0}
 #dg .vcd{fill:#378ADD}#dg.st2 .vcd{fill:#7fe8ff}
-#clkd{color:var(--ink);font-weight:600;font-size:13px}
 #dg .pigd{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-opacity:.85;stroke-linejoin:round}#dg.st2 .pigd{stroke:#071524}
 
 /* valve list inside the diagram card */
@@ -181,3 +179,17 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 .vt tr.passed .vb{background:#1D9E75}.vt tr.next .vb{background:#378ADD}
 .vt tr.next .vrem{background:rgba(55,138,221,.18);border-radius:12px;padding:2px 8px;font-weight:600}
 .vt input.bad{border-color:var(--bad);background:var(--badbg)}
+
+/* run clocks */
+.runbar{align-items:stretch}
+.runbar .add.start{height:auto;min-height:52px;align-self:stretch;font-size:15px}
+.tiles{flex:1 1 360px;display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:6px}
+.tile{background:var(--soft);border-radius:10px;padding:5px 10px;min-width:0}
+.tile span{display:block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile b{display:block;font-size:19px;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile.hot b{font-size:22px;color:var(--accent)}
+.tile.hot.live{background:var(--accent)}.tile.hot.live span{color:rgba(255,255,255,.8)}.tile.hot.live b{color:#fff}
+.rprog{height:5px;border-radius:3px;background:var(--line);margin-top:8px;overflow:hidden}
+.rprog i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .25s linear}
+.rprog i.done{background:#1D9E75}
+.loginfo{margin-top:4px}
