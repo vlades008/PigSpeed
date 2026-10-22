@@ -12,14 +12,11 @@
 <div class="app">
   <header class="bar">
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
-    <button type="button" id="saveBtn" class="gbtn nocaret" title="Save"><span>Save</span></button>
     <div class="sec">
-      <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Pipe sections</span></button>
+      <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Runs</span><i class="rdot" id="rdot"></i></button>
       <div class="gpanel wide" id="secPanel">
-        <div class="srow"><button type="button" class="add" id="secSave">Save current</button><span class="hint" id="secMsg"></span></div>
-        <div id="secList"></div>
-        <div class="gh">History of runs</div>
-        <div id="histList"></div>
+        <div class="srow"><button type="button" class="add" id="runNew"><span>+ New run</span></button><span class="hint" id="secMsg"></span><span class="grow"></span><span id="acct"></span></div>
+        <div id="runList"></div>
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
       </div>
     </div>
@@ -44,6 +41,7 @@
     </div>
     <div class="seg lang" id="lang"><button type="button" data-v="en">EN</button><button type="button" data-v="ru">RU</button></div>
   </header>
+  <div class="robar" id="roBar"><span id="roTxt"></span><button type="button" class="add" id="roNew"><span>New run from this</span></button></div>
   <div class="phead" id="phead"></div>
 
   <div class="layout">

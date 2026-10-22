@@ -32,7 +32,7 @@
     if(!S.flowTouched)flowDefault(S.fluid);
     if(!S.dstyleTouched)S.dstyle=1;
   }
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}runsTouch()}
   var VT=['Ball valve','Gate valve','Check valve'];
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
   function vName(i){return String(S.vnames[i]||'').trim()||(tr('Valve')+' '+(i+1))}
@@ -108,7 +108,7 @@
   function toolKind(){var t=toolIdx();return t===0?'egt':'mfl'}
   function toolLenM(od){var m=toolKind()==='egt'?CAT.lenEgt:CAT.lenMfl;var v=catKey(m,od);return v?v/1000:1.5}
   function barrelRatio(od){var c=catKey(CAT.barrel,od);return c&&od>0?Math.max(1.08,Math.min(1.5,c/od)):1.25}
-  function setStartLabel(){if($('arrBtn'))$('arrBtn').style.display=anim?'inline-block':'none';$('dg').classList.toggle('run',!!anim);if(!anim&&$('runWarn'))$('runWarn').style.display='none';$('startBtn').style.display=anim?'none':'';if($('stopBtn'))$('stopBtn').disabled=!anim;[].forEach.call($('fluid').children,function(b){b.disabled=!!anim})}
+  function setStartLabel(){if($('arrBtn'))$('arrBtn').style.display=(anim&&!RO)?'inline-block':'none';$('dg').classList.toggle('run',!!anim);if(!anim&&$('runWarn'))$('runWarn').style.display='none';$('startBtn').style.display=(anim||RO)?'none':'';if($('stopBtn'))$('stopBtn').disabled=!anim||RO;[].forEach.call($('fluid').children,function(b){b.disabled=!!anim})}
   var RKEY='pigSpeedCalc.run.v1', pendingRun=null, lastClk=0;
   try{pendingRun=JSON.parse(localStorage.getItem(RKEY)||'null')}catch(e){}
   function pad2(n){return (n<10?'0':'')+n}
@@ -158,8 +158,7 @@
     }
   }
   // alerts: sound and a banner (system notification when allowed), screen kept awake during a run
-  var alertCtx=null,alerted={},wake=null,HKEY='pigSpeedCalc.history.v1',HIST=[];
-  try{HIST=JSON.parse(localStorage.getItem(HKEY)||'[]')||[]}catch(e){HIST=[]}
+  var alertCtx=null,alerted={},wake=null;
   function primeAlerts(){
     try{alertCtx=alertCtx||new (window.AudioContext||window.webkitAudioContext)();if(alertCtx.resume)alertCtx.resume()}catch(e){}
     try{if(window.Notification&&Notification.permission==='default')Notification.requestPermission()}catch(e){}
@@ -173,7 +172,7 @@
     try{if(on&&navigator.wakeLock){navigator.wakeLock.request('screen').then(function(l){wake=l}).catch(function(){})}
       else if(!on&&wake){wake.release();wake=null}}catch(e){}
   }
-  function saveRun(){var run=window.__run,g=window.__dg;if(!run)return;try{localStorage.setItem(RKEY,JSON.stringify({launch:run.launch,hours:g&&g.hours,pb:+S.pb||1,dur:run.dur,obs:run.obs}))}catch(e){}}
+  function saveRun(){var run=window.__run,g=window.__dg;if(!run)return;recFromRun();try{localStorage.setItem(RKEY,JSON.stringify({launch:run.launch,hours:g&&g.hours,pb:+S.pb||1,dur:run.dur,obs:run.obs}))}catch(e){}}
   function removeRun(){try{localStorage.removeItem(RKEY)}catch(e){}}
   function snapRun(){return anim&&{t0:anim.t0,dur:anim.dur,obs:(window.__run&&window.__run.obs)||{}}}
   var logIdx=-1;
@@ -186,7 +185,7 @@
   }
   function nowClock(){var d=new Date();return pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds())}
   function openLog(i){
-    var g=window.__dg;if(!g||!g.hours||!g.valves[i]||!g.valves[i].ok)return;
+    if(RO)return;var g=window.__dg;if(!g||!g.hours||!g.valves[i]||!g.valves[i].ok)return;
     logIdx=i;$('logTitle').textContent=vName(i)+' — '+tr('passed at');
     $('logLaunchRow').style.display=anim?'none':'flex';
     $('logLaunch').value='';$('logAt').value=nowClock();$('logErr').textContent='';
@@ -219,25 +218,12 @@
     var distM=v.frac*(+num('len'))*[1000,1][+S.lenu],act=distM/(elapsed/1000),pl=distM/(planned0/1000),dev=Math.round((act/pl-1)*100);
     $('logInfo').textContent=tr('Actual')+': '+vName(i)+' '+fmtClock(at).split(' ')[0]+' · '+tr('average speed')+' '+fmt(act,2)+' '+tr('m/s')+' ('+tr('plan')+' '+fmt(pl,2)+', '+(dev>0?'+':'')+dev+'%)';
   }
-  function histAdd(e){HIST.unshift(e);HIST=HIST.slice(0,30);try{localStorage.setItem(HKEY,JSON.stringify(HIST))}catch(x){}renderHist()}
-  function renderHist(){
-    var box=$('histList');if(!box)return;box.innerHTML='';
-    if(!HIST.length){var e=document.createElement('div');e.className='hint';e.textContent=tr('No finished runs yet.');box.appendChild(e);return}
-    HIST.forEach(function(it){
-      var d=document.createElement('div');d.className='sitem hist';var info=document.createElement('div');info.className='si';
-      var n=document.createElement('div');n.className='sn';n.textContent=it.name;
-      var s=document.createElement('div');s.className='sd';
-      var dv=it.planned>0?Math.round((it.actual/it.planned-1)*100):0;
-      s.textContent=new Date(it.at).toLocaleString(S.lang==='ru'?'ru-RU':'en-GB')+' · '+tr('planned')+' '+fmtRem(it.planned)+' · '+tr('actual')+' '+fmtRem(it.actual)+' ('+(dv>0?'+':'')+dv+'%)';
-      info.appendChild(n);info.appendChild(s);d.appendChild(info);box.appendChild(d);
-    });
-  }
   function finishRun(){
     var run=window.__run,g=window.__dg;if(!anim||!run||!g)return;
     var actual=Date.now()-run.launch,planned=g.hours*3.6e6,pb=+S.pb||1;
     cancelAnimationFrame(anim.raf);anim=null;run.done=true;removeRun();lockWake(false);
     applyProgress(1);setStartLabel();updateValveClocks();
-    if(pb===1)histAdd({name:(S.name||'').trim()||'—',at:Date.now(),planned:planned,actual:actual});
+    runFinished(false);
   }
   function fillPrintHead(){
     var o=[],f=S.fluid,u=function(a,i){return tr(a[i])};
@@ -259,14 +245,13 @@
     [].forEach.call($('vlist').children,function(row,i){R.push([i+1,vName(i),S.valves[i],row.querySelector('.veta').textContent,row.querySelector('.varr').textContent,row.querySelector('.vrem').textContent])});
     download('pig-run-'+((S.name||'plan').trim().replace(/[^\w\-а-яА-Я]+/g,'_'))+'.csv','\ufeff'+R.map(function(r){return r.map(q).join(';')}).join('\r\n'),'text/csv;charset=utf-8');
   }
-  function exportAll(){download('pig-speed-sections.json',JSON.stringify({sections:SAVED,history:HIST},null,1),'application/json')}
+  function exportAll(){download('pig-speed-runs.json',JSON.stringify({runs:RUNS},null,1),'application/json')}
   function importAll(){
     var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();
-    rd.onload=function(){try{var d=JSON.parse(rd.result);
-      (d.sections||[]).forEach(function(it){if(!it||!it.name||!it.data)return;var at=-1;SAVED.forEach(function(x,i){if(x.name===it.name)at=i});if(at>=0)SAVED[at]=it;else SAVED.push(it)});
-      persistSections();renderSections();
-      (d.history||[]).forEach(function(it){if(it&&it.at&&!HIST.some(function(x){return x.at===it.at}))HIST.push(it)});HIST.sort(function(a,b){return b.at-a.at});HIST=HIST.slice(0,30);
-      try{localStorage.setItem(HKEY,JSON.stringify(HIST))}catch(e){}renderHist();
+    rd.onload=function(){try{var d=JSON.parse(rd.result),n=0;
+      (d.runs||[]).forEach(function(it){if(!it||!it.id||!it.params&&!it.hist)return;var at=-1;RUNS.forEach(function(x,i){if(x.id===it.id)at=i});if(at>=0){if((it.updated||0)>(RUNS[at].updated||0))RUNS[at]=it}else RUNS.push(it);n++});
+      (d.sections||[]).forEach(function(it){if(!it||!it.data)return;var r=mkRun(it.data,'planned');r.name=it.name||r.name;r.created=r.updated=it.at||Date.now();RUNS.push(r);n++});
+      runsSave();renderRuns();$('secMsg').textContent=tr('Imported')+': '+n;setTimeout(function(){$('secMsg').textContent=''},2500);
     }catch(e){$('secMsg').textContent='×'}};
     rd.readAsText(f);this.value='';
   }
@@ -313,7 +298,7 @@
     function frame(now){
       if(!anim)return;
       var p=Math.min(1,(now-anim.t0)/anim.dur);applyProgress(p);
-      if(p<1)anim.raf=requestAnimationFrame(frame);else{anim=null;if(window.__run)window.__run.done=true;removeRun();lockWake(false);setStartLabel();updateValveClocks()}
+      if(p<1)anim.raf=requestAnimationFrame(frame);else{anim=null;if(window.__run)window.__run.done=true;removeRun();lockWake(false);setStartLabel();updateValveClocks();runFinished(true)}
     }
     anim.raf=requestAnimationFrame(frame);
   }
@@ -323,7 +308,7 @@
     var g=window.__dg,pb=+S.pb||1;
     if(!g||!g.hours||!s.hours||Math.abs(g.hours-s.hours)>1e-6*Math.max(1,s.hours)||(+s.pb||1)!==pb)return;
     var dur=s.dur||s.hours*3600000/pb,el=Date.now()-s.launch;
-    if(el<0||el>=dur)return;
+    if(el<0||el>=dur){if(s.rec){if(RO){window.__run={launch:s.launch,done:true,dur:dur,obs:s.obs||{}};applyProgress(1);updateValveClocks()}else runFinished(true,s)}return}
     resumeAnim({t0:performance.now()-el,dur:dur,obs:s.obs||{}});
   }
   function keepRun(fn){var run=snapRun();fn();if(run){resumeAnim(run);$('runWarn').style.display='block'}}
@@ -360,7 +345,7 @@
    'm/s':'м/с','mph':'миль/ч','km/h':'км/ч','°R (Rankine)':'°R (Ранкин)','Km³/day':'тыс. м³/сут','MMSCF/day':'млн фут³/сут','MMSCM/day':'млн м³/сут','Km³/h':'тыс. м³/ч','MMSCF/h':'млн фут³/ч','MMSCM/h':'млн м³/ч',
    'm³/day':'м³/сут','BBL/day':'барр/сут','m³/h':'м³/ч','BBL/h':'барр/ч','SCF/BBL':'фут³/барр','Gas flow rate':'Расход газа','Oil flow rate':'Расход нефти','Oil flow rate (gas follows from GOR)':'Расход нефти (газ — по GOR)',
    'Enter a number':'Введите число','Must be greater than zero':'Должно быть больше нуля','Wrong Outer Diameter or Wall Thickness':'Неверный наружный диаметр или толщина стенки',
-   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','New version':'Новая версия','Update':'Обновить','Download':'Скачать','Later':'Позже','Stop the run':'Остановить запуск','End the run?':'Завершить запуск?','This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.':'Снаряд будет считаться прибывшим в приёмник, запуск завершится: часы остановятся, а плановое и фактическое время сохранятся в истории. Отменить это нельзя.','Cancel':'Отмена','Yes, end the run':'Да, завершить запуск','Symbols':'Буквы','Live numbers':'Числа','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the tool limit':'Скорость ниже предела снаряда','Speed above the tool limit':'Скорость выше предела снаряда','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the tool limits':'Давление вне допустимого диапазона снаряда','Gas pressure below the tool limit':'Давление газа ниже предела снаряда','Temperature outside the tool limits':'Температура вне допустимого диапазона снаряда','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within equipment limits':'В пределах возможностей оборудования','Allowed flow':'Допустимый расход','Allowed':'Допустимо','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
+   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Runs':'Запуски','+ New run':'+ Новый запуск','New run from this':'Новый запуск из этого','Live now':'Сейчас идут','Planned':'Запланированы','Finished':'Завершены','Run':'Запуск','Duplicate':'Дублировать','Delete':'Удалить','Delete?':'Удалить?','No runs yet.':'Запусков пока нет.','Imported':'Импортировано','You are viewing this run':'Вы просматриваете этот запуск','This run is finished and cannot be changed. Start a new run from its settings to launch again.':'Запуск завершён и не редактируется. Чтобы запустить снова, создайте новый запуск из этих настроек.','New version':'Новая версия','Update':'Обновить','Download':'Скачать','Later':'Позже','Stop the run':'Остановить запуск','End the run?':'Завершить запуск?','This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.':'Снаряд будет считаться прибывшим в приёмник, запуск завершится: часы остановятся, а плановое и фактическое время сохранятся в истории. Отменить это нельзя.','Cancel':'Отмена','Yes, end the run':'Да, завершить запуск','Symbols':'Буквы','Live numbers':'Числа','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the tool limit':'Скорость ниже предела снаряда','Speed above the tool limit':'Скорость выше предела снаряда','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the tool limits':'Давление вне допустимого диапазона снаряда','Gas pressure below the tool limit':'Давление газа ниже предела снаряда','Temperature outside the tool limits':'Температура вне допустимого диапазона снаряда','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within equipment limits':'В пределах возможностей оборудования','Allowed flow':'Допустимый расход','Allowed':'Допустимо','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
   function tr(s){return S.lang==='ru'&&RU[s]||s}
   function applyLang(){
     document.documentElement.lang=S.lang;
@@ -645,43 +630,130 @@
   });
   $('tscale').addEventListener('input',function(){S.tscale=+this.value;$('tscaleV').textContent=S.tscale+'%';save();update()});
   // saved pipe sections
-  var SKEY='pigSpeedCalc.sections.v1',SAVED=[],SNAP=['fluid','name','od','wt','wtu','len','lenu','p','pu','t','tu','sg','api','gor','flow','gasu','oilu','rv','rvu','velu','rgasu','roilu','valves','vnames','vt'];
-  try{SAVED=JSON.parse(localStorage.getItem(SKEY)||'[]')||[]}catch(e){SAVED=[]}
-  function persistSections(){try{localStorage.setItem(SKEY,JSON.stringify(SAVED))}catch(e){}}
-  function renderSections(){
-    var box=$('secList');box.innerHTML='';
-    if(!SAVED.length){var e=document.createElement('div');e.className='hint';e.textContent=tr('No saved sections yet.');box.appendChild(e);return}
-    SAVED.forEach(function(it,i){
-      var d=document.createElement('div');d.className='sitem';
-      var info=document.createElement('div');info.className='si';
-      var n=document.createElement('div');n.className='sn';n.textContent=it.name;
-      var s=document.createElement('div');s.className='sd';
-      var k=it.data;
-      s.textContent=tr(['Gas','Oil','Oil + gas'][k.fluid||0])+' · Ø '+k.od+' '+tr('mm')+' · '+k.len+' '+tr(['km','m'][+k.lenu||0])+(k.valves&&k.valves.length?' · '+k.valves.length+' '+tr('valves'):'');
-      info.appendChild(n);info.appendChild(s);
-      var o=document.createElement('button');o.type='button';o.textContent=tr('Open');
-      o.addEventListener('click',function(){loadSection(it.data);$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')});
-      var x=document.createElement('button');x.type='button';x.className='del';x.textContent='×';x.setAttribute('aria-label','Delete');
-      x.addEventListener('click',function(){SAVED.splice(i,1);persistSections();renderSections()});
-      d.appendChild(info);d.appendChild(o);d.appendChild(x);box.appendChild(d);
-    });
+  var SNAP=['fluid','name','od','wt','wtu','len','lenu','p','pu','t','tu','sg','api','gor','flow','gasu','oilu','rv','rvu','velu','rgasu','roilu','valves','vnames','vt'];
+  var RKEY2='pigSpeedCalc.runs.v1',CKEY='pigSpeedCalc.cur.v1',RUNS=[],CUR=null,RO=false,loadingRun=false;
+  function uid(){return 'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+  function snapParams(){var o={};SNAP.forEach(function(k){o[k]=Array.isArray(S[k])?S[k].slice():S[k]});return o}
+  function runsSave(){try{localStorage.setItem(RKEY2,JSON.stringify(RUNS));localStorage.setItem(CKEY,CUR||'')}catch(e){}}
+  function curRun(){for(var i=0;i<RUNS.length;i++)if(RUNS[i].id===CUR)return RUNS[i];return null}
+  function runById(id){for(var i=0;i<RUNS.length;i++)if(RUNS[i].id===id)return RUNS[i];return null}
+  function mkRun(params,st){return {id:uid(),name:(params&&params.name||'').trim()||tr('Run'),st:st||'planned',params:params,created:Date.now(),updated:Date.now(),owner:null}}
+  function pushRun(r){if(window.runsHook)window.runsHook(r)}
+  function isRO(r){return r.st==='done'}
+  function setRO(v){
+    RO=!!v;document.body.classList.toggle('ro',RO);
+    var ic=document.querySelector('.card.inp');if(ic)ic.inert=RO;$('vlist').inert=RO;$('vadd').disabled=RO;
+    var r=curRun();$('roTxt').textContent=RO?tr(r&&r.st==='done'?'This run is finished and cannot be changed. Start a new run from its settings to launch again.':'You are viewing this run'):'';
+    $('roNew').style.display=(RO&&r&&r.st==='done')?'':'none';
+    setStartLabel();
   }
+  function runsTouch(){
+    var c=curRun();if(!c||RO||loadingRun)return;
+    c.params=snapParams();var nm=(S.name||'').trim();if(nm)c.name=nm;c.updated=Date.now();runsSave();renderRuns();pushRun(c);
+  }
+  function recFromRun(){
+    var c=curRun(),run=window.__run,g=window.__dg;if(!c||!run||RO||(+S.pb||1)!==1)return;
+    c.st='running';c.launch=run.launch;c.hours=g&&g.hours;c.pb=1;c.dur=run.dur;c.obs=run.obs||{};c.updated=Date.now();runsSave();renderRuns();pushRun(c);
+  }
+  function runFinished(auto,s){
+    var c=curRun();if(!c||RO||c.st==='done')return;
+    var run=window.__run,g=window.__dg;if(!s&&(+S.pb||1)!==1)return;
+    var launch=s?s.launch:(run?run.launch:c.launch),dur=s?s.dur:(run&&run.dur),planned=(g&&g.hours?g.hours:(c.hours||0))*3.6e6;
+    var actual=auto&&dur?Math.min(Date.now()-launch,dur):Date.now()-launch;
+    c.st='done';c.finish={at:Date.now(),planned:planned,actual:actual,auto:!!auto};c.updated=Date.now();runsSave();pushRun(c);renderRuns();setRO(true);
+  }
+  function stopRunUser(){
+    if(RO)return;animStop();var c=curRun();
+    if(c&&c.st==='running'){c.st='planned';delete c.launch;delete c.dur;delete c.obs;delete c.hours;c.updated=Date.now();runsSave();renderRuns();pushRun(c)}
+    update();
+  }
+  function animDetach(){if(anim){cancelAnimationFrame(anim.raf);anim=null;lockWake(false)}window.__run=null;$('logInfo').textContent='';setStartLabel()}
+  function openRun(id){
+    var r=runById(id);if(!r||!r.params||r.id===CUR)return;
+    animDetach();CUR=id;loadingRun=true;
+    if(r.st!=='planned'){S.pb=1}
+    loadSection(r.params);loadingRun=false;$('pbSel').value=S.pb;
+    setRO(isRO(r));
+    var g=window.__dg;
+    if(r.st==='running'&&r.launch&&r.pb===1){pendingRun={launch:r.launch,hours:r.hours,pb:1,dur:r.dur,obs:r.obs||{},rec:r.id};restoreRun()}
+    else if(r.st==='done'&&r.launch&&g&&g.hours){window.__run={launch:r.launch,done:true,dur:r.dur||g.hours*3.6e6,obs:r.obs||{}};applyProgress(1);updateValveClocks()}
+    runsSave();renderRuns();closeRuns();
+  }
+  function dupRun(r,open){
+    if(!r||!r.params)return null;var n=mkRun(JSON.parse(JSON.stringify(r.params)),'planned');if(open!==false)openRun(n.id,RUNS.unshift(n));else RUNS.unshift(n);return n;
+  }
+  function newRun(){var c=curRun(),p=c&&c.params?JSON.parse(JSON.stringify(c.params)):snapParams(),n=mkRun(p,'planned');RUNS.unshift(n);openRun(n.id)}
+  function delRun(id){
+    var i=-1;RUNS.forEach(function(x,k){if(x.id===id)i=k});if(i<0)return;var was=RUNS[i].id===CUR;RUNS.splice(i,1);pushRun({id:id,deleted:true});
+    if(was){var nx=RUNS.filter(function(x){return x.params})[0];CUR=null;if(nx)openRun(nx.id);else{var n=mkRun(snapParams(),'planned');RUNS.unshift(n);CUR=n.id;setRO(false)}}
+    runsSave();renderRuns();
+  }
+  function runDesc(r){
+    var k=r.params;if(!k)return '';
+    return tr(['Gas','Oil','Oil + gas'][k.fluid||0])+' · Ø '+k.od+' '+tr('mm')+' · '+k.len+' '+tr(['km','m'][+k.lenu||0])+(k.valves&&k.valves.length?' · '+k.valves.length+' '+tr('valves'):'');
+  }
+  function renderRuns(){
+    var box=$('runList');if(!box)return;box.innerHTML='';
+    var now=Date.now(),live=0,groups=[['running','Live now'],['planned','Planned'],['done','Finished']];
+    var any=false;
+    groups.forEach(function(gp){
+      var list=RUNS.filter(function(r){return r.st===gp[0]});if(gp[0]==='running')live=list.length;
+      list.sort(function(a,b){return (b.st==='done'?(b.finish&&b.finish.at):b.updated)-(a.st==='done'?(a.finish&&a.finish.at):a.updated)});
+      if(!list.length)return;any=true;
+      var h=document.createElement('div');h.className='gh';h.textContent=tr(gp[1]);box.appendChild(h);
+      list.slice(0,60).forEach(function(r){
+        var d=document.createElement('div');d.className='ritem st-'+r.st+(r.id===CUR?' cur':'')+(r.params?'':' nopen');
+        var info=document.createElement('div');info.className='si';
+        var n=document.createElement('div');n.className='sn';n.innerHTML='<i class="rd"></i>';n.appendChild(document.createTextNode(r.name));
+        var s=document.createElement('div');s.className='sd';s.textContent=(r.params?runDesc(r):tr('Finished'))+' · '+new Date(r.created).toLocaleString(S.lang==='ru'?'ru-RU':'en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        info.appendChild(n);info.appendChild(s);
+        if(r.st==='running'&&r.dur){var pr=Math.max(0,Math.min(1,(now-r.launch)/r.dur));
+          var bar=document.createElement('div');bar.className='rbar2';bar.innerHTML='<i style="width:'+(pr*100)+'%"></i>';info.appendChild(bar)}
+        d.appendChild(info);
+        var side=document.createElement('div');side.className='rside';
+        if(r.st==='running'&&r.dur){var rem=r.launch+r.dur-now;side.innerHTML='<b>'+(rem>0?fmtRem(rem):'✓')+'</b><span>'+tr('left')+'</span>'}
+        else if(r.st==='done'&&r.finish){var dv=r.finish.planned>0?Math.round((r.finish.actual/r.finish.planned-1)*100):0;side.innerHTML='<b>'+fmtRem(r.finish.actual)+'</b><span>'+tr('plan')+' '+fmtRem(r.finish.planned)+' ('+(dv>0?'+':'')+dv+'%)</span>'}
+        d.appendChild(side);
+        if(r.params)d.addEventListener('click',function(){openRun(r.id)});
+        var dp=document.createElement('button');dp.type='button';dp.className='ib';dp.title=tr('Duplicate');dp.textContent='⧉';
+        dp.addEventListener('click',function(e){e.stopPropagation();dupRun(r)});if(r.params)d.appendChild(dp);
+        var x=document.createElement('button');x.type='button';x.className='ib del';x.title=tr('Delete');x.textContent='×';
+        x.addEventListener('click',function(e){e.stopPropagation();if(x.dataset.sure){delRun(r.id);return}x.dataset.sure='1';x.textContent=tr('Delete?');x.classList.add('sure');setTimeout(function(){x.dataset.sure='';x.textContent='×';x.classList.remove('sure')},3000)});
+        d.appendChild(x);box.appendChild(d);
+      });
+    });
+    if(!any){var e=document.createElement('div');e.className='hint';e.textContent=tr('No runs yet.');box.appendChild(e)}
+    $('rdot').style.display=live?'inline-block':'none';
+  }
+  function closeRuns(){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}
   function loadSection(snap){
     SNAP.forEach(function(k){if(k in snap)S[k]=Array.isArray(snap[k])?snap[k].slice():snap[k]});
     S.vt=Array.isArray(S.vt)?S.vt:[];while(S.vt.length<S.valves.length)S.vt.push(1);
     S.flowTouched=true;toUI();applyLang();save();update();
   }
-  $('secSave').addEventListener('click',function(){
-    var snap={};SNAP.forEach(function(k){snap[k]=Array.isArray(S[k])?S[k].slice():S[k]});
-    var name=(S.name||'').trim()||(tr('Section')+' '+(SAVED.length+1)),at=-1;
-    SAVED.forEach(function(it,i){if(it.name===name)at=i});
-    var rec={name:name,at:Date.now(),data:snap};
-    if(at>=0)SAVED[at]=rec;else SAVED.unshift(rec);
-    persistSections();renderSections();
-    var m=$('secMsg');m.textContent=tr('Saved')+': '+name;setTimeout(function(){m.textContent=''},2500);
-  });
-  $('saveBtn').addEventListener('click',function(){var b=this;$('secSave').click();b.classList.add('ok');setTimeout(function(){b.classList.remove('ok')},1500)});
-  $('secBtn').addEventListener('click',function(e){e.stopPropagation();var o=$('secPanel').classList.toggle('open');this.setAttribute('aria-expanded',String(o));$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')});
+  function initRuns(){
+    var raw=null;try{raw=JSON.parse(localStorage.getItem(RKEY2)||'null')}catch(e){}
+    if(Array.isArray(raw))RUNS=raw;
+    else{                                                           // first start after the update: old saved sections and history become runs
+      var sv=[],hs=[];
+      try{sv=JSON.parse(localStorage.getItem('pigSpeedCalc.sections.v1')||'[]')||[]}catch(e){}
+      try{hs=JSON.parse(localStorage.getItem('pigSpeedCalc.history.v1')||'[]')||[]}catch(e){}
+      sv.forEach(function(it){if(it&&it.data){var r=mkRun(it.data,'planned');r.name=it.name||r.name;r.created=r.updated=it.at||Date.now();RUNS.push(r)}});
+      hs.forEach(function(h){if(!h||!h.at)return;var r={id:uid(),name:h.name||'—',st:'done',params:null,hist:true,created:h.at,updated:h.at,owner:null,finish:{at:h.at,planned:h.planned,actual:h.actual}};RUNS.push(r)});
+    }
+    try{CUR=localStorage.getItem(CKEY)||null}catch(e){}
+    var c=curRun();
+    if(!c){c=mkRun(snapParams(),'planned');RUNS.unshift(c);CUR=c.id}
+    if(c.params&&c.st!=='done'){c.params=snapParams()}
+    runsSave();
+    if(c.st==='running'&&c.launch&&c.pb===1)pendingRun={launch:c.launch,hours:c.hours,pb:1,dur:c.dur,obs:c.obs||{},rec:c.id};
+    if(c.st==='done'&&c.launch){var g0=window.__dg;if(g0&&g0.hours){window.__run={launch:c.launch,done:true,dur:c.dur||g0.hours*3.6e6,obs:c.obs||{}};applyProgress(1)}}
+    setRO(isRO(c));renderRuns();
+  }
+  $('runNew').addEventListener('click',newRun);
+  $('roNew').addEventListener('click',newRun);
+  setInterval(function(){if($('secPanel').classList.contains('open'))renderRuns()},2000);
+  $('secBtn').addEventListener('click',function(e){e.stopPropagation();var o=$('secPanel').classList.toggle('open');this.setAttribute('aria-expanded',String(o));if(o)renderRuns();$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')});
   $('gearBtn').addEventListener('click',function(e){e.stopPropagation();var o=$('gpanel').classList.toggle('open');this.setAttribute('aria-expanded',String(o));$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')});
   document.addEventListener('click',function(e){if(!e.target.closest('.sec')){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('click',function(e){if(!e.target.closest('.gear')){$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
@@ -694,7 +766,7 @@
   $('arrNo').addEventListener('click',function(){$('arrDlg').classList.remove('open')});
   $('arrYes').addEventListener('click',function(){$('arrDlg').classList.remove('open');finishRun()});
   $('arrDlg').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
-  $('stopBtn').addEventListener('click',function(){var gp=$('gpanel');if(gp)gp.classList.remove('open');if(anim){animStop();update()}});
+  $('stopBtn').addEventListener('click',function(){var gp=$('gpanel');if(gp)gp.classList.remove('open');stopRunUser()});
   $('logOk').addEventListener('click',confirmLog);
   $('logCancel').addEventListener('click',closeLog);
   ['logAt','logLaunch'].forEach(function(id){$(id).addEventListener('keydown',function(e){if(e.key==='Enter')confirmLog();else if(e.key==='Escape')closeLog()})});
@@ -708,7 +780,7 @@
   $('startBtn').addEventListener('click',animStart);
   $('pbSel').addEventListener('change',function(){S.pb=+this.value;save();update()});
   $('toolSel').addEventListener('change',function(){var v=+this.value;S.toolOn=v>=0;if(v>=0)S.tool=v;save();update()});
-  $('lang').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.lang=b.dataset.v;save();ensureOd();$('od').value=S.od;renderValves();applyLang();renderSections();setFluid(S.fluid,true);update()});
+  $('lang').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.lang=b.dataset.v;save();ensureOd();$('od').value=S.od;renderValves();applyLang();renderRuns();setFluid(S.fluid,true);update()});
   $('fluid').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setFluid(+b.dataset.v)});
   $('vadd').addEventListener('click',function(){keepRun(function(){var L=num('len');S.valves.push(L>0?String(+(L/2).toFixed(3)):'');S.vt.push(1);S.vnames.push('');save();renderValves();update()})});
   $('reset').addEventListener('click',function(){var lg=S.lang;S={};for(var k in DEF)S[k]=DEF[k];S.lang=lg;S.valves=[];S.vt=[];S.vnames=[];S.flowTouched=false;flowDefault(S.fluid);toUI();save();update()});
@@ -736,7 +808,7 @@
     }
     svg.addEventListener('pointerdown',function(e){
       var g=e.target.closest&&e.target.closest('.vg');
-      if(g&&!anim){vd=+g.dataset.v;window.__vdrag=vd;svg.setPointerCapture(e.pointerId);e.preventDefault();return}
+      if(g&&!anim&&!RO){vd=+g.dataset.v;window.__vdrag=vd;svg.setPointerCapture(e.pointerId);e.preventDefault();return}
       if(!g&&ghostOn){addAt(ghostFrac);ghostOn=false;e.preventDefault();return}
       if(!g&&BW>VW+1){pd={x:e.clientX,vx:VB.x};window.__userPan=true;svg.setPointerCapture(e.pointerId);svg.classList.add('drag')}
     });
@@ -747,7 +819,7 @@
     }
     function ghostUpdate(e){
       var gh=svg.querySelector('#ghost'),dg=window.__dg;
-      if(!gh||!dg||dg.local||anim||vd!==null||pd||(e.target.closest&&e.target.closest('.vg'))){ghostOn=false;if(gh)gh.style.display='none';svg.style.cursor='';return}
+      if(!gh||!dg||dg.local||anim||RO||vd!==null||pd||(e.target.closest&&e.target.closest('.vg'))){ghostOn=false;if(gh)gh.style.display='none';svg.style.cursor='';return}
       var r=svg.getBoundingClientRect(),x=pt(e).x,y=(e.clientY-r.top)/r.height*BH,len=num('len');
       var near=Math.abs(y-dg.cy)<44&&x>=dg.x0-6&&x<=dg.x1+6&&len>0;
       if(!near){ghostOn=false;gh.style.display='none';svg.style.cursor='';return}
@@ -789,7 +861,7 @@
   }
   if($('ver'))$('ver').textContent='v'+(typeof APP_VERSION==='undefined'?'?':APP_VERSION);
   checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});
-  load();toUI();applyLang();update();renderSections();renderHist();restoreRun();setInterval(updateValveClocks,500);
+  load();toUI();applyLang();update();initRuns();restoreRun();setInterval(updateValveClocks,500);
   // the global view is sized to the screen: redraw when the window width changes (a running pig keeps going)
   (function(){var t=null,w=window.innerWidth;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){if(window.innerWidth===w||S.view!==1)return;w=window.innerWidth;var run=snapRun();update();if(run)resumeAnim(run)},250)})})();
 })();
