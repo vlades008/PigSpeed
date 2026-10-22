@@ -10,12 +10,12 @@ const read = (f) => fs.readFileSync(path.join(src, f), 'utf8');
 
 function build() {
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-  let site = '';
-  try { site = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'config.json'), 'utf8')).siteUrl || ''; } catch (e) {}
+  let site = '', fbc = null, teamId = 'main';
+  try { const c = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'config.json'), 'utf8')); site = c.siteUrl || ''; fbc = c.firebase || null; teamId = c.teamId || 'main'; } catch (e) {}
   if (site && !site.endsWith('/')) site += '/';
-  const ver = 'var APP_VERSION=' + JSON.stringify(pkg.version) + ',UPDATE_URL=' + JSON.stringify(site) + ';';
+  const ver = 'var APP_VERSION=' + JSON.stringify(pkg.version) + ',UPDATE_URL=' + JSON.stringify(site) + ',FIREBASE_CONFIG=' + JSON.stringify(fbc) + ',TEAM_ID=' + JSON.stringify(teamId) + ';';
   const vlad = ver + 'var VLAD_IMG="data:image/png;base64,' + fs.readFileSync(path.join(src, 'vlad.png')).toString('base64') + '";';
-  const parts = { STYLE: read('style.css'), CORE: read('core.js'), APP: read('app.js'), VLAD: vlad };
+  const parts = { STYLE: read('style.css'), CLOUD: read('cloud.js'), CORE: read('core.js'), APP: read('app.js'), VLAD: vlad };
   let out = read('index.template.html');
   for (const k of Object.keys(parts)) {
     if (!out.includes('{{' + k + '}}')) throw new Error('placeholder {{' + k + '}} missing in index.template.html');

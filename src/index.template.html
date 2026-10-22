@@ -17,6 +17,7 @@
       <div class="gpanel wide" id="secPanel">
         <div class="srow"><button type="button" class="add" id="runNew"><span>+ New run</span></button><span class="hint" id="secMsg"></span><span class="grow"></span><span id="acct"></span></div>
         <div id="runList"></div>
+        <div id="teamBox" class="teambox"></div>
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
       </div>
     </div>
@@ -125,9 +126,23 @@
   </div>
 </div>
 
+<div class="mdl" id="authDlg" role="dialog" aria-modal="true"><div class="mbox wide">
+  <h3 id="authT">Account</h3>
+  <div id="authForm">
+    <div class="atabs"><button type="button" data-m="in" class="on">Sign in</button><button type="button" data-m="up">Create account</button></div>
+    <label class="pl" id="authNameRow" style="display:none"><span>Name</span><input id="authName" autocomplete="name"></label>
+    <label class="pl"><span>Email</span><input id="authEmail" type="email" autocomplete="email" inputmode="email"></label>
+    <label class="pl"><span>Password</span><input id="authPass" type="password" autocomplete="current-password"></label>
+    <div class="aerr" id="authErr"></div>
+    <div class="mbt"><button type="button" class="link" id="authForgot">Forgot password?</button><span class="grow"></span><button type="button" class="add" id="authGoogle"><span>Google</span></button><button type="button" class="add okb2" id="authGo"><span>Continue</span></button></div>
+  </div>
+  <div id="authStat" style="display:none"><p id="authMsg"></p><div class="mbt" id="authBtns"></div></div>
+  <div class="mbt"><span class="grow"></span><button type="button" class="link" id="authX">Close</button></div>
+</div></div>
 <div class="mdl" id="arrDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>End the run?</h3><p>This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.</p><div class="mbt"><button type="button" class="add" id="arrNo"><span>Cancel</span></button><button type="button" class="add okb2" id="arrYes"><span>Yes, end the run</span></button></div></div></div>
 <div class="toast" id="toast"></div>
 <script id="img">{{VLAD}}</script>
+<script id="cloud">{{CLOUD}}</script>
 <script id="core">{{CORE}}</script>
 
 <script>{{APP}}</script>

@@ -345,12 +345,12 @@
    'm/s':'м/с','mph':'миль/ч','km/h':'км/ч','°R (Rankine)':'°R (Ранкин)','Km³/day':'тыс. м³/сут','MMSCF/day':'млн фут³/сут','MMSCM/day':'млн м³/сут','Km³/h':'тыс. м³/ч','MMSCF/h':'млн фут³/ч','MMSCM/h':'млн м³/ч',
    'm³/day':'м³/сут','BBL/day':'барр/сут','m³/h':'м³/ч','BBL/h':'барр/ч','SCF/BBL':'фут³/барр','Gas flow rate':'Расход газа','Oil flow rate':'Расход нефти','Oil flow rate (gas follows from GOR)':'Расход нефти (газ — по GOR)',
    'Enter a number':'Введите число','Must be greater than zero':'Должно быть больше нуля','Wrong Outer Diameter or Wall Thickness':'Неверный наружный диаметр или толщина стенки',
-   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Runs':'Запуски','+ New run':'+ Новый запуск','New run from this':'Новый запуск из этого','Live now':'Сейчас идут','Planned':'Запланированы','Finished':'Завершены','Run':'Запуск','Duplicate':'Дублировать','Delete':'Удалить','Delete?':'Удалить?','No runs yet.':'Запусков пока нет.','Imported':'Импортировано','You are viewing this run':'Вы просматриваете этот запуск','This run is finished and cannot be changed. Start a new run from its settings to launch again.':'Запуск завершён и не редактируется. Чтобы запустить снова, создайте новый запуск из этих настроек.','New version':'Новая версия','Update':'Обновить','Download':'Скачать','Later':'Позже','Stop the run':'Остановить запуск','End the run?':'Завершить запуск?','This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.':'Снаряд будет считаться прибывшим в приёмник, запуск завершится: часы остановятся, а плановое и фактическое время сохранятся в истории. Отменить это нельзя.','Cancel':'Отмена','Yes, end the run':'Да, завершить запуск','Symbols':'Буквы','Live numbers':'Числа','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the tool limit':'Скорость ниже предела снаряда','Speed above the tool limit':'Скорость выше предела снаряда','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the tool limits':'Давление вне допустимого диапазона снаряда','Gas pressure below the tool limit':'Давление газа ниже предела снаряда','Temperature outside the tool limits':'Температура вне допустимого диапазона снаряда','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within equipment limits':'В пределах возможностей оборудования','Allowed flow':'Допустимый расход','Allowed':'Допустимо','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
+   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Sign in':'Войти','Sign out':'Выйти','Create account':'Создать аккаунт','Account':'Аккаунт','Name':'Имя','Email':'Эл. почта','Password':'Пароль','Continue':'Продолжить','Forgot password?':'Забыли пароль?','Team':'Команда','Invite':'Пригласить','invited':'приглашён','engineer':'инженер','manager':'руководитель','admin':'администратор','offline':'нет связи','Finish sign-in':'Завершить вход','Share with team':'Поделиться с командой','Confirm your email':'Подтвердите почту','We sent a link to':'Мы отправили ссылку на','Open it, then press the button.':'Откройте её и нажмите кнопку.','I confirmed it':'Я подтвердил','Send again':'Отправить ещё раз','Sent':'Отправлено','Waiting for an invitation':'Ожидание приглашения','Your account is not in the team yet. Ask the administrator to invite':'Вашего аккаунта пока нет в команде. Попросите администратора пригласить','Check again':'Проверить снова','Wrong email or password':'Неверная почта или пароль','This email is already registered':'Эта почта уже зарегистрирована','Password must have at least 6 characters':'Пароль не короче 6 символов','Enter a valid email':'Введите корректную почту','No connection':'Нет соединения','Too many attempts, try again later':'Слишком много попыток, попробуйте позже','Google sign-in does not work in this app, use email and password':'Вход через Google не работает в этом приложении, используйте почту и пароль','Error':'Ошибка','Enter email and password':'Введите почту и пароль','Enter your name':'Введите имя','Enter your email first':'Сначала введите почту','Password reset email sent':'Письмо для сброса пароля отправлено','launched by':'запущен:','passed at':'пройдена в','finished':'завершён','You are viewing':'Вы просматриваете','Closed':'Закрыть','Runs':'Запуски','+ New run':'+ Новый запуск','New run from this':'Новый запуск из этого','Live now':'Сейчас идут','Planned':'Запланированы','Finished':'Завершены','Run':'Запуск','Duplicate':'Дублировать','Delete':'Удалить','Delete?':'Удалить?','No runs yet.':'Запусков пока нет.','Imported':'Импортировано','You are viewing this run':'Вы просматриваете этот запуск','This run is finished and cannot be changed. Start a new run from its settings to launch again.':'Запуск завершён и не редактируется. Чтобы запустить снова, создайте новый запуск из этих настроек.','New version':'Новая версия','Update':'Обновить','Download':'Скачать','Later':'Позже','Stop the run':'Остановить запуск','End the run?':'Завершить запуск?','This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.':'Снаряд будет считаться прибывшим в приёмник, запуск завершится: часы остановятся, а плановое и фактическое время сохранятся в истории. Отменить это нельзя.','Cancel':'Отмена','Yes, end the run':'Да, завершить запуск','Symbols':'Буквы','Live numbers':'Числа','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the tool limit':'Скорость ниже предела снаряда','Speed above the tool limit':'Скорость выше предела снаряда','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the tool limits':'Давление вне допустимого диапазона снаряда','Gas pressure below the tool limit':'Давление газа ниже предела снаряда','Temperature outside the tool limits':'Температура вне допустимого диапазона снаряда','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within equipment limits':'В пределах возможностей оборудования','Allowed flow':'Допустимый расход','Allowed':'Допустимо','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
   function tr(s){return S.lang==='ru'&&RU[s]||s}
   function applyLang(){
     document.documentElement.lang=S.lang;
     [].forEach.call(document.body.querySelectorAll('*'),function(el){
-      if(el.closest('svg')||{title:1,flowL:1,vel:1,dur:1,rflow:1,warn:1,startL:1,tArrL:1,pL:1,fmlBody:1,rlo:1,rrange:1,updTxt:1,ver:1}[el.id])return;
+      if(el.closest('svg')||{title:1,flowL:1,vel:1,dur:1,rflow:1,warn:1,startL:1,tArrL:1,pL:1,fmlBody:1,rlo:1,rrange:1,updTxt:1,ver:1,authMsg:1,acct:1,teamBox:1,runList:1,roTxt:1}[el.id])return;
       if(el.childNodes.length!==1||el.firstChild.nodeType!==3)return;
       var en=el.dataset.en||el.textContent.trim();
       if(RU[en]){el.dataset.en=en;el.textContent=S.lang==='ru'?RU[en]:en}
@@ -637,13 +637,26 @@
   function runsSave(){try{localStorage.setItem(RKEY2,JSON.stringify(RUNS));localStorage.setItem(CKEY,CUR||'')}catch(e){}}
   function curRun(){for(var i=0;i<RUNS.length;i++)if(RUNS[i].id===CUR)return RUNS[i];return null}
   function runById(id){for(var i=0;i<RUNS.length;i++)if(RUNS[i].id===id)return RUNS[i];return null}
-  function mkRun(params,st){return {id:uid(),name:(params&&params.name||'').trim()||tr('Run'),st:st||'planned',params:params,created:Date.now(),updated:Date.now(),owner:null}}
-  function pushRun(r){if(window.runsHook)window.runsHook(r)}
-  function isRO(r){return r.st==='done'}
+  var ME=null,ROLE=null,CSTATE='out',unRuns=null,unMem=null,unInv=null,pushT={},AKEY='pigSpeedCalc.acct.v1';
+  try{var ac=JSON.parse(localStorage.getItem(AKEY)||'null');if(ac&&ac.uid){ME=ac;ROLE=ac.role;CSTATE='cached'}}catch(e){}
+  function signed(){return !!(ME&&ROLE)}
+  function canWrite(){return signed()&&(ROLE==='engineer'||ROLE==='admin')}
+  function mkRun(params,st){
+    var r={id:uid(),name:(params&&params.name||'').trim()||tr('Run'),st:st||'planned',params:params,created:Date.now(),updated:Date.now(),owner:null};
+    if(canWrite()){r.team=true;r.owner={uid:ME.uid,name:ME.name}}
+    return r;
+  }
+  function pushRun(r){
+    if(!r||!r.team||!canWrite()||!window.Cloud||!Cloud.available())return;
+    if(!r.deleted&&r.owner&&r.owner.uid!==ME.uid&&ROLE!=='admin')return;
+    clearTimeout(pushT[r.id]);
+    pushT[r.id]=setTimeout(function(){if(r.deleted)Cloud.deleteRun(r.id).catch(function(){});else Cloud.saveRun(r).catch(function(){})},r.deleted?0:350);
+  }
+  function isRO(r){if(r.st==='done')return true;if(!r.team)return false;if(!canWrite())return true;return !(r.owner&&r.owner.uid===ME.uid||ROLE==='admin')}
   function setRO(v){
     RO=!!v;document.body.classList.toggle('ro',RO);
     var ic=document.querySelector('.card.inp');if(ic)ic.inert=RO;$('vlist').inert=RO;$('vadd').disabled=RO;
-    var r=curRun();$('roTxt').textContent=RO?tr(r&&r.st==='done'?'This run is finished and cannot be changed. Start a new run from its settings to launch again.':'You are viewing this run'):'';
+    var r=curRun();$('roTxt').textContent=RO?(r&&r.st==='done'?tr('This run is finished and cannot be changed. Start a new run from its settings to launch again.'):tr('You are viewing')+' '+(r&&r.owner?r.owner.name+' — ':'')+(r?esc(r.name):'')):'';
     $('roNew').style.display=(RO&&r&&r.st==='done')?'':'none';
     setStartLabel();
   }
@@ -668,23 +681,25 @@
     update();
   }
   function animDetach(){if(anim){cancelAnimationFrame(anim.raf);anim=null;lockWake(false)}window.__run=null;$('logInfo').textContent='';setStartLabel()}
-  function openRun(id){
-    var r=runById(id);if(!r||!r.params||r.id===CUR)return;
-    animDetach();CUR=id;loadingRun=true;
+  function showRun(r){
+    animDetach();loadingRun=true;
     if(r.st!=='planned'){S.pb=1}
     loadSection(r.params);loadingRun=false;$('pbSel').value=S.pb;
     setRO(isRO(r));
     var g=window.__dg;
     if(r.st==='running'&&r.launch&&r.pb===1){pendingRun={launch:r.launch,hours:r.hours,pb:1,dur:r.dur,obs:r.obs||{},rec:r.id};restoreRun()}
     else if(r.st==='done'&&r.launch&&g&&g.hours){window.__run={launch:r.launch,done:true,dur:r.dur||g.hours*3.6e6,obs:r.obs||{}};applyProgress(1);updateValveClocks()}
-    runsSave();renderRuns();closeRuns();
+  }
+  function openRun(id){
+    var r=runById(id);if(!r||!r.params||r.id===CUR)return;
+    CUR=id;showRun(r);runsSave();renderRuns();closeRuns();
   }
   function dupRun(r,open){
-    if(!r||!r.params)return null;var n=mkRun(JSON.parse(JSON.stringify(r.params)),'planned');if(open!==false)openRun(n.id,RUNS.unshift(n));else RUNS.unshift(n);return n;
+    if(!r||!r.params)return null;var n=mkRun(JSON.parse(JSON.stringify(r.params)),'planned');RUNS.unshift(n);pushRun(n);if(open!==false)openRun(n.id);return n;
   }
-  function newRun(){var c=curRun(),p=c&&c.params?JSON.parse(JSON.stringify(c.params)):snapParams(),n=mkRun(p,'planned');RUNS.unshift(n);openRun(n.id)}
+  function newRun(){var c=curRun(),p=c&&c.params?JSON.parse(JSON.stringify(c.params)):snapParams(),n=mkRun(p,'planned');RUNS.unshift(n);pushRun(n);openRun(n.id)}
   function delRun(id){
-    var i=-1;RUNS.forEach(function(x,k){if(x.id===id)i=k});if(i<0)return;var was=RUNS[i].id===CUR;RUNS.splice(i,1);pushRun({id:id,deleted:true});
+    var i=-1;RUNS.forEach(function(x,k){if(x.id===id)i=k});if(i<0)return;var was=RUNS[i].id===CUR,wasTeam=RUNS[i].team;RUNS.splice(i,1);pushRun({id:id,deleted:true,team:wasTeam});
     if(was){var nx=RUNS.filter(function(x){return x.params})[0];CUR=null;if(nx)openRun(nx.id);else{var n=mkRun(snapParams(),'planned');RUNS.unshift(n);CUR=n.id;setRO(false)}}
     runsSave();renderRuns();
   }
@@ -705,7 +720,7 @@
         var d=document.createElement('div');d.className='ritem st-'+r.st+(r.id===CUR?' cur':'')+(r.params?'':' nopen');
         var info=document.createElement('div');info.className='si';
         var n=document.createElement('div');n.className='sn';n.innerHTML='<i class="rd"></i>';n.appendChild(document.createTextNode(r.name));
-        var s=document.createElement('div');s.className='sd';s.textContent=(r.params?runDesc(r):tr('Finished'))+' · '+new Date(r.created).toLocaleString(S.lang==='ru'?'ru-RU':'en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        var s=document.createElement('div');s.className='sd';s.textContent=(r.team?'☁ ':'')+(r.params?runDesc(r):tr('Finished'))+(r.team&&r.owner?' · '+r.owner.name:'')+' · '+new Date(r.created).toLocaleString(S.lang==='ru'?'ru-RU':'en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
         info.appendChild(n);info.appendChild(s);
         if(r.st==='running'&&r.dur){var pr=Math.max(0,Math.min(1,(now-r.launch)/r.dur));
           var bar=document.createElement('div');bar.className='rbar2';bar.innerHTML='<i style="width:'+(pr*100)+'%"></i>';info.appendChild(bar)}
@@ -717,6 +732,8 @@
         if(r.params)d.addEventListener('click',function(){openRun(r.id)});
         var dp=document.createElement('button');dp.type='button';dp.className='ib';dp.title=tr('Duplicate');dp.textContent='⧉';
         dp.addEventListener('click',function(e){e.stopPropagation();dupRun(r)});if(r.params)d.appendChild(dp);
+        if(!r.team&&r.params&&canWrite()&&r.st!=='done'){var sh=document.createElement('button');sh.type='button';sh.className='ib';sh.title=tr('Share with team');sh.textContent='☁';sh.addEventListener('click',function(e){e.stopPropagation();r.team=true;r.owner={uid:ME.uid,name:ME.name};r.updated=Date.now();runsSave();pushRun(r);renderRuns()});d.appendChild(sh)}
+        if(r.team&&!(canWrite()&&(r.owner&&r.owner.uid===ME.uid||ROLE==='admin'))){box.appendChild(d);return}
         var x=document.createElement('button');x.type='button';x.className='ib del';x.title=tr('Delete');x.textContent='×';
         x.addEventListener('click',function(e){e.stopPropagation();if(x.dataset.sure){delRun(r.id);return}x.dataset.sure='1';x.textContent=tr('Delete?');x.classList.add('sure');setTimeout(function(){x.dataset.sure='';x.textContent='×';x.classList.remove('sure')},3000)});
         d.appendChild(x);box.appendChild(d);
@@ -731,6 +748,121 @@
     S.vt=Array.isArray(S.vt)?S.vt:[];while(S.vt.length<S.valves.length)S.vt.push(1);
     S.flowTouched=true;toUI();applyLang();save();update();
   }
+  // ---- team cloud
+  function esc2(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function clockOf(ms){return fmtClock(ms).split(' ')[0]}
+  function notifyChange(l,r){
+    if(!ME||(r.owner&&r.owner.uid===ME.uid))return;
+    var who=r.owner?r.owner.name:'';
+    if(l.st!=='running'&&r.st==='running'){toast(r.name+': '+tr('launched by')+' '+who);return}
+    var vn=(r.params&&r.params.vnames)||[];
+    Object.keys(r.obs||{}).forEach(function(k){if(!(l.obs&&l.obs[k])){toast(r.name+' · '+(vn[k]||tr('Valve')+' '+(+k+1))+' '+tr('passed at')+' '+clockOf(r.obs[k]))}});
+    if(l.st!=='done'&&r.st==='done'&&r.finish){var dv=r.finish.planned>0?Math.round((r.finish.actual/r.finish.planned-1)*100):0;toast(r.name+': '+tr('finished')+' '+fmtRem(r.finish.actual)+' ('+(dv>0?'+':'')+dv+'%)')}
+  }
+  function onRemote(list,changes){
+    var ids={},cur0=CUR,refresh=false,gone=false;
+    list.forEach(function(r){ids[r.id]=1});
+    RUNS=RUNS.filter(function(x){if(x.team&&!ids[x.id]){if(x.id===CUR)gone=true;return false}return true});
+    list.forEach(function(r){
+      var l=runById(r.id);
+      if(!l){RUNS.push(r);if(r.st==='running'&&r.owner&&ME&&r.owner.uid!==ME.uid)toast(r.name+': '+tr('launched by')+' '+r.owner.name);return}
+      if((r.updated||0)>(l.updated||0)){
+        notifyChange(l,r);var i=RUNS.indexOf(l);RUNS[i]=r;if(r.id===CUR)refresh=true;
+      }else if(!l.team){l.team=true;l.owner=r.owner}
+    });
+    if(gone){var nx=RUNS.filter(function(x){return x.params})[0];CUR=null;if(nx){CUR=nx.id;showRun(nx)}else{var n=mkRun(snapParams(),'planned');RUNS.unshift(n);CUR=n.id;setRO(false)}}
+    else if(refresh){var c=curRun();if(c)showRun(c)}
+    runsSave();renderRuns();
+  }
+  function stopWatch(){[unRuns,unMem,unInv].forEach(function(u){if(u)try{u()}catch(e){}});unRuns=unMem=unInv=null}
+  function onCloud(s){
+    CSTATE=s.status;
+    if(s.status==='member'){
+      ME={uid:s.user.uid,name:s.user.name,email:s.user.email,role:s.role};ROLE=s.role;
+      try{localStorage.setItem(AKEY,JSON.stringify(ME))}catch(e){}
+      if(!unRuns)unRuns=Cloud.watchRuns(onRemote);
+    }else if(s.status==='out'){
+      stopWatch();ME=null;ROLE=null;try{localStorage.removeItem(AKEY)}catch(e){}
+      var had=RUNS.some(function(x){return x.team});RUNS=RUNS.filter(function(x){return !x.team});
+      var c=curRun();if(!c){var nx=RUNS.filter(function(x){return x.params})[0];CUR=null;if(nx){CUR=nx.id;showRun(nx)}else{var n=mkRun(snapParams(),'planned');RUNS.unshift(n);CUR=n.id;setRO(false)}}
+      if(had)runsSave();
+    }else if(s.status==='verify'||s.status==='nomember'){
+      stopWatch();ME=null;ROLE=null;
+    }
+    var cr=curRun();if(cr)setRO(isRO(cr));
+    renderAcct();renderRuns();if(s.status==='out'||s.status==='member')renderTeam();
+    if($('authDlg').classList.contains('open'))authView();
+  }
+  var AUTHERR={'auth/invalid-credential':'Wrong email or password','auth/wrong-password':'Wrong email or password','auth/user-not-found':'Wrong email or password','auth/email-already-in-use':'This email is already registered','auth/weak-password':'Password must have at least 6 characters','auth/invalid-email':'Enter a valid email','auth/network-request-failed':'No connection','auth/too-many-requests':'Too many attempts, try again later','auth/popup-closed-by-user':'','auth/operation-not-supported-in-this-environment':'Google sign-in does not work in this app, use email and password'};
+  var authMode='in';
+  function authView(){
+    var st=CSTATE,form=$('authForm'),stat=$('authStat'),msg=$('authMsg'),btns=$('authBtns');btns.innerHTML='';
+    function btn(t,fn,cls){var b=document.createElement('button');b.type='button';b.className='add '+(cls||'');b.innerHTML='<span>'+tr(t)+'</span>';b.onclick=fn;btns.appendChild(b)}
+    if(st==='verify'){form.style.display='none';stat.style.display='';$('authT').textContent=tr('Confirm your email');
+      msg.textContent=tr('We sent a link to')+' '+(Cloud.state().user?Cloud.state().user.email:'')+'. '+tr('Open it, then press the button.');
+      btn('I confirmed it',function(){Cloud.refresh()},'okb2');btn('Send again',function(){Cloud.resendVerify();msg.textContent=tr('Sent')});btn('Sign out',function(){Cloud.signOut()})}
+    else if(st==='nomember'){form.style.display='none';stat.style.display='';$('authT').textContent=tr('Waiting for an invitation');
+      msg.textContent=tr('Your account is not in the team yet. Ask the administrator to invite')+' '+(Cloud.state().user?Cloud.state().user.email:'')+'.';
+      btn('Check again',function(){Cloud.refresh()},'okb2');btn('Sign out',function(){Cloud.signOut()})}
+    else if(st==='member'||st==='cached'){form.style.display='none';stat.style.display='';$('authT').textContent=tr('Account');
+      msg.textContent=(ME?ME.name+' ('+ME.email+') — '+tr(ROLE):'');btn('Sign out',function(){Cloud.signOut()});}
+    else{form.style.display='';stat.style.display='none';$('authT').textContent=tr(authMode==='up'?'Create account':'Sign in');
+      $('authNameRow').style.display=authMode==='up'?'':'none';[].forEach.call(document.querySelectorAll('.atabs button'),function(b){b.classList.toggle('on',b.dataset.m===authMode)});
+      $('authPass').autocomplete=authMode==='up'?'new-password':'current-password'}
+  }
+  function openAuth(){$('authErr').textContent='';authView();$('authDlg').classList.add('open')}
+  function authErr(e){var m=AUTHERR[e&&e.code];$('authErr').textContent=m===undefined?tr('Error')+(e&&e.code?' ('+e.code+')':''):tr(m)}
+  function renderAcct(){
+    var box=$('acct');if(!box)return;box.innerHTML='';
+    if(!window.Cloud||!Cloud.available())return;
+    function b(t,fn,cls){var x=document.createElement('button');x.type='button';x.className='add '+(cls||'');x.innerHTML='<span>'+t+'</span>';x.onclick=fn;box.appendChild(x);return x}
+    if(signed()){
+      var c=document.createElement('span');c.className='chip';c.textContent=ME.name+' · '+tr(ROLE)+(CSTATE==='offline'?' · '+tr('offline'):'');box.appendChild(c);
+      if(ROLE==='admin')b(tr('Team'),function(){$('teamBox').classList.toggle('open');renderTeam()});
+      b(tr('Sign out'),function(){Cloud.signOut()});
+    }else if(CSTATE==='verify'||CSTATE==='nomember')b(tr('Finish sign-in'),openAuth);
+    else b(tr('Sign in'),openAuth);
+  }
+  function renderTeam(){
+    var box=$('teamBox');if(!box)return;
+    if(!(signed()&&ROLE==='admin')){box.classList.remove('open');box.innerHTML='';stopMembers();return}
+    if(!box.classList.contains('open')){stopMembers();return}
+    if(!unMem){unMem=Cloud.watchMembers(function(a){TEAMM=a;drawTeam()});unInv=Cloud.watchInvites(function(a){TEAMI=a;drawTeam()})}
+    drawTeam();
+  }
+  var TEAMM=[],TEAMI=[];
+  function stopMembers(){if(unMem){try{unMem()}catch(e){}unMem=null}if(unInv){try{unInv()}catch(e){}unInv=null}}
+  function roleSel(v){return '<select>'+['engineer','manager','admin'].map(function(r){return '<option value="'+r+'"'+(r===v?' selected':'')+'>'+tr(r)+'</option>'}).join('')+'</select>'}
+  function drawTeam(){
+    var box=$('teamBox');if(!box||!box.classList.contains('open'))return;
+    var h='<div class="gh">'+tr('Team')+'</div>';
+    TEAMM.forEach(function(m){h+='<div class="trow" data-u="'+esc2(m.uid)+'"><div class="si"><div class="sn">'+esc2(m.name)+'</div><div class="sd">'+esc2(m.email)+'</div></div>'+(ME&&m.uid===ME.uid?'<span class="chip">'+tr(m.role)+'</span>':roleSel(m.role)+'<button type="button" class="ib del" data-act="rm">×</button>')+'</div>'});
+    TEAMI.forEach(function(m){h+='<div class="trow inv" data-e="'+esc2(m.email)+'"><div class="si"><div class="sn">'+esc2(m.email)+'</div><div class="sd">'+tr('invited')+' · '+tr(m.role)+'</div></div><button type="button" class="ib del" data-act="rmi">×</button></div>'});
+    h+='<div class="srow tinv"><input id="invEmail" type="email" placeholder="'+tr('Email')+'">'+roleSel('engineer').replace('<select>','<select id="invRole">')+'<button type="button" class="add" id="invGo"><span>'+tr('Invite')+'</span></button></div>';
+    box.innerHTML=h;
+  }
+  $('teamBox').addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t)return;
+    if(t.id==='invGo'){var em=($('invEmail').value||'').trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(em))return;Cloud.addInvite(em,$('invRole').value).then(function(){$('invEmail').value=''}).catch(function(){});return}
+    var row=t.closest('.trow');if(!row)return;
+    if(t.dataset.act==='rm'){if(t.dataset.sure){Cloud.removeMember(row.dataset.u)}else{t.dataset.sure='1';t.textContent=tr('Delete?');t.classList.add('sure');setTimeout(function(){t.dataset.sure='';t.textContent='×';t.classList.remove('sure')},3000)}}
+    else if(t.dataset.act==='rmi')Cloud.delInvite(row.dataset.e);
+  });
+  $('teamBox').addEventListener('change',function(e){var row=e.target.closest('.trow');if(row&&row.dataset.u&&e.target.tagName==='SELECT')Cloud.setRole(row.dataset.u,e.target.value)});
+  $('authDlg').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
+  $('authX').addEventListener('click',function(){$('authDlg').classList.remove('open')});
+  document.querySelector('.atabs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;authMode=b.dataset.m;authView()});
+  function authGo(){
+    var em=($('authEmail').value||'').trim(),pw=$('authPass').value||'',nm=($('authName').value||'').trim();$('authErr').textContent='';
+    if(!em||!pw){$('authErr').textContent=tr('Enter email and password');return}
+    if(authMode==='up'&&!nm){$('authErr').textContent=tr('Enter your name');return}
+    var p=authMode==='up'?Cloud.signUp(em,pw,nm):Cloud.signIn(em,pw);
+    p.then(function(){authView()}).catch(authErr);
+  }
+  $('authGo').addEventListener('click',authGo);
+  ['authEmail','authPass','authName'].forEach(function(id){$(id).addEventListener('keydown',function(e){if(e.key==='Enter')authGo()})});
+  $('authGoogle').addEventListener('click',function(){Cloud.google().catch(authErr)});
+  $('authForgot').addEventListener('click',function(){var em=($('authEmail').value||'').trim();if(!em){$('authErr').textContent=tr('Enter your email first');return}Cloud.reset(em).then(function(){$('authErr').textContent=tr('Password reset email sent')}).catch(authErr)});
   function initRuns(){
     var raw=null;try{raw=JSON.parse(localStorage.getItem(RKEY2)||'null')}catch(e){}
     if(Array.isArray(raw))RUNS=raw;
@@ -748,7 +880,8 @@
     runsSave();
     if(c.st==='running'&&c.launch&&c.pb===1)pendingRun={launch:c.launch,hours:c.hours,pb:1,dur:c.dur,obs:c.obs||{},rec:c.id};
     if(c.st==='done'&&c.launch){var g0=window.__dg;if(g0&&g0.hours){window.__run={launch:c.launch,done:true,dur:c.dur||g0.hours*3.6e6,obs:c.obs||{}};applyProgress(1)}}
-    setRO(isRO(c));renderRuns();
+    setRO(isRO(c));renderRuns();renderAcct();
+    if(window.Cloud&&Cloud.available())Cloud.start(onCloud);
   }
   $('runNew').addEventListener('click',newRun);
   $('roNew').addEventListener('click',newRun);

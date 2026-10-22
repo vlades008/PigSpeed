@@ -1,0 +1,43 @@
+rules_version = '2';
+// Paste into Firebase console > Firestore Database > Rules > Publish.
+// Replace REPLACE_WITH_ADMIN_EMAIL with the address of the first administrator (it alone may create the team).
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function signedIn() { return request.auth != null; }
+    function verified() { return request.auth.token.email_verified == true; }
+    function member(t) { return signedIn() && exists(/databases/$(db)/documents/teams/$(t)/members/$(request.auth.uid)); }
+    function role(t) { return get(/databases/$(db)/documents/teams/$(t)/members/$(request.auth.uid)).data.role; }
+    function admin(t) { return member(t) && role(t) == 'admin'; }
+    function writer(t) { return member(t) && (role(t) == 'admin' || role(t) == 'engineer'); }
+
+    match /teams/{t} {
+      allow read: if signedIn();
+      allow create: if signedIn() && verified()
+                    && request.auth.token.email.lower() == 'REPLACE_WITH_ADMIN_EMAIL'
+                    && request.resource.data.owner == request.auth.uid;
+
+      match /members/{u} {
+        allow read: if member(t) || (signedIn() && request.auth.uid == u);
+        allow create: if signedIn() && verified() && request.auth.uid == u && (
+          (getAfter(/databases/$(db)/documents/teams/$(t)).data.owner == request.auth.uid
+            && request.resource.data.role == 'admin') ||
+          (exists(/databases/$(db)/documents/teams/$(t)/invites/$(request.auth.token.email.lower()))
+            && get(/databases/$(db)/documents/teams/$(t)/invites/$(request.auth.token.email.lower())).data.role
+               == request.resource.data.role));
+        allow update, delete: if admin(t);
+      }
+
+      match /invites/{e} {
+        allow read: if admin(t) || (signedIn() && verified() && request.auth.token.email.lower() == e);
+        allow write: if admin(t);
+      }
+
+      match /runs/{r} {
+        allow read: if member(t);
+        allow create: if writer(t) && request.resource.data.owner.uid == request.auth.uid;
+        allow update: if writer(t) && (resource.data.owner.uid == request.auth.uid || role(t) == 'admin');
+        allow delete: if writer(t) && (resource.data.owner.uid == request.auth.uid || role(t) == 'admin');
+      }
+    }
+  }
+}
