@@ -164,3 +164,14 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 .kic.ic-vel{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2017a8%208%200%201%201%2016%200%22%2F%3E%3Cpath%20d%3D%22M12%2017l5-6%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2217%22%20r%3D%221.3%22%2F%3E%3C%2Fsvg%3E")}
 .kic.ic-dur{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M12%207v5l3%202%22%2F%3E%3C%2Fsvg%3E")}
 .kic.ic-flow{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%209c3%200%203%202%206%202s3-2%206-2%203%202%206%202M3%2015c3%200%203%202%206%202s3-2%206-2%203%202%206%202%22%2F%3E%3C%2Fsvg%3E")}
+
+/* global view: stops on the line + departure board */
+#dg .vg .b{fill:#5d6674}#dg .vg.passed .b,#dg .brow.passed .b{fill:#1D9E75}#dg .vg.next .b,#dg .brow.next .b{fill:#378ADD}
+#dg .bn{fill:#fff;font:600 13px system-ui,sans-serif;pointer-events:none}
+#dg .vg .ring{opacity:0}#dg .vg.next .ring{opacity:1}#dg .vg.passed .ring{opacity:0}
+#dg .vcd{fill:#378ADD}#dg.st2 .vcd{fill:#7fe8ff}
+#dg .bdpanel{fill:var(--soft)}#dg.st1 .bdpanel{fill:#fff;fill-opacity:.65}#dg.st2 .bdpanel{fill:#0c2a45;fill-opacity:.75}
+#dg .bpill{fill:transparent}#dg .brow.next .bpill{fill:#378ADD;fill-opacity:.2}
+#dg .brow.passed text.t{fill:#1b7f46}#dg.st2 .brow.passed text.t{fill:#5ff29a}
+#dg .brow.next .bm{font-weight:700}
+#dg .bt{font-size:calc(14px*(1 + (var(--ts,1) - 1)*0.4))}
