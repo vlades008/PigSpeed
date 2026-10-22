@@ -42,6 +42,11 @@ input:disabled,select:disabled{opacity:.7}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
 .seg.lang{width:auto}.seg.lang button{padding:5px 11px;flex:none}
+.vswitch{display:flex;align-items:center;gap:8px;height:30px}
+.vswitch .vl{font-size:13px;color:var(--muted);cursor:pointer;user-select:none}.vswitch .vl.on{color:var(--ink);font-weight:600}
+#viewSw{position:relative;width:40px;height:22px;padding:0;border:0;border-radius:11px;background:var(--line);cursor:pointer;transition:background .15s}
+#viewSw i{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .15s}
+#viewSw[aria-checked=true]{background:var(--accent)}#viewSw[aria-checked=true] i{transform:translateX(18px)}
 .seg.sm{width:auto}.seg.sm button{padding:4px 12px;font-size:13px}
 #fluid button:disabled{opacity:.45;cursor:not-allowed}
 .hint{font-size:12px;color:var(--muted)}

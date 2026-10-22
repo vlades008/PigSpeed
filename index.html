@@ -49,6 +49,11 @@ input:disabled,select:disabled{opacity:.7}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
 .seg.lang{width:auto}.seg.lang button{padding:5px 11px;flex:none}
+.vswitch{display:flex;align-items:center;gap:8px;height:30px}
+.vswitch .vl{font-size:13px;color:var(--muted);cursor:pointer;user-select:none}.vswitch .vl.on{color:var(--ink);font-weight:600}
+#viewSw{position:relative;width:40px;height:22px;padding:0;border:0;border-radius:11px;background:var(--line);cursor:pointer;transition:background .15s}
+#viewSw i{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .15s}
+#viewSw[aria-checked=true]{background:var(--accent)}#viewSw[aria-checked=true] i{transform:translateX(18px)}
 .seg.sm{width:auto}.seg.sm button{padding:4px 12px;font-size:13px}
 #fluid button:disabled{opacity:.45;cursor:not-allowed}
 .hint{font-size:12px;color:var(--muted)}
@@ -244,7 +249,7 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 
       <section class="card diag">
         <div class="dhead">
-          <div class="seg sm" id="viewSeg"><button type="button" data-v="0">Local</button><button type="button" data-v="1">Global</button></div>
+          <div class="vswitch" id="viewSeg"><span class="vl" data-v="0">Local</span><button type="button" role="switch" id="viewSw" aria-checked="false" aria-label="Local / Global"><i></i></button><span class="vl" data-v="1">Global</span></div>
           <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
         </div>
         <svg id="dg" viewBox="0 0 900 235" role="img" aria-label="Pipeline diagram"></svg>
@@ -458,7 +463,7 @@ var PSC = (function(){
     IDS.forEach(function(id){if(id!=='od')$(id).value=S[id]});
     setFluid(S.fluid,true);setView(S.view,true);renderValves();$('pbSel').value=S.pb;$('atm').checked=!!S.atm;$('alert').checked=!!S.alert;$('leadSel').value=S.lead;$('tscale').value=S.tscale;$('tscaleV').textContent=S.tscale+'%';$('toolSel').value=S.toolOn?S.tool:-1;
   }
-  function setView(v,quiet){S.view=+v;[].forEach.call($('viewSeg').children,function(b){b.setAttribute('aria-pressed',String(+b.dataset.v===S.view))});if(!quiet){save();var run=snapRun();update();if(run)resumeAnim(run)}}
+  function setView(v,quiet){S.view=+v;$('viewSw').setAttribute('aria-checked',String(S.view===1));[].forEach.call($('viewSeg').querySelectorAll('.vl'),function(l){l.classList.toggle('on',+l.dataset.v===S.view)});if(!quiet){save();var run=snapRun();update();if(run)resumeAnim(run)}}
   function setFluid(f,quiet){
     S.fluid=f;
     if(!quiet&&!S.flowTouched){flowDefault(f);$('flow').value=S.flow;$('gasu').value=S.gasu;$('oilu').value=S.oilu}
@@ -966,7 +971,7 @@ var PSC = (function(){
   document.addEventListener('click',function(e){if(!e.target.closest('.sec')){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('click',function(e){if(!e.target.closest('.gear')){$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false');$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
-  $('viewSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setView(+b.dataset.v)});
+  $('viewSeg').addEventListener('click',function(e){var l=e.target.closest('.vl');if(l)setView(+l.dataset.v);else if(e.target.closest('#viewSw'))setView(S.view===1?0:1)});
   $('atm').addEventListener('change',function(){S.atm=this.checked;save();update()});
   $('alert').addEventListener('change',function(){S.alert=this.checked;save();if(this.checked)primeAlerts()});
   $('leadSel').addEventListener('change',function(){S.lead=+this.value;save()});

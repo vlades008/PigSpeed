@@ -69,7 +69,7 @@
     IDS.forEach(function(id){if(id!=='od')$(id).value=S[id]});
     setFluid(S.fluid,true);setView(S.view,true);renderValves();$('pbSel').value=S.pb;$('atm').checked=!!S.atm;$('alert').checked=!!S.alert;$('leadSel').value=S.lead;$('tscale').value=S.tscale;$('tscaleV').textContent=S.tscale+'%';$('toolSel').value=S.toolOn?S.tool:-1;
   }
-  function setView(v,quiet){S.view=+v;[].forEach.call($('viewSeg').children,function(b){b.setAttribute('aria-pressed',String(+b.dataset.v===S.view))});if(!quiet){save();var run=snapRun();update();if(run)resumeAnim(run)}}
+  function setView(v,quiet){S.view=+v;$('viewSw').setAttribute('aria-checked',String(S.view===1));[].forEach.call($('viewSeg').querySelectorAll('.vl'),function(l){l.classList.toggle('on',+l.dataset.v===S.view)});if(!quiet){save();var run=snapRun();update();if(run)resumeAnim(run)}}
   function setFluid(f,quiet){
     S.fluid=f;
     if(!quiet&&!S.flowTouched){flowDefault(f);$('flow').value=S.flow;$('gasu').value=S.gasu;$('oilu').value=S.oilu}
@@ -577,7 +577,7 @@
   document.addEventListener('click',function(e){if(!e.target.closest('.sec')){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('click',function(e){if(!e.target.closest('.gear')){$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false');$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
-  $('viewSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setView(+b.dataset.v)});
+  $('viewSeg').addEventListener('click',function(e){var l=e.target.closest('.vl');if(l)setView(+l.dataset.v);else if(e.target.closest('#viewSw'))setView(S.view===1?0:1)});
   $('atm').addEventListener('change',function(){S.atm=this.checked;save();update()});
   $('alert').addEventListener('change',function(){S.alert=this.checked;save();if(this.checked)primeAlerts()});
   $('leadSel').addEventListener('change',function(){S.lead=+this.value;save()});
