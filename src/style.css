@@ -175,3 +175,5 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 #dg .brow.passed text.t{fill:#1b7f46}#dg.st2 .brow.passed text.t{fill:#5ff29a}
 #dg .brow.next .bm{font-weight:700}
 #dg .bt{font-size:calc(14px*(1 + (var(--ts,1) - 1)*0.4))}
+#clkd{color:var(--ink);font-weight:600;font-size:13px}
+#dg .pigd{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-opacity:.85;stroke-linejoin:round}#dg.st2 .pigd{stroke:#071524}
