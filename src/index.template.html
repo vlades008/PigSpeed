@@ -34,6 +34,7 @@
         <label class="pl"><span>Standard conditions</span><select id="std"><option value="0">60 °F, 14.696 psia</option><option value="1">15 °C, 101.325 kPa</option><option value="2">20 °C, 101.325 kPa</option></select></label>
         <label class="pl" data-ti="Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip."><span>Pig speed / flow speed, %</span><input id="slip" inputmode="decimal" autocomplete="off"></label>
         <div class="gh">Display</div>
+        <label class="pl"><span>Interface</span><select id="ui"><option value="0">Standard</option><option value="1">Control room</option><option value="2">Route map</option></select></label>
         <label class="pl"><span>Diagram style</span><select id="dstyle"><option value="0">Classic</option><option value="1">Glass</option><option value="2">Blueprint</option></select></label>
         <label class="pl"><span>Text size in diagram</span><input type="range" id="tscale" min="60" max="220" step="5"><b id="tscaleV">100%</b></label>
         <div class="gver" id="ver"></div>
@@ -85,6 +86,8 @@
       <div class="info"><div class="cat" id="cat"></div></div>
 
       <section class="card diag">
+        <button type="button" id="rvBtn" class="add rvbtn"><span>Pipe diagram</span></button>
+        <div class="route" id="route"></div>
         <div class="dhead">
           <div class="vswitch" id="viewSeg"><span class="vl" data-v="0">Local</span><button type="button" role="switch" id="viewSw" aria-checked="false" aria-label="Local / Global"><i></i></button><span class="vl" data-v="1">Global</span></div>
           <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
@@ -139,6 +142,7 @@
   <div id="authStat" style="display:none"><p id="authMsg"></p><div class="mbt" id="authBtns"></div></div>
   <div class="mbt"><span class="grow"></span><button type="button" class="link" id="authX">Close</button></div>
 </div></div>
+<nav class="tabbar" id="tabbar"><button type="button" data-a="run"><b>▶</b><span>Run</span></button><button type="button" data-a="runs"><b>☰</b><span>Runs</span></button><button type="button" data-a="fml"><b>ƒ</b><span>Formulas</span></button><button type="button" data-a="set"><b>⚙</b><span>Settings</span></button></nav>
 <button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡<i class="fabn" id="fabN"></i></button>
 <div class="mdl" id="ideaDlg" role="dialog" aria-modal="true"><div class="mbox wide">
   <h3 id="ideaT">Your idea</h3>

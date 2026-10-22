@@ -9,3 +9,4 @@ android/*
 index.before-redesign.html
 style-previews/
 !docs/downloads/*
+firestore.admin.rules

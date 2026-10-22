@@ -1,6 +1,6 @@
 {
-  "version": "1.3.0",
-  "notes": "Кнопка идей со снимком экрана",
+  "version": "1.4.0",
+  "notes": "Три интерфейса: стандартный, пульт и маршрут",
   "date": "2026-10-22",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
