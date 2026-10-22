@@ -212,6 +212,27 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 #fmlBody .fl{font-family:Consolas,"Cascadia Mono",monospace;font-size:12.5px;background:var(--soft);border-radius:8px;padding:5px 9px;margin:4px 0;overflow-x:auto;white-space:nowrap}
 #fmlBody p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0}
 #fmlBody p b{color:var(--ink)}
+
+#fmlBody .fl{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",Georgia,"Times New Roman",serif;font-size:15.5px;white-space:normal;line-height:2.1;padding:3px 10px;overflow-x:auto}
+#fmlBody .fl i{font-style:italic}
+#fmlBody .fl sub,#fmlBody .fl sup{font-size:.7em;line-height:0}
+#fmlBody .fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.35}
+#fmlBody .fr>span:first-child{border-bottom:1px solid currentColor;padding:0 3px}
+#fmlBody .fr>span:last-child{padding:0 3px}
+#fmlBody .rt{white-space:nowrap}#fmlBody .rt>span{border-top:1px solid currentColor;padding:0 2px}
+#fmlBody .int{font-size:1.25em}
+
+.fmode{display:flex;gap:2px;padding:2px;margin:8px 0 2px;background:var(--soft);border-radius:10px}
+.fmode button{flex:1;border:0;background:transparent;border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.fmode button.on{background:var(--card,#fff);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.fmode button:first-child span::before{content:"ƒ ";font-family:Georgia,serif;font-style:italic}
+.fmode button:last-child span::before{content:"# "}
+#fmlBody.swap{animation:fswap .25s ease}
+@keyframes fswap{from{opacity:.15;transform:translateY(4px)}to{opacity:1;transform:none}}
+#fmlBody .nv{text-decoration:none;border-bottom:1px dotted var(--accent);cursor:pointer}
+#fmlBody p.lg{font-size:12px;font-style:italic}
+.field.flash{animation:fflash 1.3s ease}
+@keyframes fflash{0%,60%{box-shadow:0 0 0 3px var(--accent);border-radius:10px}100%{box-shadow:0 0 0 0 transparent}}
 </style>
 </head>
 <body>
@@ -273,14 +294,14 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
       <div class="fg">
         <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
       </div>
-      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div id="fmlBody"></div></details>
+      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details>
     </section>
 
     <main class="main">
       <div class="warn" id="warn"></div>
       <div class="kpis">
         <div class="kpi main"><div class="k"><span class="kic ic-vel">Pig speed</span><select id="velu" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="v" id="vel">–</div></div>
-        <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">HHH:MM:SS</div></div>
+        <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">H:MM:SS</div></div>
         <div class="kpi tgt">
           <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
           <div class="v" id="rflow">–</div>
@@ -299,7 +320,7 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
         <div class="runbar">
           <button type="button" class="add start" id="startBtn"><span id="startL">Start</span></button>
           <button type="button" class="add okb" id="arrBtn"><span>✓ Accepted at receiver</span></button>
-          <div class="tiles"><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">000:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
+          <div class="tiles"><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
         </div>
         <div class="rprog"><i id="rprog"></i></div>
         <div class="clk loginfo" id="logInfo"></div>
@@ -430,7 +451,7 @@ var PSC = (function(){
     if(h===null)return null;
     var mm=(h%1)*60, ss=(mm%1)*60;
     var a=Math.trunc(h),b=Math.trunc(mm),c=Math.trunc(ss);
-    return String(a).padStart(3,'0')+':'+String(b).padStart(2,'0')+':'+String(c).padStart(2,'0');
+    return String(a)+':'+String(b).padStart(2,'0')+':'+String(c).padStart(2,'0');
   }
   return {calc:calc,velOut:velOut,fmtDur:fmtDur,tAt:tAt,xAt:xAt,vRel:vRel};
 })();
@@ -505,7 +526,9 @@ var PSC = (function(){
   function toolIdx(){return S.toolOn?+S.tool:1}
   function toUI(){
     ensureOd();
-    IDS.forEach(function(id){if(id!=='od')$(id).value=S[id]});
+    $('fmode').addEventListener('click',function(e){var bt=e.target.closest('button');if(!bt)return;S.fmode=+bt.dataset.m;save();var fb=$('fmlBody');fb.classList.remove('swap');void fb.offsetWidth;fb.classList.add('swap');update()});
+  $('fmlBody').addEventListener('click',function(e){var u=e.target.closest('.nv');if(!u)return;var fe=document.querySelector('.field[data-f="'+u.dataset.nf+'"]');if(!fe)return;fe.scrollIntoView({block:'center',behavior:'smooth'});fe.classList.remove('flash');void fe.offsetWidth;fe.classList.add('flash')});
+  IDS.forEach(function(id){if(id!=='od')$(id).value=S[id]});
     setFluid(S.fluid,true);setView(S.view,true);renderValves();$('pbSel').value=S.pb;$('atm').checked=!!S.atm;$('alert').checked=!!S.alert;$('leadSel').value=S.lead;$('tscale').value=S.tscale;$('tscaleV').textContent=S.tscale+'%';$('toolSel').value=S.toolOn?S.tool:-1;
   }
   function setView(v,quiet){S.view=+v;$('viewSw').setAttribute('aria-checked',String(S.view===1));[].forEach.call($('viewSeg').querySelectorAll('.vl'),function(l){l.classList.toggle('on',+l.dataset.v===S.view)});if(!quiet){save();var run=snapRun();update();if(run)resumeAnim(run)}}
@@ -792,11 +815,11 @@ var PSC = (function(){
    'Pipeline':'Трубопровод','Line name':'Название линии','Outside diameter':'Наружный диаметр','Wall thickness':'Толщина стенки','Line length':'Длина линии','Conditions':'Условия',
    'Pressure':'Давление','Temperature':'Температура','Gas-oil ratio (GOR)':'Газовый фактор (GOR)','Target speed':'Целевая скорость','Target pig speed':'Целевая скорость снаряда',
    'Results':'Результаты','Pig speed':'Скорость снаряда','Estimated duration':'Расчётное время','Flow for target speed':'Расход для целевой скорости','Reset to defaults':'Сбросить',
-   'Values are saved in this browser.':'Значения сохраняются в этом браузере.','HHH:MM:SS':'ЧЧЧ:ММ:СС','mm':'мм','inch':'дюйм','km':'км','m':'м','kPa':'кПа','MPa':'МПа','bar':'бар',
+   'Values are saved in this browser.':'Значения сохраняются в этом браузере.','H:MM:SS':'Ч:ММ:СС','mm':'мм','inch':'дюйм','km':'км','m':'м','kPa':'кПа','MPa':'МПа','bar':'бар',
    'm/s':'м/с','mph':'миль/ч','km/h':'км/ч','°R (Rankine)':'°R (Ранкин)','Km³/day':'тыс. м³/сут','MMSCF/day':'млн фут³/сут','MMSCM/day':'млн м³/сут','Km³/h':'тыс. м³/ч','MMSCF/h':'млн фут³/ч','MMSCM/h':'млн м³/ч',
    'm³/day':'м³/сут','BBL/day':'барр/сут','m³/h':'м³/ч','BBL/h':'барр/ч','SCF/BBL':'фут³/барр','Gas flow rate':'Расход газа','Oil flow rate':'Расход нефти','Oil flow rate (gas follows from GOR)':'Расход нефти (газ — по GOR)',
    'Enter a number':'Введите число','Must be greater than zero':'Должно быть больше нуля','Wrong Outer Diameter or Wall Thickness':'Неверный наружный диаметр или толщина стенки',
-   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the catalogue minimum':'Скорость ниже минимума каталога','Speed above the catalogue maximum':'Скорость выше максимума каталога','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the catalogue range':'Давление вне диапазона каталога','Gas pressure below the catalogue minimum':'Давление газа ниже минимума каталога','Temperature outside the catalogue range':'Температура вне диапазона каталога','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within the limits of the tool catalogue':'В пределах ограничений каталога снарядов','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
+   ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Symbols':'Буквы','Live numbers':'Числа','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the catalogue minimum':'Скорость ниже минимума каталога','Speed above the catalogue maximum':'Скорость выше максимума каталога','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the catalogue range':'Давление вне диапазона каталога','Gas pressure below the catalogue minimum':'Давление газа ниже минимума каталога','Temperature outside the catalogue range':'Температура вне диапазона каталога','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within the limits of the tool catalogue':'В пределах ограничений каталога снарядов','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локальный','Global':'Глобальный','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм'};
   function tr(s){return S.lang==='ru'&&RU[s]||s}
   function applyLang(){
     document.documentElement.lang=S.lang;
@@ -825,6 +848,7 @@ var PSC = (function(){
     svg.style.setProperty('--ts',(+S.tscale||100)/100);
     var DW=px1+30,VWd=gl?DW:Math.min(DW,1000),DH=Math.round(gl?(cy+54*tsf+16):(335+ro+(tsf-1)*40));if(dgDim!==DW+'x'+DH+'x'+VWd){dgDim=DW+'x'+DH+'x'+VWd;if(window.dgBase)window.dgBase(DW,DH,VWd)}
     var col=f===0?'#8ec5ff':f===1?'#c98a2b':null;
+    if(!gl)o.push('<defs><pattern id="pgrid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#8b95a3" stroke-opacity=".16" stroke-width="1"/></pattern></defs><rect x="0" y="0" width="'+DW+'" height="'+DH+'" fill="url(#pgrid)"/>');
     o.push('<rect x="'+pa+'" y="'+top+'" width="'+(pb-pa)+'" height="'+H+'" fill="#8b95a3"/>');
     if(f===2)o.push('<rect x="'+pa+'" y="'+(top+wpx)+'" width="'+(pb-pa)+'" height="'+ih/2+'" fill="#8ec5ff"/><rect x="'+pa+'" y="'+cy+'" width="'+(pb-pa)+'" height="'+ih/2+'" fill="#c98a2b"/>');
     else o.push('<rect x="'+pa+'" y="'+(top+wpx)+'" width="'+(pb-pa)+'" height="'+ih+'" fill="'+col+'"/>');
@@ -833,6 +857,16 @@ var PSC = (function(){
     if(!gl)o.push('<rect x="'+pa+'" y="'+top+'" width="'+(pb-pa)+'" height="'+H+'" fill="url(#tube)"/>');
     if(gl)o.push('<rect x="'+pa+'" y="'+top+'" width="'+(pb-pa)+'" height="'+H+'" fill="none" stroke="#27303b" stroke-width="1"/>');
     if(!gl)o.push('<path d="M'+pa+' '+top+'H'+pb+'M'+pa+' '+bot+'H'+pb+'" stroke="#5d6674" stroke-width="2"/>');
+    if(!gl){                                                       // pro look: bore shading, wall highlights, weld seams, tool shadow and trail
+      o.push('<defs><linearGradient id="bore" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset=".22" stop-color="#000" stop-opacity=".06"/><stop offset=".7" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>'
+        +'<linearGradient id="seam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>'
+        +'<linearGradient id="trail" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".4"/></linearGradient>'
+        +'<filter id="tsh" x="-10%" y="-20%" width="120%" height="150%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity=".4"/></filter></defs>');
+      o.push('<rect x="'+pa+'" y="'+(top+wpx)+'" width="'+(pb-pa)+'" height="'+ih+'" fill="url(#bore)"/>');
+      o.push('<path d="M'+pa+' '+(top+1)+'H'+pb+'" stroke="#fff" stroke-opacity=".55" stroke-width="1.5"/><path d="M'+pa+' '+(top+wpx)+'H'+pb+'M'+pa+' '+(bot-wpx)+'H'+pb+'" stroke="#000" stroke-opacity=".3" stroke-width="1"/>');
+      for(var wx=pa+420;wx<pb-60;wx+=640)o.push('<rect x="'+(wx-5)+'" y="'+(top-1)+'" width="10" height="'+(H+2)+'" fill="url(#seam)"/>');
+    }
+    if(!gl)[pa,pb].forEach(function(x){o.push('<rect x="'+(x-12)+'" y="'+(top-7)+'" width="24" height="'+(H+14)+'" rx="3" fill="url(#gBarrel)" stroke="#4a5562" stroke-width="1.5"/>'+[0.18,0.82].map(function(q){return '<circle cx="'+x+'" cy="'+(top-7+(H+14)*q)+'" r="2.6" fill="#4a5562"/>'}).join(''))});
     if(false)[px0,px1].forEach(function(x){o.push('<path d="M'+x+' '+(top-4)+'l6 '+(H/4+2)+'l-8 '+(H/4)+'l8 '+(H/4)+'l-6 '+(H/4+2)+'" stroke="var(--ink)" stroke-width="2" fill="none"/>')});
     [x0,x1].forEach(function(x){o.push('<path d="M'+x+' '+(top+wpx-(gl?12:0))+'V'+(bot-wpx+(gl?12:0))+'" stroke="#fff" stroke-opacity=".75" stroke-width="1.5" stroke-dasharray="5 5"/>')});
     if(!gl)for(var ax=pa+60;ax<pb-60;ax+=220){o.push('<path d="M'+ax+' '+(cy+ih/2-7)+'h24m-6 -5l6 5l-6 5" stroke="#fff" stroke-opacity=".8" stroke-width="2" fill="none"/>')}
@@ -861,6 +895,8 @@ var PSC = (function(){
         g+='<g class="dOpen"><rect x="'+(s>0?xo:xo-14)+'" y="'+(cy-HB/2+wb)+'" width="14" height="'+(HB-2*wb)+'" fill="#1c2a40" fill-opacity=".55"/><g transform="rotate('+(72*s)+' '+hx+' '+hy+')"><rect class="bclos" x="'+(hx-7)+'" y="'+hy+'" width="14" height="'+(HB-16)+'" rx="6" fill="#d6453d" stroke="#7a1f16" stroke-width="1.5"/><circle cx="'+hx+'" cy="'+(hy+(HB-16)/2)+'" r="6" fill="#ececec" stroke="#4a5562"/></g></g>';
         var nx=xi-s*48;
         g+='<rect x="'+(nx-6)+'" y="'+(cy-HB/2-24)+'" width="12" height="24" fill="url(#gMetal)" stroke="#27303b" stroke-width="1.5"/><rect x="'+(nx-11)+'" y="'+(cy-HB/2-30)+'" width="22" height="7" rx="2" fill="url(#gDark)"/>';
+        var gx=xo+s*LB*0.5,gy=cy-HB/2-22;
+        g+='<rect x="'+(gx-3)+'" y="'+(gy+8)+'" width="6" height="'+(HB/2-30+14)+'" fill="#6b7686"/><circle cx="'+gx+'" cy="'+gy+'" r="15" fill="#f4f6f8" stroke="#27303b" stroke-width="2"/><path d="M'+(gx-10)+' '+(gy+6)+'A12 12 0 1 1 '+(gx+10)+' '+(gy+6)+'" fill="none" stroke="#9aa5b4" stroke-width="2" stroke-dasharray="1.5 3"/><path d="M'+gx+' '+gy+'L'+(gx+7)+' '+(gy-7)+'" stroke="#c0392b" stroke-width="2" stroke-linecap="round"/><circle cx="'+gx+'" cy="'+gy+'" r="2.2" fill="#27303b"/>';
         [xo+s*70,xi-s*70].forEach(function(sx){g+='<path d="M'+(sx-28)+' '+(cy+HB/2-2)+'H'+(sx+28)+'L'+(sx+38)+' '+(cy+HB/2+36)+'H'+(sx-38)+'Z" fill="#6b7686" stroke="#3a424e" stroke-width="1.5"/><rect x="'+(sx-46)+'" y="'+(cy+HB/2+36)+'" width="92" height="8" rx="2" fill="#3a424e"/>'});
         return g+'</g>';
       };
@@ -869,7 +905,7 @@ var PSC = (function(){
       o.push(barrel(px1,-1,'rb','rbar'));
     }
     if(gl)o.push('<line id="prog" x1="'+x0+'" y1="'+cy+'" x2="'+x0+'" y2="'+cy+'" stroke="#1D9E75" stroke-width="6" stroke-linecap="round"/>');
-    o.push('<g id="toolg" transform="translate('+(x0-tw/2)+' 0)"><g transform="translate(0 '+cy+') scale('+th+')">'+B.m+'</g><text class="t tl pigd" x="'+(gl?0:tw/2)+'" y="'+(gl?cy-(H/2+40):top-14)+'" text-anchor="middle"></text></g>');
+    o.push('<g id="toolg" transform="translate('+(x0-tw/2)+' 0)">'+(gl?'':'<rect x="'+(-tw*1.7)+'" y="'+(cy-ih/2+2)+'" width="'+(tw*1.7)+'" height="'+(ih-4)+'" fill="url(#trail)"/>')+'<g transform="translate(0 '+cy+') scale('+th+')"'+(gl?'':' filter="url(#tsh)"')+'>'+B.m+'</g><text class="t tl pigd" x="'+(gl?0:tw/2)+'" y="'+(gl?cy-(H/2+40):top-14)+'" text-anchor="middle"></text></g>');
     var rowOf={},asc=(vals.valves||[]).map(function(v,i){return {v:v,i:i}}).filter(function(e){return e.v.ok}).sort(function(p,q){return p.v.frac-q.v.frac});
     asc.forEach(function(e,k){rowOf[e.i]=asc.length-1-k});
     (vals.valves||[]).forEach(function(v,i){
@@ -885,6 +921,7 @@ var PSC = (function(){
       o.push('<g class="vg'+(window.__vdrag===i?' on':'')+'" data-v="'+i+'"><rect class="vhl" x="'+(vx-20)+'" y="'+(top-46)+'" width="40" height="'+(H+50)+'" rx="8"/><rect x="'+(vx-20)+'" y="'+(top-46)+'" width="40" height="'+(H+50)+'" fill="transparent"/>');
       o.push('<path d="M'+vx+' '+bot+'V'+(ry-4)+'h6" stroke="var(--muted)" stroke-width="1" fill="none" stroke-dasharray="2 3"/>');
       o.push('<text class="t tv" x="'+vx+'" y="'+(top-40-(rowOf[i]%2)*18*tsf)+'" text-anchor="middle">'+(+(v.frac*vals.len).toFixed(2))+' '+tr(['km','m'][+S.lenu])+'</text>');
+      o.push('<rect x="'+(vx-10)+'" y="'+(top-5)+'" width="20" height="'+(H+10)+'" rx="3" fill="url(#gBarrel)" stroke="#4a5562" stroke-width="1.5"/>');
       o.push('<rect class="vp" x="'+(vx-2.5)+'" y="'+(cy-Math.max(ih,16)/2)+'" width="5" height="'+Math.max(ih,16)+'" fill="#e5484d" stroke="#8c1d22" stroke-width="1"/>');
       var ty=1, ic;
       if(ty===1)ic='<path d="M'+vx+' '+(top-26)+'V'+top+'" stroke="#4a5562" stroke-width="4"/><path d="M'+(vx-14)+' '+(top-33)+'h28" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/><path d="M'+vx+' '+(top-33)+'V'+(top-26)+'" stroke="#4a5562" stroke-width="3"/><path d="M'+(vx-12)+' '+top+'v-6q0 -6 6 -6h12q6 0 6 6v6z" fill="url(#gMetal)" stroke="#27303b" stroke-width="1.5"/><rect x="'+(vx-16)+'" y="'+(top-4)+'" width="32" height="5" rx="2" fill="url(#gDark)"/>';
@@ -900,6 +937,7 @@ var PSC = (function(){
     if(!gl&&vals.len>0){
       var ppu=W/vals.len, st=1, bases=[1,2,5], k=0, minPx=170*tsf;
       while(true){var cand=bases[k%3]*Math.pow(10,Math.floor(k/3)-3);if(cand*ppu>=minPx&&vals.len/cand<=400){st=cand;break}k++;if(k>40)break}
+      for(var mv=0;mv<=vals.len+1e-9;mv+=st/5){var mx=x0+mv*ppu;o.push('<path class="dl" d="M'+mx+' '+(ly-3)+'v6"/>')}
       for(var tv=0;tv<=vals.len+1e-9;tv+=st){var tx=x0+tv*ppu;o.push('<path class="dl" d="M'+tx+' '+(ly-6)+'v12"/><text class="t tm" x="'+tx+'" y="'+(ly+22*tsf)+'" text-anchor="middle">'+(+tv.toFixed(6))+'</text>')}
     }
     if(gl){
@@ -933,39 +971,59 @@ var PSC = (function(){
   }
   function renderFormulas(r,vals){
     var b=$('fmlBody');if(!b)return;
-    if(!r||!(r.v>0)){b.innerHTML='<p>'+(S.lang==='ru'?'Введите данные, чтобы увидеть формулы с вашими числами.':'Enter the inputs to see the formulas with your numbers.')+'</p>';return}
-    var ru=S.lang==='ru',f=S.fluid,o=[],hasGas=f===0||(f===2&&vals.gor>0);
-    function sec(t){o.push('<h4>'+t+'</h4>')}function ln(t){o.push('<div class="fl">'+t+'</div>')}function nt(t){o.push('<p>'+t+'</p>')}
+    var live=S.fmode!==0,ru=S.lang==='ru';
+    [].forEach.call(document.querySelectorAll('#fmode button'),function(x){x.classList.toggle('on',(+x.dataset.m===1)===live)});
+    if(!r||!(r.v>0)){b.innerHTML='<p>'+(ru?'Введите данные, чтобы увидеть формулы с вашими числами.':'Enter the inputs to see the formulas with your numbers.')+'</p>';return}
+    var f=S.fluid,o=[],hasGas=f===0||(f===2&&vals.gor>0);
+    function m(s){return s.replace(/_\(((?:[^()]|\([^()]*\))*)\)/g,'<sub>$1</sub>').replace(/\^\(((?:[^()]|\([^()]*\))*)\)/g,'<sup>$1</sup>').replace(/~([^~]+)~/g,'<i>$1</i>')}
+    function fr(n,d){return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'}
+    function rt(x){return '<span class="rt">√<span>'+x+'</span></span>'}
+    function nv(k,t){return '<u class="nv" data-nf="'+k+'">'+t+'</u>'}
+    function sec(t){o.push('<h4>'+t+'</h4>')}
+    function ln(sym,num){o.push('<div class="fl">'+m(live&&num!=null?num:sym)+'</div>')}
+    function nt(t){o.push('<p>'+t+'</p>')}
+    function lg(en,rus){if(!live)o.push('<p class="lg">'+(ru?rus:en)+'</p>')}
     var idm=vals.od-2*vals.wt,A=Math.PI*Math.pow(idm/1000,2)/4,q=r.qline*3600,sl=parseFloat(String(S.slip).replace(',','.'))||100;
+    var Pp=Math.abs(num('p')||0)*[0.145038,145.038,1,14.5038][+S.pu]+(S.atm?14.696:0),TF=(+S.tu)?(num('t')||0)-459.67:(num('t')||0)*9/5+32,TRk=TF+459.67,Tsd=[519.67,518.67,527.67][+S.std]||519.67;
+    var qs=r.f>0?q/r.f:0,Po=num('pout')>0?Math.abs(num('pout'))*[0.145038,145.038,1,14.5038][+S.pu]+(S.atm?14.696:0):Pp;
     nt(ru?'<b>Почему скорость падает при росте давления?</b> Расход задан при стандартных условиях. Чем выше давление, тем плотнее среда и тем меньший объём в трубе занимает тот же стандартный расход, поэтому поток и шаровой разделитель движутся медленнее. У газа эффект почти обратно пропорционален давлению (1/P), у нефти заметно слабее: жидкость почти не сжимается.'
       :'<b>Why does speed drop when pressure rises?</b> The flow is fixed at standard conditions. At higher pressure the fluid is denser, so the same standard flow takes up less volume in the pipe and the flow, with the pig, moves slower. For gas the effect is almost proportional to 1/P; for oil it is much weaker because liquid barely compresses.');
     sec(ru?'Скорость':'Speed');
-    ln('d<sub>in</sub> = OD − 2·WT = '+fmt(vals.od,1)+' − 2·'+fmt(vals.wt,2)+' = '+fmt(idm,1)+' mm');
-    ln('A = π·d<sub>in</sub>² / 4 = '+fmt(A,4)+' m²');
-    ln('v = Q<sub>line</sub> / A = '+fmt(q,1)+' m³/h / (3600·'+fmt(A,4)+') = '+fmt(q/3600/A,3)+' m/s');
-    if(sl<100)ln((ru?'v<sub>пига</sub> = v · проскальзывание = v · ':'v<sub>pig</sub> = v · slip = v · ')+sl+' %');
+    ln('~d~_(in) = ~OD~ − 2·~WT~','~d~_(in) = '+nv('od',fmt(vals.od,1))+' − 2·'+nv('wt',fmt(vals.wt,2))+' = '+fmt(idm,1)+' mm');
+    ln('~A~ = '+fr('π·~d~_(in)^(2)','4'),'~A~ = '+fr('π·'+fmt(idm,1)+'^(2)','4')+' = '+fmt(A,4)+' m^(2)');
+    ln('~v~ = '+fr('~Q~_(line)','~A~'),'~v~ = '+fr(fmt(q,1)+' m^(3)/h','3600·'+fmt(A,4)+' m^(2)')+' = <b>'+fmt(q/3600/A,3)+' m/s</b>');
+    if(sl<100)ln('~v~_(pig) = ~s~·~v~','~v~_(pig) = '+nv('slip',sl+' %')+' · '+fmt(q/3600/A,3)+' = '+fmt(q/3600/A*sl/100,3)+' m/s');
+    lg('OD outside diameter, WT wall thickness, d_in inner diameter, A flow area, Q_line flow at line conditions, s slip.','OD — наружный диаметр, WT — стенка, d_in — внутренний диаметр, A — площадь сечения, Q_line — расход при рабочих условиях, s — проскальзывание.');
     sec(ru?'Объём в трубе':'Volume in the line');
     if(f===0){
-      ln('Q<sub>line</sub> = Q<sub>std</sub> · (P<sub>std</sub> / P) · (T / T<sub>std</sub>) · Z');
-      ln('Z = '+r.z.toFixed(3)+'  →  Q<sub>line</sub> / Q<sub>std</sub> = '+r.f.toPrecision(4));
-      nt(ru?'Z: Дранчук — Абу-Кассем (1975), 11 коэффициентов, итерации Ньютона по приведённой плотности. Псевдокритические: Саттон (1985), T<sub>pc</sub> = 169,2 + 349,5·g − 74,0·g² (°R), P<sub>pc</sub> = 756,8 − 131,0·g − 3,6·g² (psia).'
-        :'Z: Dranchuk–Abou-Kassem (1975), 11 coefficients, Newton iteration on reduced density. Pseudo-criticals: Sutton (1985), T<sub>pc</sub> = 169.2 + 349.5·g − 74.0·g² (°R), P<sub>pc</sub> = 756.8 − 131.0·g − 3.6·g² (psia).');
+      ln('~Q~_(line) = ~Q~_(std) · '+fr('~P~_(std)','~P~')+' · '+fr('~T~','~T~_(std)')+' · ~Z~',
+        '~Q~_(line) = '+nv('flow',fmt(qs,1))+' · '+fr('14.696',nv('p',fmt(Pp,1)))+' · '+fr(nv('t',fmt(TRk,1)),fmt(Tsd,2))+' · '+r.z.toFixed(3)+' = '+fmt(q,1)+' m^(3)/h');
+      ln('~T~_(pc) = 169.2 + 349.5·~g~ − 74.0·~g~^(2)','~T~_(pc) = 169.2 + 349.5·'+nv('sg',fmt(vals.sg,3))+' − 74.0·'+fmt(vals.sg,3)+'^(2) = '+fmt(169.2+349.5*vals.sg-74*vals.sg*vals.sg,1)+' °R');
+      ln('~P~_(pc) = 756.8 − 131.0·~g~ − 3.6·~g~^(2)','~P~_(pc) = 756.8 − 131.0·'+fmt(vals.sg,3)+' − 3.6·'+fmt(vals.sg,3)+'^(2) = '+fmt(756.8-131*vals.sg-3.6*vals.sg*vals.sg,1)+' psia');
+      ln('~T~_(pr) = '+fr('~T~','~T~_(pc)')+', &nbsp;~P~_(pr) = '+fr('~P~','~P~_(pc)')+', &nbsp;~Z~ = ~Z~_(DAK)(~T~_(pr), ~P~_(pr))',
+        '~Z~ = ~Z~_(DAK)(~T~_(pr), ~P~_(pr)) = <b>'+r.z.toFixed(3)+'</b>, &nbsp;'+fr('~Q~_(line)','~Q~_(std)')+' = '+r.f.toPrecision(4));
+      lg('Q_std flow at standard conditions, P and T absolute, Z compressibility factor (Dranchuk–Abou-Kassem), g gas specific gravity, pc / pr pseudo-critical / pseudo-reduced (Sutton).','Q_std — расход при стандартных условиях, P и T — абсолютные, Z — коэффициент сжимаемости (Дранчук — Абу-Кассем), g — относительная плотность газа, pc / pr — псевдокритические / приведённые (Саттон).');
     }else if(!hasGas){
-      ln('Q<sub>line</sub> = Q<sub>std</sub> / VCF(T) · exp(−c<sub>o</sub>·(P − P<sub>std</sub>))');
-      ln('Q<sub>line</sub> / Q<sub>std</sub> = '+r.f.toPrecision(4));
-      nt(ru?'VCF: API MPMS 11.1, α<sub>60</sub> = 341,0957 / ρ<sub>60</sub>², VCF = exp(−α·ΔT·(1 + 0,8·α·ΔT)), ΔT = T − 60 °F. c<sub>o</sub>: Васкес — Беггс (1980), в пределах 4·10⁻⁶…3·10⁻⁵ 1/psi.'
-        :'VCF: API MPMS 11.1, α<sub>60</sub> = 341.0957 / ρ<sub>60</sub>², VCF = exp(−α·ΔT·(1 + 0.8·α·ΔT)), ΔT = T − 60 °F. c<sub>o</sub>: Vazquez–Beggs (1980), limited to 4·10⁻⁶…3·10⁻⁵ 1/psi.');
+      var rho=141.5/(131.5+(vals.api||35))*999.016,al=341.0957/(rho*rho),dT=TF-60,vcf=Math.exp(-al*dT*(1+0.8*al*dT));
+      ln('~Q~_(line) = '+fr('~Q~_(std)','VCF')+' · e^(−~c~_(o)(~P~ − ~P~_(std)))','~Q~_(line) = '+fr(nv('flow',fmt(qs,1)),vcf.toFixed(4))+' · e^(−~c~_(o)('+nv('p',fmt(Pp,1))+' − 14.696)) = '+fmt(q,1)+' m^(3)/h');
+      ln('VCF = exp[−~α~Δ~T~(1 + 0.8·~α~Δ~T~)], &nbsp;Δ~T~ = ~T~ − 60 °F','VCF = '+vcf.toFixed(4)+', &nbsp;Δ~T~ = '+nv('t',fmt(TF,1))+' − 60 = '+fmt(dT,1)+' °F');
+      ln('~α~ = '+fr('341.0957','~ρ~_(60)^(2)')+', &nbsp;4·10^(−6) ≤ ~c~_(o) ≤ 3·10^(−5) psi^(−1)','~α~ = '+fr('341.0957',fmt(rho,1)+'^(2)')+' = '+al.toExponential(3)+', &nbsp;~ρ~_(60) = '+fmt(rho,1)+' kg/m^(3) ('+nv('api',fmt(vals.api,1)+' °API')+')');
+      lg('Q_std flow at standard conditions, VCF volume correction factor (API MPMS 11.1), α thermal expansion coefficient, ρ_60 density at 60 °F, c_o oil compressibility (Vazquez–Beggs).','Q_std — расход при стандартных условиях, VCF — поправка на объём (API MPMS 11.1), α — коэффициент теплового расширения, ρ_60 — плотность при 60 °F, c_o — сжимаемость нефти (Васкес — Беггс).');
     }else{
-      ln('Q<sub>line</sub> = Q<sub>std</sub> · (B<sub>o</sub> + (GOR − R<sub>s</sub>) · B<sub>g</sub> / 5.6146)');
-      ln('Z = '+(r.z!=null?r.z.toFixed(3):'–')+'  →  Q<sub>line</sub> / Q<sub>std</sub> = '+r.f.toPrecision(4));
-      nt('R<sub>s</sub> = g·[(P/18.2 + 1.4)·10<sup>0.0125·API − 0.00091·T</sup>]<sup>1.2048</sup>; B<sub>o</sub> = 0.9759 + 0.00012·[R<sub>s</sub>·√(g/g<sub>o</sub>) + 1.25·T]<sup>1.2</sup>; B<sub>g</sub> = (P<sub>std</sub>/T<sub>std</sub>)·Z·T/P (Standing, 1947; T '+(ru?'в °F':'in °F')+').'+(ru?' Выше давления насыщения весь газ растворён: B<sub>o</sub> = B<sub>ob</sub>·exp(c<sub>o</sub>·(P<sub>b</sub> − P)).':' Above the bubble point all gas is dissolved: B<sub>o</sub> = B<sub>ob</sub>·exp(c<sub>o</sub>·(P<sub>b</sub> − P)).'));
+      ln('~Q~_(line) = ~Q~_(std) · [~B~_(o) + (GOR − ~R~_(s)) · '+fr('~B~_(g)','5.6146')+']','~Q~_(line) = '+fmt(qs,1)+' · '+r.f.toPrecision(4)+' = '+fmt(q,1)+' m^(3)/h');
+      ln('~R~_(s) = ~g~ · [('+fr('~P~','18.2')+' + 1.4) · 10^(0.0125·API − 0.00091·~T~)]^(1.2048)','~g~ = '+nv('sg',fmt(vals.sg,3))+', API = '+nv('api',fmt(vals.api,1))+', GOR = '+nv('gor',fmt(vals.gor,0))+', ~P~ = '+nv('p',fmt(Pp,1))+' psia, ~T~ = '+nv('t',fmt(TF,1))+' °F');
+      ln('~B~_(o) = 0.9759 + 0.00012 · [~R~_(s) · '+rt(fr('~g~','~g~_(o)'))+' + 1.25·~T~]^(1.2)','~Z~ = '+(r.z!=null?r.z.toFixed(3):'–')+', &nbsp;'+fr('~Q~_(line)','~Q~_(std)')+' = '+r.f.toPrecision(4));
+      ln('~B~_(g) = '+fr('~P~_(std)','~T~_(std)')+' · '+fr('~Z~·~T~','~P~'),null);
+      ln('~P~ ≥ ~P~_(b): &nbsp;~B~_(o) = ~B~_(ob) · e^(~c~_(o)(~P~_(b) − ~P~))',null);
+      lg('GOR gas-oil ratio, R_s dissolved gas, B_o oil and B_g gas formation volume factors, P_b bubble-point pressure, g_o oil specific gravity (Standing).','GOR — газовый фактор, R_s — растворённый газ, B_o и B_g — объёмные коэффициенты нефти и газа, P_b — давление насыщения, g_o — относительная плотность нефти (Стэндинг).');
     }
     sec(ru?'Давление по линии и время':'Pressure along the line and time');
-    ln(hasGas?'P(x)² = P<sub>1</sub>² − (P<sub>1</sub>² − P<sub>2</sub>²)·x':'P(x) = P<sub>1</sub> − (P<sub>1</sub> − P<sub>2</sub>)·x');
-    ln('t = ∫ dx / v(P(x)) ('+(ru?'200 шагов':'200 steps')+') = '+PSC.fmtDur(r.hours));
-    ln((ru?'v вход → выход: ':'v inlet → outlet: ')+fmt(r.vin/3.6,2)+' → '+fmt(r.vout/3.6,2)+' m/s');
-    ln(ru?'Расход для заданной скорости = Q<sub>std</sub> · v<sub>цель</sub> / v':'Flow for target speed = Q<sub>std</sub> · v<sub>target</sub> / v');
-    nt(ru?'Стандартные условия: 14,696 psia и 60 °F (или 15/20 °C по выбору). Давление абсолютное. Без поправок на H₂S/CO₂/N₂. Подробнее в NOTES.md.':'Standard conditions: 14.696 psia and 60 °F (or 15/20 °C as selected). Pressure is absolute. No H₂S/CO₂/N₂ correction. More in NOTES.md.');
+    ln(hasGas?'~P~(~x~)^(2) = ~P~_(1)^(2) − (~P~_(1)^(2) − ~P~_(2)^(2))·~x~':'~P~(~x~) = ~P~_(1) − (~P~_(1) − ~P~_(2))·~x~',
+       hasGas?'~P~(~x~)^(2) = '+fmt(Pp,1)+'^(2) − ('+fmt(Pp,1)+'^(2) − '+nv('pout',fmt(Po,1))+'^(2))·~x~':'~P~(~x~) = '+fmt(Pp,1)+' − ('+fmt(Pp,1)+' − '+nv('pout',fmt(Po,1))+')·~x~');
+    ln('~t~ = <span class="int">∫<sub>0</sub><sup>~L~</sup></span> '+fr('d~x~','~v~(~P~(~x~))'),'~t~ = <span class="int">∫<sub>0</sub><sup>'+nv('len',fmt(vals.len,1))+'</sup></span> '+fr('d~x~','~v~(~P~(~x~))')+' = <b>'+PSC.fmtDur(r.hours)+'</b>');
+    ln('~v~_(in) → ~v~_(out)','~v~_(in) → ~v~_(out) = '+fmt(r.vin/3.6,2)+' → '+fmt(r.vout/3.6,2)+' m/s');
+    ln('~Q~_(target) = ~Q~_(std) · '+fr('~v~_(target)','~v~'),'~Q~_(target) = '+fmt(qs,1)+' · '+fr(nv('rv',fmt(num('rv')||0,2)),fmt(r.v/3.6,3))+' (m/s)');
+    lg('P_1, P_2 inlet / outlet pressure, x fraction of the line length, L length, v_target target speed.','P_1, P_2 — давление на входе / выходе, x — доля длины линии, L — длина, v_target — целевая скорость.');
     b.innerHTML=o.join('');
   }
   function update(){

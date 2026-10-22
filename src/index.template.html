@@ -66,14 +66,14 @@
       <div class="fg">
         <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
       </div>
-      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div id="fmlBody"></div></details>
+      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details>
     </section>
 
     <main class="main">
       <div class="warn" id="warn"></div>
       <div class="kpis">
         <div class="kpi main"><div class="k"><span class="kic ic-vel">Pig speed</span><select id="velu" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="v" id="vel">–</div></div>
-        <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">HHH:MM:SS</div></div>
+        <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">H:MM:SS</div></div>
         <div class="kpi tgt">
           <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
           <div class="v" id="rflow">–</div>
@@ -92,7 +92,7 @@
         <div class="runbar">
           <button type="button" class="add start" id="startBtn"><span id="startL">Start</span></button>
           <button type="button" class="add okb" id="arrBtn"><span>✓ Accepted at receiver</span></button>
-          <div class="tiles"><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">000:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
+          <div class="tiles"><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
         </div>
         <div class="rprog"><i id="rprog"></i></div>
         <div class="clk loginfo" id="logInfo"></div>

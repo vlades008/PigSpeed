@@ -95,7 +95,7 @@ var PSC = (function(){
     if(h===null)return null;
     var mm=(h%1)*60, ss=(mm%1)*60;
     var a=Math.trunc(h),b=Math.trunc(mm),c=Math.trunc(ss);
-    return String(a).padStart(3,'0')+':'+String(b).padStart(2,'0')+':'+String(c).padStart(2,'0');
+    return String(a)+':'+String(b).padStart(2,'0')+':'+String(c).padStart(2,'0');
   }
   return {calc:calc,velOut:velOut,fmtDur:fmtDur,tAt:tAt,xAt:xAt,vRel:vRel};
 })();

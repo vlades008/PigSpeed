@@ -205,3 +205,24 @@ label[for="rv"]{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww
 #fmlBody .fl{font-family:Consolas,"Cascadia Mono",monospace;font-size:12.5px;background:var(--soft);border-radius:8px;padding:5px 9px;margin:4px 0;overflow-x:auto;white-space:nowrap}
 #fmlBody p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0}
 #fmlBody p b{color:var(--ink)}
+
+#fmlBody .fl{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",Georgia,"Times New Roman",serif;font-size:15.5px;white-space:normal;line-height:2.1;padding:3px 10px;overflow-x:auto}
+#fmlBody .fl i{font-style:italic}
+#fmlBody .fl sub,#fmlBody .fl sup{font-size:.7em;line-height:0}
+#fmlBody .fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.35}
+#fmlBody .fr>span:first-child{border-bottom:1px solid currentColor;padding:0 3px}
+#fmlBody .fr>span:last-child{padding:0 3px}
+#fmlBody .rt{white-space:nowrap}#fmlBody .rt>span{border-top:1px solid currentColor;padding:0 2px}
+#fmlBody .int{font-size:1.25em}
+
+.fmode{display:flex;gap:2px;padding:2px;margin:8px 0 2px;background:var(--soft);border-radius:10px}
+.fmode button{flex:1;border:0;background:transparent;border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.fmode button.on{background:var(--card,#fff);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.fmode button:first-child span::before{content:"ƒ ";font-family:Georgia,serif;font-style:italic}
+.fmode button:last-child span::before{content:"# "}
+#fmlBody.swap{animation:fswap .25s ease}
+@keyframes fswap{from{opacity:.15;transform:translateY(4px)}to{opacity:1;transform:none}}
+#fmlBody .nv{text-decoration:none;border-bottom:1px dotted var(--accent);cursor:pointer}
+#fmlBody p.lg{font-size:12px;font-style:italic}
+.field.flash{animation:fflash 1.3s ease}
+@keyframes fflash{0%,60%{box-shadow:0 0 0 3px var(--accent);border-radius:10px}100%{box-shadow:0 0 0 0 transparent}}
