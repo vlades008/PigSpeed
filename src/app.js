@@ -601,9 +601,9 @@
     setValves(vals,r);drawDiagram(r,vals);renderFormulas(r,vals);
     var ru=tr((f===0?GAS_U:OIL_U)[f===0?S.rgasu:S.roilu]);
     (function(){
-      var L=CAT.lim,W=[],odv=num('od'),vavg=r.v/3.6,vmax=Math.max(r.vin||0,r.vout||0)/3.6,vmin=Math.min(r.vin||1e9,r.vout||1e9)/3.6;
-      if(vmin<L.vmin)W.push(tr('Speed below the tool limit')+': '+fmt(vmin,2)+' < '+String(L.vmin).replace('.',S.lang==='ru'?',':'.')+' '+tr('m/s'));
-      if(vmax>L.vmax)W.push(tr('Speed above the tool limit')+': '+fmt(vmax,2)+' > '+L.vmax+' '+tr('m/s'));
+      var L=CAT.lim,W=[],WS=[],odv=num('od'),vavg=r.v/3.6,vmax=Math.max(r.vin||0,r.vout||0)/3.6,vmin=Math.min(r.vin||1e9,r.vout||1e9)/3.6;
+      if(vmin<L.vmin)WS.push(tr('Speed below the tool limit')+': '+fmt(vmin,2)+' < '+String(L.vmin).replace('.',S.lang==='ru'?',':'.')+' '+tr('m/s'));
+      if(vmax>L.vmax)WS.push(tr('Speed above the tool limit')+': '+fmt(vmax,2)+' > '+L.vmax+' '+tr('m/s'));
       if(r.hours>L.hours)W.push(tr('Trip longer than the tool can run')+': '+Math.round(r.hours)+' > '+L.hours+' '+tr('h'));
       var km=num('len')*[1,0.001][+S.lenu];if(km>L.km)W.push(tr('Line longer than the tool range')+': '+fmt(km,1)+' > '+L.km+' '+tr('km'));
       var barG=null;
@@ -625,7 +625,7 @@
       if(W.length){
         var cb=document.createElement('button');cb.type='button';cb.className='wn';cb.textContent='⚠ '+W[0]+(W.length>1?'  +'+(W.length-1):'');box.appendChild(cb);
         if(W.length>1){var wl=document.createElement('div');wl.className='wl';wl.style.display=catOpen?'':'none';W.slice(1).forEach(function(t){var d=document.createElement('div');d.textContent='⚠ '+t;wl.appendChild(d)});box.appendChild(wl);cb.onclick=function(){catOpen=!catOpen;wl.style.display=catOpen?'':'none'}}
-      }else one('ok','✓ '+tr('Within equipment limits'));
+      }else if(!WS.length)one('ok','✓ '+tr('Within equipment limits'));
       var hint='',tgtBad=false;
       if(!noRv&&r.rq>0){var rvm=num('rv')*[1,1.609344/3.6,1/3.6][+S.rvu];if(rvm>0){var q0=r.rq*L.vmin/rvm,q1=r.rq*L.vmax/rvm;hint=tr('Allowed flow')+': '+fmt(q0,q0<10?2:0)+' – '+fmt(q1,q1<10?2:0)+' '+ru;tgtBad=(rvm<L.vmin||rvm>L.vmax)}}
       $('rrange').textContent=hint;
