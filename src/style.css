@@ -369,3 +369,6 @@ html[data-ui="1"] body{overflow-x:hidden}
 
 .ahint{background:var(--soft);border-radius:10px;padding:8px 10px;font-size:13px;margin:0 0 10px}
 .invcard{padding:4px 0 10px}.invcard textarea{width:100%;box-sizing:border-box;font:inherit;font-size:12.5px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);resize:vertical;margin-bottom:6px}
+.brand{margin-right:12px}.hacct{margin-right:auto;min-width:0}
+#acct .add{white-space:nowrap}
+@media(max-width:560px){#acct .chip{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
