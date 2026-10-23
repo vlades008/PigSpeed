@@ -15,7 +15,9 @@ function build() {
   if (site && !site.endsWith('/')) site += '/';
   let notes = '';
   try { notes = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'notes.json'), 'utf8')).notes || ''; } catch (e) {}
-  const ver = 'var APP_NOTES=' + JSON.stringify(notes) + ';var APP_VERSION=' + JSON.stringify(pkg.version) + ',UPDATE_URL=' + JSON.stringify(site) + ',FIREBASE_CONFIG=' + JSON.stringify(fbc) + ',TEAM_ID=' + JSON.stringify(teamId) + ';';
+  let hist = [];
+  try { hist = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'changelog.json'), 'utf8')); } catch (e) {}
+  const ver = 'var APP_HISTORY=' + JSON.stringify(hist) + ';var APP_NOTES=' + JSON.stringify(notes) + ';var APP_VERSION=' + JSON.stringify(pkg.version) + ',UPDATE_URL=' + JSON.stringify(site) + ',FIREBASE_CONFIG=' + JSON.stringify(fbc) + ',TEAM_ID=' + JSON.stringify(teamId) + ';';
   const vlad = ver + 'var VLAD_IMG="data:image/png;base64,' + fs.readFileSync(path.join(src, 'vlad.png')).toString('base64') + '";';
   const parts = { STYLE: read('style.css'), CLOUD: read('cloud.js'), CORE: read('core.js'), APP: read('app.js'), VLAD: vlad };
   let out = read('index.template.html');

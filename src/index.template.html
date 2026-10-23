@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="updbar annbar" id="annBar"><span id="annTxt"></span><button type="button" class="link" id="annX">Close</button></div>
-<div class="updbar" id="updBar"><span id="updTxt"></span><a class="add" id="updGo" href="#"><span>Update</span></a><button type="button" class="link" id="updNo">Later</button></div>
+<div class="updbar" id="updBar"><div class="updt"><b id="updTxt"></b><span id="updNotes"></span></div><div class="updb"><a class="add" id="updGo" href="#"><span>Update</span></a><button type="button" class="add" id="updLog">What's new</button><button type="button" class="link" id="updNo">Later</button></div></div>
 <div class="app">
   <header class="bar">
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
@@ -80,7 +80,7 @@
         <div id="installBox" style="display:none"><button type="button" class="add" id="installBtn"><span>Install app</span></button><div class="iosguide" id="iosGuide" style="display:none"></div></div>
         <button type="button" class="add" id="tourBtn"><span>Show the tour</span></button>
         <div class="gver" id="ver"></div>
-        <details class="wnew" id="wnew"><summary>What's new</summary><div id="whatsnew"></div></details>
+        <button type="button" class="add wbtn" id="wnew"><span>What's new</span><b id="whatsnew"></b></button>
                 <div class="gfoot"><span>Values are saved in this browser.</span><button class="link" id="reset" type="button">Reset to defaults</button></div>
       </div>
     </div>
@@ -184,6 +184,7 @@
   <div class="lerr" id="vdErr"></div>
   <div class="vact"><button type="button" class="add vdel" id="vdDel">Delete</button><span class="sp"></span><button type="button" class="add" id="vdCancel">Cancel</button><button type="button" class="add" id="vdMore">Add more</button><button type="button" class="add vok" id="vdOk">Add</button></div>
 </div></div>
+<div class="mdl" id="logDlg" role="dialog" aria-modal="true"><div class="mbox vbox"><h3>What's new</h3><div class="chl" id="chList"></div><div class="vact"><span class="sp"></span><button type="button" class="add vok" id="chClose">Close</button></div></div></div>
 <div class="mdl" id="arrDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>End the run?</h3><p>This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.</p><div class="mbt"><button type="button" class="add" id="arrNo"><span>Cancel</span></button><button type="button" class="add okb2" id="arrYes"><span>Yes, end the run</span></button></div></div></div>
 <div class="toast" id="toast"></div>
 <script id="img">{{VLAD}}</script>
