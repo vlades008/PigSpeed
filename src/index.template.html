@@ -15,26 +15,43 @@
     <div class="sec">
       <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Runs</span><i class="rdot" id="rdot"></i></button>
       <div class="gpanel wide" id="secPanel">
-        <div class="srow"><button type="button" class="add" id="runNew"><span>+ New run</span></button><span class="hint" id="secMsg"></span><span class="grow"></span><span id="acct"></span></div>
+        <div class="srow"><button type="button" class="add" id="runNew"><span>+ New run</span></button><span class="hint" id="secMsg"></span></div>
         <div id="runList"></div>
         <div id="teamBox" class="teambox"></div>
-        <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
       </div>
     </div>
     <div class="vswitch uisw" id="uiSeg" title="Interface"><span class="vl" data-v="2">Route</span><button type="button" role="switch" id="uiSw" aria-checked="false" aria-label="Route / Control room"><i></i></button><span class="vl" data-v="1">Control</span></div>
     <div class="gear">
       <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
       <div class="gpanel" id="gpanel">
+        <div id="acctBox"><div class="gh">Account</div><div id="acct"></div></div>
+        <div class="gh">Language</div>
+        <div class="seg lang" id="lang"><button type="button" data-v="en">EN</button><button type="button" data-v="ru">RU</button></div>
         <div class="gh">Run</div>
         <button type="button" class="add stopb" id="stopBtn" disabled><span>Stop the run</span></button>
         <label class="pl" data-ti="You get a reminder this many minutes before the pig reaches a valve and before it arrives at the receiver."><span>Remind me before valves and arrival</span><span class="lead"><input id="leadIn" inputmode="numeric" autocomplete="off"><b>min</b></span></label>
+        <div class="chks"><label class="chk"><input type="checkbox" id="aSound"><span>Sound</span></label><label class="chk"><input type="checkbox" id="aBanner"><span>Banner</span></label><label class="chk"><input type="checkbox" id="aVib"><span>Vibration</span></label></div>
+        <div class="gh">Units</div>
+        <div class="ugrid">
+          <label><span>Pressure</span><select id="u_p"><option value="0">kPa</option><option value="1">MPa</option><option value="2">psi</option><option value="3">bar</option></select></label>
+          <label><span>Length</span><select id="u_len"><option value="0">km</option><option value="1">m</option></select></label>
+          <label><span>Wall thickness</span><select id="u_wt"><option value="0">mm</option><option value="1">inch</option></select></label>
+          <label><span>Temperature</span><select id="u_t"><option value="0">°C</option><option value="1">°R (Rankine)</option></select></label>
+          <label><span>Speed</span><select id="u_spd"><option value="0">m/s</option><option value="1">mph</option><option value="2">km/h</option></select></label>
+          <label><span>Gas flow</span><select id="u_gas"></select></label>
+          <label><span>Oil flow</span><select id="u_oil"></select></label>
+        </div>
         <div class="gh">Display</div>
         <label class="pl"><span>Diagram style</span><select id="dstyle"><option value="0">Classic</option><option value="1">Glass</option><option value="2">Blueprint</option></select></label>
+        <div class="gh">Data</div>
+        <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
+        <div class="gh">About</div>
         <div class="gver" id="ver"></div>
+        <details class="wnew" id="wnew"><summary>What's new</summary><div id="whatsnew"></div></details>
+        <button type="button" class="add" id="aboutIdea"><span>Send an idea</span></button>
         <div class="gfoot"><span>Values are saved in this browser.</span><button class="link" id="reset" type="button">Reset to defaults</button></div>
       </div>
     </div>
-    <div class="seg lang" id="lang"><button type="button" data-v="en">EN</button><button type="button" data-v="ru">RU</button></div>
   </header>
   <div class="robar" id="roBar"><span id="roTxt"></span><button type="button" class="add" id="roNew"><span>New run from this</span></button></div>
   <div class="phead" id="phead"></div>

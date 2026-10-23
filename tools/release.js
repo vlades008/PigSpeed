@@ -8,6 +8,7 @@ const build = require('./build');
 
 const root = path.join(__dirname, '..');
 const noApk = process.argv.includes('--no-apk');
+if (process.argv.some(x => x.startsWith('--notes='))) { const nn = process.argv.find(x => x.startsWith('--notes=')).slice(8); fs.writeFileSync(path.join(__dirname, 'notes.json'), JSON.stringify({ notes: nn }, null, 2) + '\n'); }
 const arg = (n) => { const a = process.argv.find(x => x.startsWith('--' + n + '=')); return a ? a.slice(n.length + 3) : null; };
 const bump = process.argv.includes('--bump') ? 'patch' : arg('bump');
 const notes = arg('notes') || '';
