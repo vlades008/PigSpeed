@@ -798,7 +798,7 @@
       stopWatch();ME=null;ROLE=null;
     }
     var cr=curRun();if(cr)setRO(isRO(cr));
-    renderAcct();renderRuns();if(s.status==='out'||s.status==='member')renderTeam();
+    maybeJoin(s);renderAcct();renderRuns();if(s.status==='out'||s.status==='member')renderTeam();
     if($('authDlg').classList.contains('open'))authView();
   }
   var AUTHERR={'auth/invalid-credential':'Wrong email or password','auth/wrong-password':'Wrong email or password','auth/user-not-found':'Wrong email or password','auth/email-already-in-use':'This email is already registered','auth/weak-password':'Password must have at least 6 characters','auth/invalid-email':'Enter a valid email','auth/network-request-failed':'No connection','auth/too-many-requests':'Too many attempts, try again later','auth/popup-closed-by-user':'','auth/operation-not-supported-in-this-environment':'Google sign-in does not work in this app, use email and password'};
@@ -815,10 +815,13 @@
     else if(st==='member'||st==='cached'){form.style.display='none';stat.style.display='';$('authT').textContent=tr('Account');
       msg.textContent=(ME?ME.name+' ('+ME.email+') — '+tr(ROLE):'');btn('Sign out',function(){Cloud.signOut()});}
     else{form.style.display='';stat.style.display='none';$('authT').textContent=tr(authMode==='up'?'Create account':'Sign in');
+      $('authHint').style.display=(JOIN&&authMode==='up')?'':'none';$('authEmail').readOnly=!!(JOIN&&authMode==='up');if(JOIN&&authMode==='up')$('authEmail').value=JOIN;
       $('authNameRow').style.display=authMode==='up'?'':'none';[].forEach.call(document.querySelectorAll('.atabs button'),function(b){b.classList.toggle('on',b.dataset.m===authMode)});
       $('authPass').autocomplete=authMode==='up'?'new-password':'current-password'}
   }
   function openAuth(){$('authErr').textContent='';authView();$('authDlg').classList.add('open')}
+  var joinShown=false;
+  function maybeJoin(s){if(!JOIN||joinShown||s.status!=='out')return;joinShown=true;authMode='up';$('authEmail').value=JOIN;openAuth();setTimeout(function(){$('authName').focus()},100)}
   function authErr(e){var m=AUTHERR[e&&e.code];$('authErr').textContent=m===undefined?tr('Error')+(e&&e.code?' ('+e.code+')':''):tr(m)}
   function renderAcct(){
     var box=$('acct');if(!box)return;box.innerHTML='';var ab=$('acctBox');if(ab)ab.style.display=(window.Cloud&&Cloud.available())?'':'none';
@@ -845,14 +848,21 @@
     var box=$('teamBox');if(!box||!box.classList.contains('open'))return;
     var h='<div class="gh">'+tr('Team')+'</div>';
     TEAMM.forEach(function(m){h+='<div class="trow" data-u="'+esc2(m.uid)+'"><div class="si"><div class="sn">'+esc2(m.name)+'</div><div class="sd">'+esc2(m.email)+'</div></div>'+(ME&&m.uid===ME.uid?'<span class="chip">'+tr(m.role)+'</span>':roleSel(m.role)+'<button type="button" class="ib del" data-act="rm">×</button>')+'</div>'});
-    TEAMI.forEach(function(m){h+='<div class="trow inv" data-e="'+esc2(m.email)+'"><div class="si"><div class="sn">'+esc2(m.email)+'</div><div class="sd">'+tr('invited')+' · '+tr(m.role)+'</div></div><button type="button" class="ib del" data-act="rmi">×</button></div>'});
+    TEAMI.forEach(function(m){h+='<div class="trow inv" data-e="'+esc2(m.email)+'"><div class="si"><div class="sn">'+esc2(m.email)+'</div><div class="sd">'+tr('invited')+' · '+tr(m.role)+'</div></div><button type="button" class="ib" data-act="invc" title="Приглашение">✉</button><button type="button" class="ib del" data-act="rmi">×</button></div><div class="invcard" data-e="'+esc2(m.email)+'" style="display:'+(invOpen===m.email?'block':'none')+'"><textarea readonly rows="6">'+esc2(inviteText(m.email))+'</textarea><div class="srow"><button type="button" class="add" data-act="icopy"><span>Копировать</span></button>'+(navigator.share?'<button type="button" class="add" data-act="ishare"><span>Поделиться</span></button>':'')+'<button type="button" class="add" data-act="imail"><span>Письмо</span></button></div></div>'});
     h+='<div class="srow tinv"><input id="invEmail" type="email" placeholder="'+tr('Email')+'">'+roleSel('engineer').replace('<select>','<select id="invRole">')+'<button type="button" class="add" id="invGo"><span>'+tr('Invite')+'</span></button></div>';
     box.innerHTML=h;
   }
   $('teamBox').addEventListener('click',function(e){
     var t=e.target.closest('button');if(!t||t.closest('.idea'))return;
-    if(t.id==='invGo'){var em=($('invEmail').value||'').trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(em))return;Cloud.addInvite(em,$('invRole').value).then(function(){$('invEmail').value=''}).catch(function(){});return}
+    if(t.id==='invGo'){var em=($('invEmail').value||'').trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(em))return;Cloud.addInvite(em,$('invRole').value).then(function(){$('invEmail').value='';invOpen=em;drawTeam()}).catch(function(){});return}
+    var card=t.closest('.invcard');
+    if(card){var em=card.dataset.e,tx=inviteText(em);
+      if(t.dataset.act==='icopy'){copyText(tx);var sp=t.firstChild;sp.textContent='✓ Скопировано';setTimeout(function(){sp.textContent='Копировать'},1600)}
+      else if(t.dataset.act==='ishare'){navigator.share({title:'Приглашение в Pig Speed',text:tx}).catch(function(){})}
+      else if(t.dataset.act==='imail'){location.href='mailto:'+encodeURIComponent(em)+'?subject='+encodeURIComponent('Приглашение в Pig Speed')+'&body='+encodeURIComponent(tx)}
+      return}
     var row=t.closest('.trow');if(!row)return;
+    if(t.dataset.act==='invc'){var c2=row.nextElementSibling;if(c2&&c2.classList.contains('invcard')){var open=c2.style.display==='none';c2.style.display=open?'block':'none';invOpen=open?row.dataset.e:null}return}
     if(t.dataset.act==='rm'){if(t.dataset.sure){Cloud.removeMember(row.dataset.u)}else{t.dataset.sure='1';t.textContent=tr('Delete?');t.classList.add('sure');setTimeout(function(){t.dataset.sure='';t.textContent='×';t.classList.remove('sure')},3000)}}
     else if(t.dataset.act==='rmi')Cloud.delInvite(row.dataset.e);
   });
@@ -982,6 +992,15 @@
   $('ideaType').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;ideaType=b.dataset.t;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)})});
   $('ideaShot').addEventListener('click',captureShot);
   $('ideaSend').addEventListener('click',sendIdea);
+  var JOIN=null;
+  try{var jm=/[?&]join=([^&]+)/.exec(location.search);if(jm){JOIN=decodeURIComponent(jm[1]).trim().toLowerCase();history.replaceState(null,'',location.pathname)}}catch(e){}
+  function joinUrl(em){var base=(typeof UPDATE_URL!=='undefined'&&UPDATE_URL)?UPDATE_URL:(location.origin+location.pathname);return base+'?join='+encodeURIComponent(em)}
+  function inviteText(em){return 'Здравствуйте! Вас пригласили в команду Pig Speed.\n1. Откройте ссылку: '+joinUrl(em)+'\n2. Придумайте пароль и нажмите «Продолжить».\n3. Откройте письмо от Firebase на '+em+' и нажмите ссылку подтверждения (если письма нет, проверьте папку «Спам»).\n4. Вернитесь в приложение и нажмите «Я подтвердил».'}
+  function copyText(s){
+    function fb(){var ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}
+    if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(s).catch(fb);fb();
+  }
+  var invOpen=null;
   function initRuns(){
     var raw=null;try{raw=JSON.parse(localStorage.getItem(RKEY2)||'null')}catch(e){}
     if(Array.isArray(raw))RUNS=raw;
