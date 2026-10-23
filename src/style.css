@@ -784,3 +784,25 @@ html[data-txt="2"] .vt input{font-family:var(--fnum)}
 @media(min-width:700px){.phoneonly{display:none}}
 .gpanel.pfix{box-sizing:border-box;z-index:45}
 body{overflow-x:hidden}
+
+/* local view: close-up strip */
+#lc,.lcinfo{display:none}
+.card.diag.lc-on #lc{display:block;width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.card.diag.lc-on .lcinfo{display:flex;justify-content:space-between;gap:12px;margin:8px 2px 0}
+.card.diag.lc-on #dg,.card.diag.lc-on #mm{display:none!important}
+.card.diag.lc-on #toolSel{display:none}
+.lcinfo div{display:flex;flex-direction:column;min-width:0}.lcinfo div:last-child{text-align:right}
+.lcinfo span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lcinfo b{font-size:19px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-pipe{fill:var(--soft)}.lc-wall{stroke:var(--muted);stroke-width:2;fill:none}
+.lc-tk{stroke:var(--muted);stroke-width:1.4;fill:none}.lc-tl{font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.lc-pb{fill:var(--accent)}.lc-pn{fill:var(--card)}.lc-pd{fill:var(--card);opacity:.55}
+.lc-vl{stroke:#e0a21b;stroke-width:2}.lc-vc{fill:var(--card);stroke:#e0a21b;stroke-width:2}.lc-vn{font-size:11px;font-weight:700;fill:var(--ink)}
+.lc-v.next .lc-vc{fill:#e0a21b}.lc-v.next .lc-vn{fill:#1b1b1b}
+.lc-v.passed .lc-vc,.lc-v.passed .lc-vl{stroke:#1D9E75}.lc-v.passed .lc-vc{fill:#1D9E75}.lc-v.passed .lc-vn{fill:#fff}
+.lc-end rect{fill:var(--muted)}.lc-end text{font-size:10px;fill:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.lc-edge{font-size:12px;fill:var(--muted)}
+.lscb{width:38px;height:38px;flex:none;border:0;border-radius:12px;background:var(--soft);color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.lscb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lscb[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.card.diag:not(.vw-local) .lscb{display:none}

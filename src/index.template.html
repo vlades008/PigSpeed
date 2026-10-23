@@ -113,8 +113,11 @@
         <div class="dhead vbar">
           <div class="seg vsel" id="vsel"><button type="button" data-w="route">Route</button><button type="button" data-w="local">Local</button><button type="button" data-w="global">Global</button></div>
           <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
+          <button type="button" id="lscBtn" class="lscb" aria-pressed="false" title="Real scale" aria-label="Real scale"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3M19 9v3"/></svg></button>
         </div>
         <div class="route" id="route"></div>
+        <svg id="lc" viewBox="0 0 360 150" role="img" aria-label="Pig close-up"></svg>
+        <div class="lcinfo" id="lcInfo"></div>
         <svg id="dg" viewBox="0 0 900 235" role="img" aria-label="Pipeline diagram"></svg>
         <svg id="mm" viewBox="0 0 1000 44" preserveAspectRatio="none" role="img" aria-label="Whole pipeline overview"></svg>
         <div class="runbar">
