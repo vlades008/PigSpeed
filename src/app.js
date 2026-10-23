@@ -34,7 +34,7 @@
     try{var s0=JSON.parse(localStorage.getItem(KEY)||'null');if(s0&&!('flowTouched' in s0))S.flowTouched=(String(S.flow)!=='250000'&&String(S.flow)!=='4000')}catch(e){}
     if(!S.flowTouched)flowDefault(S.fluid);
     if(!S.dstyleTouched)S.dstyle=1;
-    S.alert=true;S.pb=1;S.dstyle=1;S.api='35';S.sg='0.65';if(!S.vwv2){S.rview=1;S.view=0;S.vwv2=1}fixTemp(S);                                           // reminders are always on, playback is always real time
+    S.alert=true;S.pb=1;S.dstyle=1;S.api='35';S.sg='0.65';S.velu=0;S.rvu=0;if(!S.vwv2){S.rview=1;S.view=0;S.vwv2=1}fixTemp(S);                                           // reminders are always on, playback is always real time
   }
   function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}runsTouch()}
   var VT=['Ball valve','Gate valve','Check valve'];
@@ -69,7 +69,7 @@
     document.querySelector('.vt').style.display=S.valves.length?'table':'none';
   }
   function toolIdx(){return S.toolOn?+S.tool:1}
-  var UM=[['u_p',['pu']],['u_len',['lenu']],['u_wt',['wtu']],['u_spd',['velu','rvu']],['u_gas',['gasu','rgasu']],['u_oil',['oilu','roilu']]];
+  var UM=[['u_p',['pu']],['u_len',['lenu']],['u_wt',['wtu']],['u_gas',['gasu','rgasu']],['u_oil',['oilu','roilu']]];
   function syncUnits(){UM.forEach(function(m){var e=$(m[0]);if(e)e.value=S[m[1][0]]})}
   function toUI(){
     ensureOd();
@@ -604,7 +604,7 @@
     lg('P_1, P_2 inlet / outlet pressure, x fraction of the line length, L length, v_target target speed.','P_1, P_2 — давление на входе / выходе, x — доля длины линии, L — длина, v_target — целевая скорость.');
     b.innerHTML=o.join('');
   }
-  function kst(a,b,c){[['vel',a],['dur',b],['rflow',c]].forEach(function(p){var k=$(p[0]).closest('.kpi');k.classList.remove('st-ok','st-warn','st-bad');if(p[1])k.classList.add('st-'+p[1])})}
+  function kst(a,b,c){[['vel',a],['dur',b],['rflow',c]].forEach(function(p){var k=$(p[0]).closest('.kpi');if(!k)return;k.classList.remove('st-ok','st-warn','st-bad');if(p[1])k.classList.add('st-'+p[1])})}
   var catOpen=false;
   function update(){
     var f=S.fluid, bad=false;

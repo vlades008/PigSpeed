@@ -38,6 +38,11 @@
       <div class="fg">
         <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
       </div>
+        <div class="tgtbox">
+          <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
+          <div class="v" id="rflow">–</div><div class="hint" id="rrange"></div>
+          <div class="tin field" data-f="rv"><label for="rv" data-ti="The speed you want the pig to have. The app shows the flow that gives it.">Target pig speed</label><div class="row"><input id="rv" inputmode="decimal" autocomplete="off"><select id="rvu" class="hide"><option>m/s</option><option>mph</option><option>km/h</option></select><span class="unitnote">m/s</span></div><div class="msg"></div></div>
+        </div>
       <details class="fml" id="fml"><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details>
     </section>
     </div>
@@ -63,7 +68,6 @@
           <label><span>Pressure</span><select id="u_p"><option value="0">kPa</option><option value="1">MPa</option><option value="2">psi</option><option value="3">bar</option></select></label>
           <label><span>Length</span><select id="u_len"><option value="0">km</option><option value="1">m</option></select></label>
           <label><span>Wall thickness</span><select id="u_wt"><option value="0">mm</option><option value="1">inch</option></select></label>
-          <label><span>Speed</span><select id="u_spd"><option value="0">m/s</option><option value="1">mph</option><option value="2">km/h</option></select></label>
           <label><span>Gas flow</span><select id="u_gas"></select></label>
           <label><span>Oil flow</span><select id="u_oil"></select></label>
         </div>
@@ -89,13 +93,8 @@
     <main class="main">
       <div class="warn" id="warn"></div>
       <div class="kpis">
-        <div class="kpi main"><div class="k"><span class="kic ic-vel">Pig speed</span><select id="velu" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="v" id="vel">–</div><div class="rng"><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" id="rlo"></div></div>
+        <div class="kpi main"><div class="k"><span class="kic ic-vel">Pig speed</span><select id="velu" class="hide" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="v" id="vel">–</div><div class="rng"><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" id="rlo"></div></div>
         <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">H:MM:SS</div></div>
-        <div class="kpi tgt">
-          <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
-          <div class="v" id="rflow">–</div><div class="hint" id="rrange"></div>
-          <div class="tin field" data-f="rv"><label for="rv" data-ti="The speed you want the pig to have. The app shows the flow that gives it.">Target pig speed</label><div class="row"><input id="rv" inputmode="decimal" autocomplete="off"><select id="rvu"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="msg"></div></div>
-        </div>
       </div>
       <div class="info"><div class="cat" id="cat"></div></div>
 
