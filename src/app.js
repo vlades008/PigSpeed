@@ -829,7 +829,7 @@
     function b(t,fn,cls){var x=document.createElement('button');x.type='button';x.className='add '+(cls||'');x.innerHTML='<span>'+t+'</span>';x.onclick=fn;box.appendChild(x);return x}
     if(signed()){
       var c=document.createElement('span');c.className='chip';c.textContent=ME.name+' · '+tr(ROLE)+(CSTATE==='offline'?' · '+tr('offline'):'');box.appendChild(c);
-      if(ROLE==='admin')b(tr('Team'),function(){$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false');if(!$('secPanel').classList.contains('open'))$('secBtn').click();$('teamBox').classList.add('open');renderTeam()});
+      if(ROLE==='admin')b(tr('Team'),function(ev){if(ev&&ev.stopPropagation)ev.stopPropagation();$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false');if(!$('secPanel').classList.contains('open'))$('secBtn').click();$('teamBox').classList.add('open');renderTeam()});
       b(tr('Sign out'),function(){Cloud.signOut()});
     }else if(CSTATE==='verify'||CSTATE==='nomember')b(tr('Finish sign-in'),openAuth);
     else b(tr('Sign in'),openAuth);

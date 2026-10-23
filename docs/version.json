@@ -1,6 +1,6 @@
 {
-  "version": "1.5.2",
-  "notes": "Ссылка-приглашение для коллег с готовым сообщением",
+  "version": "1.5.3",
+  "notes": "Исправлена кнопка Команда в настройках",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
