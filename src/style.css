@@ -469,3 +469,20 @@ html[data-ui="1"] .app{overflow-x:clip}
 .trp.new{box-shadow:0 0 0 2px var(--accent)}
 .trp b{font-weight:600;margin-right:4px}.trp .sd{font-size:11px;opacity:.7;margin-left:8px;color:inherit}
 .imrep{display:flex;gap:6px;margin-top:6px}.imrep input{flex:1;min-width:0}
+
+/* one toolbar above the diagram: Route | Local | Global (+ tool chip in Local) */
+.vbar{display:flex!important;align-items:center;gap:8px;margin-bottom:8px}
+.vsel{flex:1;max-width:440px;padding:3px;gap:2px;background:var(--soft);border:0;border-radius:12px}
+.vsel button{flex:1;padding:9px 6px;border-radius:9px;background:transparent;color:var(--muted);font-weight:600;font-size:14px}
+.vsel button+button{border-left:0}
+.vsel button.on{background:var(--accent);color:var(--accent-ink)}
+.vbar #toolSel{height:38px;border-radius:12px;flex:none}
+.card.diag:not(.vw-local) #toolSel{display:none}
+.card.diag:not(.showpipe) #dg,.card.diag:not(.showpipe) #mm{display:none}
+.card.diag:not(.showpipe) .route{display:block}
+html[data-ui="1"] .rr0{stroke:#1d3a58}html[data-ui="1"] .rr1{stroke:#ffb347}
+html[data-ui="1"] .rchip{background:#12304a;color:#9db4cc}html[data-ui="1"] .rchip.s-live{background:#3a2a10;color:#ffb347}html[data-ui="1"] .rchip.s-done{background:#0f3a2c;color:#4fe0a0}
+html[data-ui="1"] .rline::before{background:linear-gradient(#3ad6ff var(--fill),#1d3a58 var(--fill))}
+html[data-ui="1"] .rs .rd{background:#10243b;border-color:#3b6288}html[data-ui="1"] .rs.done .rd{background:#3ad6ff;border-color:#3ad6ff}html[data-ui="1"] .rs.next .rd{border-color:#ffb347}
+html[data-ui="1"] .rs.pig .rd{background:#ffb347;border-color:#3a2a10}html[data-ui="1"] .rsum .rrem{color:#ffb347}
+@media(max-width:560px){.vsel{min-width:0}.vsel button{font-size:13px;padding:9px 2px;min-width:0}.vbar #toolSel{width:78px;font-size:12px;padding:0 4px}}

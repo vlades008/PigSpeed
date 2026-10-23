@@ -97,10 +97,9 @@
       <div class="info"><div class="cat" id="cat"></div></div>
 
       <section class="card diag">
-        <button type="button" id="rvBtn" class="add rvbtn"><span>Pipe diagram</span></button>
         <div class="route" id="route"></div>
-        <div class="dhead">
-          <div class="vswitch" id="viewSeg"><span class="vl" data-v="0">Local</span><button type="button" role="switch" id="viewSw" aria-checked="false" aria-label="Local / Global"><i></i></button><span class="vl" data-v="1">Global</span></div>
+        <div class="dhead vbar">
+          <div class="seg vsel" id="vsel"><button type="button" data-w="route">Route</button><button type="button" data-w="local">Local</button><button type="button" data-w="global">Global</button></div>
           <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
         </div>
         <svg id="dg" viewBox="0 0 900 235" role="img" aria-label="Pipeline diagram"></svg>

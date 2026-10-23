@@ -9,7 +9,7 @@ var PSC = (function(){
   var LEN_KM=[1,0.001];
   var RV_KMH=[3600/1000,1.609344,1];
   var OIL_M3D=[1,BBL,24,BBL*24];
-  var GAS_M3D=[1000,24000];                       // std m3/day per unit
+  var GAS_M3D=[1,24];                       // std m3/day per unit
   var P_PSI=[0.145038,0.145038*1000,1,0.145038*100];
   function pseudo(sg){return {Tpc:169.2+349.5*sg-74.0*sg*sg, Ppc:756.8-131.0*sg-3.6*sg*sg}}   // Sutton 1985, R and psia
   // Dranchuk and Abou-Kassem (1975): Z from reduced density by Newton iteration

@@ -1,6 +1,6 @@
 {
   "name": "pig-speed-calc",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "private": true,
   "description": "Pig speed calculator and in-line inspection run tracker (single-file web app, exe and Android wrapper)",
   "scripts": {
