@@ -429,3 +429,26 @@ html[data-ui="1"] body{overflow-x:hidden}
 #parBtn .psum{margin-left:8px;color:var(--muted);font-size:12px;font-weight:400}
 @media(max-width:700px){#parBtn .psum{display:none}}
 .layout{display:block}
+
+/* one-line header with square icon buttons */
+.bar{flex-wrap:nowrap;gap:6px}
+.brand{flex:0 1 auto;min-width:0;margin-right:8px}
+.brand h1{overflow:hidden;text-overflow:ellipsis;font-size:16px}
+.hacctwrap{margin-right:auto}
+#acct{flex-wrap:nowrap}
+.sqb,#gearBtn.sqb{position:relative;flex:none;min-width:48px;height:46px;padding:0 7px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font:inherit;font-size:10px;line-height:1;transition:background .15s,border-color .15s,color .15s}
+.sqb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+.sqb .lb{font-size:10px;color:var(--muted);white-space:nowrap}
+.sqb:hover,.sqb[aria-expanded=true]{background:var(--soft);color:var(--accent);border-color:var(--accent)}
+.sqb:hover .lb,.sqb[aria-expanded=true] .lb{color:var(--accent)}
+.sqb .rdot{position:absolute;top:6px;right:6px;margin:0}
+.sqb .fabn{top:-6px;right:-6px}
+.avt{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+#acctMenu{left:0;top:52px;width:auto;min-width:230px}
+.acn{padding:2px 2px 8px;border-bottom:1px solid var(--line);margin-bottom:8px;display:flex;flex-direction:column;gap:3px}
+.acn .sd{color:var(--muted);font-size:12px}.acn .chip{align-self:flex-start}
+.acb{display:flex;gap:6px;flex-wrap:wrap}
+.uisw .vl{display:flex;align-items:center;color:var(--muted)}.uisw .vl.on{color:var(--accent)}
+.uisw .vl svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+@media(max-width:900px){.sqb,#gearBtn.sqb{min-width:40px;width:40px;height:40px;padding:0}.sqb .lb{display:none}#acctMenu{top:46px}}
+@media(max-width:560px){.brand{display:none}}
