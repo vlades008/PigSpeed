@@ -56,6 +56,7 @@
         <div class="vswitch uisw" id="lang"><span class="vl" data-v="en">EN</span><button type="button" role="switch" id="langSw" aria-checked="false" aria-label="EN / RU"><i></i></button><span class="vl" data-v="ru">RU</span></div>
         <div class="gh">Run</div>
         <label class="pl" data-ti="You get a reminder this many minutes before the pig reaches a valve and before it arrives at the receiver."><span>Remind me before valves and arrival</span><span class="lead"><input id="leadIn" inputmode="numeric" autocomplete="off"><b>min</b></span></label>
+        <button type="button" class="add" id="dimBtn"><span>Dim screen</span></button>
         <div class="chks"><label class="chk"><input type="checkbox" id="aSound"><span>Sound</span></label><label class="chk"><input type="checkbox" id="aBanner"><span>Banner</span></label><label class="chk"><input type="checkbox" id="aVib"><span>Vibration</span></label></div>
         <div class="gh">Units</div>
         <div class="ugrid">
@@ -157,6 +158,8 @@
   <div id="authStat" style="display:none"><p id="authMsg"></p><div class="mbt" id="authBtns"></div></div>
   <div class="mbt"><span class="grow"></span><button type="button" class="link" id="authX">Close</button></div>
 </div></div>
+<div class="mdl" id="layDlg" role="dialog" aria-modal="true"><div class="mbox wide"><h3>Choose a layout</h3><p>Pick how the app looks on your phone. You can change it later in Settings.</p><div class="lays" id="layOpts"></div><div class="mbt"><span class="grow"></span><button type="button" class="link" id="layLater">Later</button></div></div></div>
+<div class="dim" id="dim"><div class="dimc"><div class="dl">Remaining</div><div class="dn" id="dimRem">–</div><div class="dx" id="dimNext"></div><div class="db"><i id="dimBar"></i></div></div><div class="dh">Tap to close</div></div>
 <div class="sheet" id="sh"></div>
 <nav class="tabbar" id="tabbar"><button type="button" data-a="run"><b>▶</b><span>Run</span></button><button type="button" data-a="runs"><b>☰</b><span>Runs</span></button><button type="button" data-a="fml"><b>ƒ</b><span>Formulas</span></button><button type="button" data-a="set"><b>⚙</b><span>Settings</span></button></nav>
 <button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡<i class="fabn" id="fabN"></i></button>
