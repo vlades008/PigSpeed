@@ -49,6 +49,7 @@ const docs = path.join(root, 'docs');
 fs.mkdirSync(path.join(docs, 'downloads'), { recursive: true });
 for (const f of fs.readdirSync(path.join(root, 'android'))) if (!f.endsWith('.md')) fs.copyFileSync(path.join(root, 'android', f), path.join(docs, f));
 fs.writeFileSync(path.join(docs, '.nojekyll'), '');
+fs.copyFileSync(path.join(__dirname, 'get.html'), path.join(docs, 'get.html'));
 for (const f of ['PigSpeedCalc.exe', 'PigSpeedCalc.apk']) if (fs.existsSync(path.join(root, f))) fs.copyFileSync(path.join(root, f), path.join(docs, 'downloads', f));
 const prev = (() => { try { return JSON.parse(fs.readFileSync(path.join(docs, 'version.json'), 'utf8')); } catch (e) { return {}; } })();
 fs.writeFileSync(path.join(docs, 'version.json'), JSON.stringify({ version: pkg.version, notes: notes || (prev.version === pkg.version ? prev.notes : '') || '', date: new Date().toISOString().slice(0, 10), apk: 'downloads/PigSpeedCalc.apk', exe: 'downloads/PigSpeedCalc.exe' }, null, 2) + '\n');

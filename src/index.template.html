@@ -8,11 +8,13 @@
 <style>{{STYLE}}</style>
 </head>
 <body>
+<div class="updbar annbar" id="annBar"><span id="annTxt"></span><button type="button" class="link" id="annX">Close</button></div>
 <div class="updbar" id="updBar"><span id="updTxt"></span><a class="add" id="updGo" href="#"><span>Update</span></a><button type="button" class="link" id="updNo">Later</button></div>
 <div class="app">
   <header class="bar">
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
     <div class="hacctwrap"><div id="acct" class="hacct"></div><div class="gpanel wide" id="teamPanel"><div id="teamBox" class="teambox open"></div></div></div>
+    <div class="annwrap"><button type="button" id="annBtn" class="gbtn nocaret" style="display:none" title="Announcements" aria-label="Announcements">🔔<i class="fabn" id="annN"></i></button><div class="gpanel wide" id="annPanel"></div></div>
     <div class="sec">
       <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Runs</span><i class="rdot" id="rdot"></i></button>
       <div class="gpanel wide" id="secPanel">
@@ -42,6 +44,7 @@
         <div class="gh">Data</div>
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
         <div class="gh">About</div>
+        <a class="add" id="apkLink" href="#" style="display:none"><span>Download Android app (APK)</span></a>
         <div id="installBox" style="display:none"><button type="button" class="add" id="installBtn"><span>Install app</span></button><div class="iosguide" id="iosGuide" style="display:none"></div></div>
         <div class="gver" id="ver"></div>
         <details class="wnew" id="wnew"><summary>What's new</summary><div id="whatsnew"></div></details>

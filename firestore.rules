@@ -40,6 +40,11 @@ service cloud.firestore {
         allow update, delete: if admin(t);
       }
 
+      match /announcements/{a} {
+        allow read: if member(t);
+        allow create, delete: if admin(t);
+      }
+
       match /runs/{r} {
         allow read: if member(t);
         allow create: if writer(t) && request.resource.data.owner.uid == request.auth.uid;

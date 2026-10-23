@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pig Speed: скачать приложение</title>
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--ink:#1b2430;--muted:#6b7686;--line:#d9dfe7;--accent:#1f6feb}
+@media(prefers-color-scheme:dark){:root{--bg:#10151c;--card:#18202a;--ink:#e7ecf3;--muted:#92a0b2;--line:#2b3644;--accent:#5b9bff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.card h2{font-size:16px;margin:0 0 8px}
+.btn{display:block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;border-radius:12px;padding:12px;margin:6px 0 10px}
+.btn.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+ol{margin:6px 0 0 18px;padding:0;color:var(--muted)}li{margin:3px 0}
+#qr{display:flex;justify-content:center;margin:8px 0}small{color:var(--muted)}
+</style></head><body><main>
+<h1>Pig Speed</h1><p class="sub">Калькулятор скорости снаряда и учёт запусков. <span id="v"></span></p>
+<div class="card"><h2>Android</h2>
+<a class="btn" href="downloads/PigSpeedCalc.apk">Скачать приложение (APK)</a>
+<ol><li>Нажмите кнопку и дождитесь загрузки файла.</li><li>Откройте скачанный файл PigSpeedCalc.apk.</li><li>Если телефон спросит, разрешите установку из этого источника (браузера).</li><li>Нажмите «Установить» и откройте «Pig Speed».</li></ol>
+<p><small>Приложение само загружает последнюю версию при запуске, обновлять его вручную не нужно.</small></p></div>
+<div class="card"><h2>iPhone</h2>
+<ol><li>Откройте эту страницу в <b>Safari</b>.</li><li>Нажмите «Поделиться» (квадрат со стрелкой).</li><li>Выберите «На экран Домой» и нажмите «Добавить».</li></ol>
+<a class="btn alt" href="./">Открыть Pig Speed</a>
+<p><small>Для iPhone приложение работает с экрана «Домой» и обновляется само. Отдельного файла для iPhone нет (нужна учётная запись Apple Developer).</small></p></div>
+<div class="card"><h2>Windows</h2><a class="btn alt" href="downloads/PigSpeedCalc.exe">Скачать PigSpeedCalc.exe</a></div>
+<div class="card"><h2>Ссылка на телефон</h2><div id="qr"></div><small>Наведите камеру телефона на код, чтобы открыть эту страницу.</small></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+try{new QRCode(document.getElementById('qr'),{text:location.href.split('#')[0],width:160,height:160})}catch(e){}
+fetch('version.json?t='+Date.now()).then(function(r){return r.json()}).then(function(v){document.getElementById('v').textContent='Версия '+v.version}).catch(function(){});
+</script></body></html>
