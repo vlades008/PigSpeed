@@ -528,15 +528,6 @@ html[data-ui="1"] .rs.pig .rd{background:#ffb347;border-color:#3a2a10}html[data-
   .shv i{width:16px;height:16px;border-radius:50%;border:3px solid #b8ad96;box-sizing:border-box;flex:none}.shv.done i{background:#1f7a6c;border-color:#1f7a6c}.shv.next i{border-color:var(--accent)}
   .shv .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.shv .k,.shv .w{color:var(--muted);font-size:12.5px;white-space:nowrap}.shv.next .w{color:var(--accent);font-weight:600}
   /* Cards */
-  html[data-lay="3"] .card.diag{display:grid;grid-template-columns:repeat(3,100%);grid-auto-flow:column;overflow-x:auto;scroll-snap-type:x mandatory;align-items:start;overscroll-behavior-x:contain}
-  html[data-lay="3"] .card.diag>*{scroll-snap-align:start;min-width:0;padding:0 4px}
-  html[data-lay="3"] .route{display:block!important;grid-column:1;grid-row:1}
-  html[data-lay="3"] .runbar{grid-column:1;grid-row:2}html[data-lay="3"] .rprog{grid-column:1;grid-row:3}html[data-lay="3"] .card.diag>.loginfo{grid-column:1;grid-row:4}
-  html[data-lay="3"] .vbar{grid-column:2;grid-row:1}html[data-lay="3"] .card.diag #dg{display:block!important;grid-column:2;grid-row:2}html[data-lay="3"] #mm{grid-column:2;grid-row:3}
-  html[data-lay="3"] .card.diag>.vsec{grid-column:3;grid-row:1/5}
-  html[data-lay="3"] .vsel [data-w=route]{display:none}
-  html[data-lay="3"] .dots{display:flex;justify-content:center;gap:8px;margin:8px 0}
-  .dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--accent)}
 }
 
 /* toast with an action button */

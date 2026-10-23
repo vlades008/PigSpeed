@@ -965,7 +965,7 @@
   // ---- phone layouts: 1 sheet, 2 focus, 3 cards (Standard = 0)
   var layBuilt=false,layLang='',shOpen=false,shSig='',lastPh=null;
   function isPhone(){return window.innerWidth<700}
-  function curLay(){return isPhone()?(+S.lay||0):0}
+  function curLay(){var l=+S.lay||0;return isPhone()&&l>=1&&l<=2?l:0}
   function layData(){
     var g=window.__dg,run=window.__run,now=Date.now(),has=!!(g&&g.hours);
     var T=has?effMs(g):0,base=run?run.launch:now,p=run?(run.done?1:(window.__p||0)):0,obs=(run&&run.obs)||{},xf=window.__xf||0;
@@ -1035,7 +1035,7 @@
   }
   function applyLay(){
     var l=curLay(),h=document.documentElement;h.dataset.lay=l;if(l!==2)h.classList.remove('lay-vals');
-    layBuilt=false;applyVw();renderLay();var c=document.querySelector('.card.diag');if(c&&l===3)c.scrollLeft=0;
+    layBuilt=false;applyVw();renderLay();
   }
   function layAct(a,t){
     var d=layData();
@@ -1052,10 +1052,9 @@
     var b=e.target.closest('button');if(!b||b.disabled||!b.dataset.a)return;layAct(b.dataset.a,b)})});
   $('layS').addEventListener('change',function(){var v=+this.value;keepRun(function(){S.lay=v;save();applyLay();update()})});
   window.addEventListener('resize',function(){var ph=isPhone();if(ph!==lastPh){lastPh=ph;keepRun(function(){applyLay();update()})}});
-  (function(){var c=document.querySelector('.card.diag'),ds=$('dots');if(!c||!ds)return;c.addEventListener('scroll',function(){var i=Math.round(c.scrollLeft/Math.max(1,c.clientWidth));[].forEach.call(ds.children,function(x,k){x.classList.toggle('on',k===i)})},{passive:true})})();
   var layPrev=0;
   function layOptsHtml(){
-    var opts=[['0','Standard','<i class="w1"></i><i class="w2"></i><i class="w3"></i>'],['1','Sheet','<i class="w4"></i><i class="w5"></i>'],['2','Focus','<i class="w6"></i><i class="w7"></i>'],['3','Cards','<i class="w8"></i><i class="w9"></i>']];
+    var opts=[['0','Standard','<i class="w1"></i><i class="w2"></i><i class="w3"></i>'],['1','Sheet','<i class="w4"></i><i class="w5"></i>'],['2','Focus','<i class="w6"></i><i class="w7"></i>']];
     $('layOpts').innerHTML=opts.map(function(o){return '<button type="button" class="lopt'+(+(S.lay||0)===+o[0]?' on':'')+'" data-v="'+o[0]+'"><span class="wfw"><span class="wf">'+o[2]+'</span></span><b>'+tr(o[1])+'</b></button>'}).join('');
   }
   function openLayPicker(){layPrev=+(S.lay||0);layOptsHtml();$('layDlg').classList.add('open');document.documentElement.classList.add('lay-picking')}
@@ -1064,7 +1063,7 @@
   $('layKeep').addEventListener('click',function(){S.layAsked=1;save();closeLayPicker()});
   $('layLater').addEventListener('click',function(){var v=layPrev;S.layAsked=1;$('layS').value=v;keepRun(function(){S.lay=v;save();applyLay();update()});closeLayPicker()});
   function renderRoute(){
-    var el=$('route');if(!el||(S.rview&&curLay()!==3))return;
+    var el=$('route');if(!el||S.rview)return;
     var g=window.__dg;
     if(!g||!g.hours){el.innerHTML='<div class="rhint">'+tr('Enter the pipe data to see the route.')+'</div>';return}
     var run=window.__run,now=Date.now(),T=effMs(g),base=run?run.launch:now,p=run?(run.done?1:(window.__p||0)):0,obs=(run&&run.obs)||{},xf=window.__xf||0;

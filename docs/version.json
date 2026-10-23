@@ -1,6 +1,6 @@
 {
-  "version": "1.12.1",
-  "notes": "Выбор вида с мгновенным просмотром",
+  "version": "1.12.2",
+  "notes": "Убран вид «Карточки»",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
