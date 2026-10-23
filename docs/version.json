@@ -1,6 +1,6 @@
 {
-  "version": "1.5.7",
-  "notes": "Быстрее вход: индикатор, автозакрытие окна, ускоренная загрузка",
+  "version": "1.5.8",
+  "notes": "Исправлено положение меню Запуски на экране",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
