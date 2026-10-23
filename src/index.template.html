@@ -92,11 +92,6 @@
 
     <main class="main">
       <div class="warn" id="warn"></div>
-      <div class="kpis">
-        <div class="kpi main"><div class="k"><span class="kic ic-vel">Pig speed</span><select id="velu" class="hide" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select></div><div class="v" id="vel">–</div><div class="rng"><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" id="rlo"></div></div>
-        <div class="kpi"><div class="k"><span class="kic ic-dur">Estimated duration</span></div><div class="v" id="dur">–</div><div class="hint">H:MM:SS</div></div>
-      </div>
-      <div class="info"><div class="cat" id="cat"></div></div>
 
       <section class="card diag">
         <div class="fcus" id="fc"></div>
@@ -110,8 +105,9 @@
         <div class="runbar">
           <button type="button" class="add start" id="startBtn"><span id="startL">Start</span></button>
           <button type="button" class="add okb" id="arrBtn"><span>✓ Accepted at receiver</span></button>
-          <div class="tiles"><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
+          <div class="tiles"><div class="tile spd"><span>Speed</span><b id="vel">–</b><select id="velu" class="hide" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select><div class="rng" hidden><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" hidden id="rlo"></div></div><div class="tile dur"><span>Estimated duration</span><b id="dur">–</b></div><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
         </div>
+        <div class="info"><div class="cat" id="cat"></div></div>
         <div class="rprog"><i id="rprog"></i></div>
         <div class="clk loginfo" id="logInfo"></div>
 

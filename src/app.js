@@ -604,7 +604,7 @@
     lg('P_1, P_2 inlet / outlet pressure, x fraction of the line length, L length, v_target target speed.','P_1, P_2 — давление на входе / выходе, x — доля длины линии, L — длина, v_target — целевая скорость.');
     b.innerHTML=o.join('');
   }
-  function kst(a,b,c){[['vel',a],['dur',b],['rflow',c]].forEach(function(p){var k=$(p[0]).closest('.kpi');if(!k)return;k.classList.remove('st-ok','st-warn','st-bad');if(p[1])k.classList.add('st-'+p[1])})}
+  function kst(a,b,c){[['vel',a],['dur',b],['rflow',c]].forEach(function(p){var k=$(p[0]).closest('.kpi,.tile');if(!k)return;k.classList.remove('st-ok','st-warn','st-bad');if(p[1])k.classList.add('st-'+p[1])})}
   var catOpen=false;
   function update(){
     var f=S.fluid, bad=false;
@@ -655,7 +655,7 @@
       r.notes.forEach(function(k){W.push(tr(k==='z_range'?'Z factor correlation used outside its best range, result is approximate.':'Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.'))});
       var sc=Math.max(L.vmax*1.5,vmax*1.1,0.01),pc=function(x){return Math.max(0,Math.min(100,x/sc*100))};
       $('rz').style.left=pc(L.vmin)+'%';$('rz').style.width=(pc(L.vmax)-pc(L.vmin))+'%';$('rmk').style.left=pc(vavg)+'%';
-      $('rlo').textContent=tr('Allowed')+': '+String(L.vmin).replace('.',S.lang==='ru'?',':'.')+'–'+L.vmax+' '+tr('m/s');
+      $('vel').parentNode.title=tr('Allowed')+': '+String(L.vmin).replace('.',S.lang==='ru'?',':'.')+'–'+L.vmax+' '+tr('m/s');$('rlo').textContent=tr('Allowed')+': '+String(L.vmin).replace('.',S.lang==='ru'?',':'.')+'–'+L.vmax+' '+tr('m/s');
       var spdBad=(vmin<L.vmin||vmax>L.vmax),durBad=(r.hours>L.hours||km>L.km);
       var box=$('cat');box.innerHTML='';
       var one=function(c,t){var d=document.createElement('div');d.className=c;d.textContent=t;box.appendChild(d)};
@@ -984,13 +984,13 @@
     layBuilt=true;layLang=S.lang;
     $('fc').innerHTML='<div class="t3top"><span class="rname" id="fcName"></span><span class="rchip" id="fcChip"></span></div>'
       +'<div class="t3big"><div class="t3lab">'+tr('Remaining')+'</div><div class="t3num" id="fcRem">–</div><div class="t3bar"><i id="fcBar"></i></div><div class="t3row"><span id="fcDist"></span><span id="fcArr"></span></div></div>'
-      +'<div class="t3next" id="fcNext"></div>'
+      +'<div class="t3next" id="fcNext"></div><div class="t3spd" id="fcSpd"></div>'
       +'<div class="fcbtns"><button type="button" class="sq ok" id="fcValve" data-a="valve"><b>✓</b><span>'+tr('Valve passed')+'</span></button><button type="button" class="sq main" id="fcGo" data-a="go"><b id="fcGoI">▶</b><span id="fcGoL"></span></button></div>'
       +'<div class="fclinks"><button type="button" data-a="par">'+tr('Parameters')+'</button><button type="button" data-a="runs">'+tr('Runs')+'</button><button type="button" data-a="vals">'+tr('Valves')+'</button><button type="button" data-a="dim">'+tr('Dim')+'</button></div>';
     $('sh').innerHTML='<button type="button" class="shh" data-a="toggle" aria-label="'+tr('Details')+'"><i></i></button>'
       +'<div class="shrow"><div class="shrem"><span class="shl">'+tr('Remaining')+'</span><b id="shRem">–</b></div><div class="shnx" id="shNx"></div></div>'
       +'<button type="button" class="shgo" id="shGo" data-a="go"></button>'
-      +'<div class="shmore"><div class="shtiles"><div><span>'+tr('Covered')+'</span><b id="shCov">–</b></div><div><span>'+tr('Elapsed')+'</span><b id="shEl">–</b></div><div><span>'+tr('Arrival at receiver')+'</span><b id="shArr">–</b></div></div>'
+      +'<div class="shmore"><div class="shtiles"><div><span>'+tr('Covered')+'</span><b id="shCov">–</b></div><div><span>'+tr('Elapsed')+'</span><b id="shEl">–</b></div><div><span>'+tr('Arrival at receiver')+'</span><b id="shArr">–</b></div><div><span>'+tr('Pig speed')+'</span><b id="shSpd">–</b></div></div>'
       +'<div class="shlist" id="shList"></div>'
       +'<div class="fcbtns"><button type="button" class="sq ok sm" id="shValve" data-a="valve"><b>✓</b><span>'+tr('Valve passed')+'</span></button><button type="button" class="sq sm" data-a="par"><b>⚙</b><span>'+tr('Parameters')+'</span></button><button type="button" class="sq sm" data-a="runs"><b>☰</b><span>'+tr('Runs')+'</span></button></div></div>';
   }
@@ -1000,6 +1000,7 @@
     $('fcRem').textContent=d.has?fmtRem(d.T-d.p*d.T):'–';$('fcBar').style.width=Math.min(100,d.p*100)+'%';
     $('fcDist').textContent=d.has?fmt(d.dd,d.dd<10?2:1)+' / '+fmt(d.LL,d.LL<10?2:1)+' '+d.unit:'';
     $('fcArr').textContent=d.has?tr('Arrival at receiver')+' '+fmtClock(d.base+d.T):'';
+    $('fcSpd').textContent=d.has?tr('Pig speed')+': '+$('vel').textContent:'';
     $('fcNext').innerHTML=nextLine(d);$('fcNext').classList.toggle('soon',!!(d.nx&&d.run&&!d.run.done&&(d.nx.tf*d.T-d.p*d.T)<=(+S.lead||5)*60000));
     $('fcValve').disabled=!(d.nx&&!RO&&d.run&&!d.run.done);
     var md=mainMode(d),go=$('fcGo');go.style.display=md?'':'none';go.dataset.mode=md;go.className='sq main'+(md==='arr'?' arr':'');
@@ -1011,7 +1012,7 @@
     var md=mainMode(d),go=$('shGo');go.style.display=md?'':'none';go.dataset.mode=md;go.className='shgo'+(md==='arr'?' arr':'');go.textContent=mainLabel(md);
     if(!shOpen)return;
     $('shCov').textContent=d.has?fmt(d.dd,d.dd<10?2:1)+' / '+fmt(d.LL,d.LL<10?2:1)+' '+d.unit:'–';
-    $('shEl').textContent=d.has?PSC.fmtDur(d.p*d.T/3.6e6):'–';$('shArr').textContent=d.has?fmtClock(d.base+d.T).split(' ')[0]:'–';
+    $('shEl').textContent=d.has?PSC.fmtDur(d.p*d.T/3.6e6):'–';$('shSpd').textContent=$('vel').textContent;$('shArr').textContent=d.has?fmtClock(d.base+d.T).split(' ')[0]:'–';
     $('shValve').disabled=!(d.nx&&!RO&&d.run&&!d.run.done);
     var rows=d.has?d.g.valves.filter(function(v){return v.ok}).sort(function(a,b){return a.frac-b.frac}):[];
     var sig=rows.map(function(v){return v.i+':'+vName(v.i)}).join('|');
