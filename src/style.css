@@ -384,3 +384,5 @@ html[data-ui="1"] body{overflow-x:hidden}
 }
 /* oil gravity is fixed at 35 API (setting removed) */
 #apiF{display:none!important}
+/* gas specific gravity is fixed at 0.65 (setting removed) */
+#sgF{display:none!important}

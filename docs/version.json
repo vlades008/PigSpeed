@@ -1,6 +1,6 @@
 {
-  "version": "1.5.9",
-  "notes": "Убрана настройка плотности нефти",
+  "version": "1.5.10",
+  "notes": "Убрана настройка плотности газа; в завершённом запуске можно удалять задвижки",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
