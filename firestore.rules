@@ -8,6 +8,7 @@ service cloud.firestore {
     function member(t) { return signedIn() && exists(/databases/$(db)/documents/teams/$(t)/members/$(request.auth.uid)); }
     function role(t) { return get(/databases/$(db)/documents/teams/$(t)/members/$(request.auth.uid)).data.role; }
     function admin(t) { return member(t) && role(t) == 'admin'; }
+    function manager(t) { return member(t) && role(t) == 'manager'; }
     function writer(t) { return member(t) && (role(t) == 'admin' || role(t) == 'engineer'); }
 
     match /teams/{t} {
@@ -28,8 +29,16 @@ service cloud.firestore {
       }
 
       match /invites/{e} {
-        allow read: if admin(t) || (signedIn() && verified() && request.auth.token.email.lower() == e);
-        allow write: if admin(t);
+        allow read: if admin(t) || (manager(t) && resource.data.by == request.auth.uid)
+                    || (signedIn() && verified() && request.auth.token.email.lower() == e);
+        allow create: if admin(t) || (manager(t) && request.resource.data.role == 'engineer' && request.resource.data.by == request.auth.uid);
+        allow update, delete: if admin(t) || (manager(t) && resource.data.by == request.auth.uid);
+      }
+
+      match /inviteNotes/{n} {
+        allow read: if admin(t) || manager(t);
+        allow create: if (admin(t) || manager(t)) && request.resource.data.byUid == request.auth.uid;
+        allow delete: if admin(t);
       }
 
       match /ideas/{i} {

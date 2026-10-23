@@ -113,10 +113,15 @@ window.Cloud = (function () {
     },
     setRole: function (uid, role) { return T().collection('members').doc(uid).update({ role: role }); },
     removeMember: function (uid) { return T().collection('members').doc(uid).delete(); },
-    watchInvites: function (fn) {
-      return T().collection('invites').onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.email = d.id; a.push(m); }); fn(a); }, function () {});
+    watchInvites: function (fn, uid) {
+      var q = T().collection('invites'); if (uid) q = q.where('by', '==', uid);
+      return q.onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.email = d.id; a.push(m); }); fn(a); }, function () {});
     },
-    addInvite: function (email, role) { return T().collection('invites').doc(email.toLowerCase()).set({ role: role, by: auth.currentUser.uid, at: Date.now() }); },
+    addInvite: function (email, role, byName) { return T().collection('invites').doc(email.toLowerCase()).set({ role: role, by: auth.currentUser.uid, byName: byName || '', at: Date.now() }); },
+    noteInvite: function (o) { return T().collection('inviteNotes').add(o); },
+    watchInviteNotes: function (fn) {
+      return T().collection('inviteNotes').orderBy('at', 'desc').limit(20).onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.id = d.id; m.kind = 'invite'; a.push(m); }); fn(a); }, function () {});
+    },
     delInvite: function (email) { return T().collection('invites').doc(email).delete(); }
   };
 })();
@@ -126,11 +131,11 @@ window.Cloud = (function () {
 function mockCloud(spec) {
   var p = spec.split(':'), uid = p[0], name = p[1] || uid, role = p[2] || 'engineer', K = 'psc.mock.v1', fns = [];
   var user = { uid: uid, name: name, email: uid + '@mock.test', verified: true };
-  function load() { var d = null; try { d = JSON.parse(localStorage.getItem(K)); } catch (e) {} d = d || {}; d.runs = d.runs || {}; d.members = d.members || {}; d.invites = d.invites || {}; d.ideas = d.ideas || {}; d.announcements = d.announcements || {}; return d; }
+  function load() { var d = null; try { d = JSON.parse(localStorage.getItem(K)); } catch (e) {} d = d || {}; d.runs = d.runs || {}; d.members = d.members || {}; d.invites = d.invites || {}; d.ideas = d.ideas || {}; d.announcements = d.announcements || {}; d.inviteNotes = d.inviteNotes || {}; return d; }
   function put(d) { localStorage.setItem(K, JSON.stringify(d)); fire(); }
   function fire() { fns.slice().forEach(function (f) { f(); }); }
   window.addEventListener('storage', function (e) { if (e.key === K) fire(); });
-  function watch(kind, fn) { var f = function () { var d = load()[kind]; fn(Object.keys(d).map(function (k) { var o = JSON.parse(JSON.stringify(d[k])); if (kind === 'runs') o.team = true; if (kind === 'members') o.uid = k; if (kind === 'invites') o.email = k; if (kind === 'ideas' || kind === 'announcements') o.id = k; return o; }), []); }; fns.push(f); setTimeout(f, 0); return function () { fns = fns.filter(function (x) { return x !== f; }); }; }
+  function watch(kind, fn) { var f = function () { var d = load()[kind]; fn(Object.keys(d).map(function (k) { var o = JSON.parse(JSON.stringify(d[k])); if (kind === 'runs') o.team = true; if (kind === 'members') o.uid = k; if (kind === 'invites') o.email = k; if (kind === 'ideas' || kind === 'announcements' || kind === 'inviteNotes') o.id = k; if (kind === 'inviteNotes') o.kind = 'invite'; return o; }), []); }; fns.push(f); setTimeout(f, 0); return function () { fns = fns.filter(function (x) { return x !== f; }); }; }
   var cb = function () {}, st = { status: 'member', user: user, role: role };
   return {
     available: function () { return true; },
@@ -151,8 +156,10 @@ function mockCloud(spec) {
     watchMembers: function (fn) { return watch('members', fn); },
     setRole: function (u, r) { var d = load(); if (d.members[u]) d.members[u].role = r; put(d); return Promise.resolve(); },
     removeMember: function (u) { var d = load(); delete d.members[u]; put(d); return Promise.resolve(); },
-    watchInvites: function (fn) { return watch('invites', fn); },
-    addInvite: function (e, r) { var d = load(); d.invites[e.toLowerCase()] = { role: r }; put(d); return Promise.resolve(); },
+    watchInvites: function (fn, u) { return watch('invites', function (a) { fn(u ? a.filter(function (x) { return x.by === u; }) : a); }); },
+    noteInvite: function (o) { var d = load(); d.inviteNotes['n' + Date.now() + Math.random().toString(36).slice(2, 5)] = o; put(d); return Promise.resolve(); },
+    watchInviteNotes: function (fn) { return watch('inviteNotes', function (a) { a.sort(function (x, y) { return y.at - x.at; }); fn(a.slice(0, 20)); }); },
+    addInvite: function (e, r, n) { var d = load(); d.invites[e.toLowerCase()] = { role: r, by: uid, byName: n || '' }; put(d); return Promise.resolve(); },
     delInvite: function (e) { var d = load(); delete d.invites[e]; put(d); return Promise.resolve(); }
   };
 }
