@@ -615,3 +615,11 @@ body.is-running .kpi.tgt,body.ro .kpi.tgt{display:none}
 .tile.spd b{font-weight:700}
 .t3spd{font-size:14px;color:var(--muted);margin:0 2px 6px}
 .shtiles{grid-template-columns:repeat(2,1fr)!important}
+
+/* spotlight tour */
+.tour{display:none;position:fixed;inset:0;z-index:100}
+.tour.open{display:block}
+.tourhole{position:fixed;display:none;border-radius:12px;box-shadow:0 0 0 100vmax rgba(8,16,32,.66);pointer-events:none;transition:left .25s,top .25s,width .25s,height .25s;outline:2px solid var(--accent)}
+.tourtip{position:fixed;background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;box-shadow:0 10px 36px rgba(0,0,0,.4);z-index:101}
+.tourtip .tt{font-weight:700;font-size:16px;margin-bottom:4px}.tourtip .tx{font-size:14px;line-height:1.4;color:var(--ink);opacity:.9}
+.tourtip .tf{display:flex;align-items:center;gap:8px;margin-top:10px}.tourtip .ts{font-size:12px;color:var(--muted)}
