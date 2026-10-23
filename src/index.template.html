@@ -21,6 +21,7 @@
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
       </div>
     </div>
+    <select id="ui" class="gsel" aria-label="Interface" title="Interface"><option value="0">Standard</option><option value="1">Control room</option><option value="2">Route map</option></select>
     <div class="gear">
       <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
       <div class="gpanel" id="gpanel">
@@ -34,7 +35,6 @@
         <label class="pl"><span>Standard conditions</span><select id="std"><option value="0">60 °F, 14.696 psia</option><option value="1">15 °C, 101.325 kPa</option><option value="2">20 °C, 101.325 kPa</option></select></label>
         <label class="pl" data-ti="Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip."><span>Pig speed / flow speed, %</span><input id="slip" inputmode="decimal" autocomplete="off"></label>
         <div class="gh">Display</div>
-        <label class="pl"><span>Interface</span><select id="ui"><option value="0">Standard</option><option value="1">Control room</option><option value="2">Route map</option></select></label>
         <label class="pl"><span>Diagram style</span><select id="dstyle"><option value="0">Classic</option><option value="1">Glass</option><option value="2">Blueprint</option></select></label>
         <label class="pl"><span>Text size in diagram</span><input type="range" id="tscale" min="60" max="220" step="5"><b id="tscaleV">100%</b></label>
         <div class="gver" id="ver"></div>

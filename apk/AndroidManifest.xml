@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.pigspeed.calc" android:versionCode="10400" android:versionName="1.4.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.pigspeed.calc" android:versionCode="10401" android:versionName="1.4.1">
     <application android:label="Pig Speed" android:icon="@mipmap/ic_launcher" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:allowBackup="true">
         <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize" android:windowSoftInputMode="adjustResize">
             <intent-filter>
