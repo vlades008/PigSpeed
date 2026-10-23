@@ -71,6 +71,8 @@
           <label><span>Gas flow</span><select id="u_gas"></select></label>
           <label><span>Oil flow</span><select id="u_oil"></select></label>
         </div>
+        <div class="gh">Clock style</div>
+        <label class="pl"><span>Style</span><select id="clkS"><option value="1">Hero countdown</option><option value="2">Progress ring</option></select></label>
         <div class="gh">Phone layout</div>
         <label class="pl"><span>Layout</span><select id="layS"><option value="0">Standard</option><option value="1">Sheet</option><option value="2">Focus</option></select></label>
         <div class="gh">Data</div>
@@ -106,7 +108,7 @@
         <div class="runbar">
           <button type="button" class="add start" id="startBtn"><span id="startL">Start</span></button>
           <button type="button" class="add okb" id="arrBtn"><span>✓ Accepted at receiver</span></button>
-          <div class="tiles"><div class="tile spd"><span>Speed</span><b id="vel">–</b><select id="velu" class="hide" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select><div class="rng" hidden><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" hidden id="rlo"></div></div><div class="tile dur"><span>Estimated duration</span><b id="dur">–</b></div><div class="tile"><span>Covered</span><b id="tDist">–</b></div><div class="tile"><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
+          <div class="tiles"><div class="tile spd"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-6"/></svg><span>Speed</span><b id="vel">–</b><select id="velu" class="hide" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select><div class="rng" hidden><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" hidden id="rlo"></div></div><div class="tile dur"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Estimated duration</span><b id="dur">–</b></div><div class="tile"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3"/></svg><span>Covered</span><b id="tDist">–</b></div><div class="tile"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="rb" cx="60" cy="60" r="54"/><circle class="rf" id="ringF" cx="60" cy="60" r="54" transform="rotate(-90 60 60)"/></svg><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10M7 20h10"/><path d="M8 4c0 5 8 5 8 8s-8 3-8 8M16 4c0 5-8 5-8 8s8 3 8 8"/></svg><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
         </div>
         <div class="info"><div class="cat" id="cat"></div></div>
         <div class="rprog"><i id="rprog"></i></div>

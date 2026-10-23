@@ -704,3 +704,58 @@ html[data-lay="2"].lay-vals .card.diag>.vsec.vc .tw,html[data-lay="2"].lay-vals 
 .che p{margin:4px 0 0;font-size:14px;line-height:1.4;color:var(--ink)}
 @media(max-width:699px){.updbar{flex-direction:column;align-items:stretch}.updb{display:grid;grid-template-columns:1fr 1fr}.updb #updGo{grid-column:1/-1;min-height:50px}.updb .link{grid-column:1/-1;text-align:center}.chl{max-height:62vh}}
 @media(max-width:699px){.updt{flex:none}}
+
+/* clock line: two designs (data-clk 1 hero, 2 ring) */
+.tile .tic{display:none;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tile .ring{display:none}
+html[data-clk] .runbar{align-items:stretch;gap:10px 14px}
+html[data-clk] .tiles{display:grid;gap:8px;align-items:stretch}
+html[data-clk] .tile,html[data-clk][data-ui] .tile,html[data-clk][data-ui] .tile.hot.live{background:var(--soft)!important;border:1px solid var(--line);border-radius:14px;padding:8px 12px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:8px;align-items:center;position:relative}
+html[data-clk] .tile .tic{display:block;color:var(--muted);grid-row:1;grid-column:1}
+html[data-clk] .tile span{grid-row:1;grid-column:2;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:block}
+html[data-clk] .tile b{grid-row:2;grid-column:1/-1;font-size:20px;font-weight:600;color:var(--ink);display:block;line-height:1.25;font-variant-numeric:tabular-nums}
+html[data-clk][data-ui] .tile b{color:var(--ink)}
+html[data-clk] .tile small{font-size:12px;color:var(--muted)}
+html[data-clk] .tile.hot.live span{color:var(--muted)}
+/* A: hero countdown */
+html[data-clk="1"] .tiles{grid-template-columns:minmax(190px,1.5fr) repeat(3,minmax(96px,1fr));grid-auto-flow:row dense}
+html[data-clk="1"] .tile.hot{order:-1;grid-column:1;grid-row:1/span 2;grid-template-columns:auto 1fr;align-content:center;background:var(--accentbg,var(--soft))!important;border-color:var(--accent)}
+html[data-clk="1"] .tile.hot b{font-size:36px;color:var(--accent)!important;line-height:1.1}
+html[data-clk="1"] .tile.hot .tic{color:var(--accent)}
+html[data-clk="1"] .tile.hot.live{background:var(--accent)!important}
+html[data-clk="1"] .tile.hot.live b,html[data-clk="1"] .tile.hot.live span,html[data-clk="1"] .tile.hot.live .tic{color:#fff!important}
+html[data-clk="1"] .tiles>.tile:last-child{grid-column:span 2}
+html[data-clk="1"] .rprog{height:8px;border-radius:4px;margin-top:10px}
+html[data-clk="1"] .rprog i{border-radius:4px}
+/* B: progress ring */
+html[data-clk="2"] .tiles{grid-template-columns:150px repeat(2,minmax(130px,1fr));grid-template-rows:repeat(3,auto);gap:8px 12px}
+html[data-clk="2"] .tile.hot{order:-1;grid-column:1;grid-row:1/span 3;width:150px;height:150px;padding:0;background:transparent!important;border:0;display:block;align-self:center}
+html[data-clk="2"] .tile.hot .ring{display:block;position:absolute;inset:0;width:100%;height:100%}
+html[data-clk="2"] .tile.hot .rb{fill:none;stroke:var(--line);stroke-width:9}
+html[data-clk="2"] .tile.hot .rf{fill:none;stroke:var(--accent);stroke-width:9;stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:339.3;transition:stroke-dashoffset .25s linear}
+html[data-clk="2"] .tile.hot .tic{display:none}
+html[data-clk="2"] .tile.hot span{position:absolute;left:0;right:0;top:40px;text-align:center}
+html[data-clk="2"] .tile.hot b{position:absolute;left:0;right:0;top:58px;text-align:center;font-size:25px;color:var(--accent)}
+html[data-clk="2"] .tile.hot.live b{color:var(--accent)!important}
+html[data-clk="2"] .tile.hot.live span,html[data-clk="2"] .tile.hot.live .tic{color:var(--muted)!important}
+html[data-clk="2"] .tile:not(.hot){background:transparent!important;border:0;padding:2px 0;grid-template-columns:38px 1fr;grid-template-rows:auto auto;column-gap:10px}
+html[data-clk="2"] .tile:not(.hot) .tic{grid-row:1/span 2;width:38px;height:38px;padding:9px;border-radius:50%;background:var(--soft);color:var(--accent);box-sizing:border-box}
+html[data-clk="2"] .tile:not(.hot) b{grid-column:2;font-size:19px}
+html[data-clk="2"] .tile:not(.hot) span{grid-column:2}
+html[data-clk="2"] .rprog{display:none}
+@media(max-width:699px){
+  html[data-clk] .tiles{flex:1 1 100%}
+  html[data-clk="1"] .tiles{grid-template-columns:1fr 1fr}
+  html[data-clk="1"] .tile.hot{grid-column:1/-1;grid-row:auto;order:-1;text-align:center;justify-items:center;grid-template-columns:auto;padding:12px}
+  html[data-clk="1"] .tile.hot .tic{display:none}
+  html[data-clk="1"] .tile.hot span{grid-column:1}
+  html[data-clk="1"] .tile.hot b{grid-column:1;font-size:40px}
+  html[data-clk="1"] .tiles>.tile:last-child{grid-column:auto}
+  html[data-clk] .tile b{font-size:17px}
+  html[data-clk="2"] .tiles{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  html[data-clk="2"] .tile.hot{grid-column:1/-1;grid-row:auto;justify-self:center;margin-bottom:4px}
+  html[data-clk="2"] .tile:not(.hot){grid-template-columns:34px 1fr}
+  html[data-clk="2"] .tile:not(.hot) .tic{width:34px;height:34px;padding:8px}
+  html[data-clk="2"] .tile:not(.hot) b{font-size:16px}
+}
+@media(max-width:699px){html[data-clk] .tiles>.tile:last-child{grid-column:1/-1}}
