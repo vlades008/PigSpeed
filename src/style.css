@@ -486,3 +486,55 @@ html[data-ui="1"] .rline::before{background:linear-gradient(#3ad6ff var(--fill),
 html[data-ui="1"] .rs .rd{background:#10243b;border-color:#3b6288}html[data-ui="1"] .rs.done .rd{background:#3ad6ff;border-color:#3ad6ff}html[data-ui="1"] .rs.next .rd{border-color:#ffb347}
 html[data-ui="1"] .rs.pig .rd{background:#ffb347;border-color:#3a2a10}html[data-ui="1"] .rsum .rrem{color:#ffb347}
 @media(max-width:560px){.vsel{min-width:0}.vsel button{font-size:13px;padding:9px 2px;min-width:0}.vbar #toolSel{width:78px;font-size:12px;padding:0 4px}}
+
+/* route only on phones; toolbar on top; no minimap in Route */
+@media(min-width:700px){.vsel [data-w=route]{display:none}}
+.card.diag.vw-route #mm{display:none!important}
+/* ===== phone layouts ===== */
+.fcus,.sheet,.dots{display:none}
+.t3top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:8px}
+.t3big{background:var(--soft);border-radius:18px;padding:14px 16px;text-align:center}
+.t3lab{font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.t3num{font-size:clamp(40px,13vw,64px);font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.t3bar{height:10px;border-radius:5px;background:var(--line);margin:10px 0 8px;overflow:hidden}.t3bar i{display:block;height:100%;width:0;background:var(--accent)}
+.t3row{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.t3next{margin:10px 2px;font-size:15px;min-height:22px}
+.fcbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.sq{aspect-ratio:1/1;min-height:110px;border:0;border-radius:18px;background:var(--soft);color:var(--ink);font:inherit;font-size:15px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:8px;text-align:center;line-height:1.2}
+.sq b{font-size:38px;font-weight:500;line-height:1}.sq.sm{min-height:84px}.sq.sm b{font-size:26px}
+.sq.ok{background:rgba(46,158,91,.16);color:#1d7a43}.sq.main{background:var(--accent);color:var(--accent-ink)}.sq.main.arr{background:#2e9e5b;color:#fff}
+.sq:disabled{opacity:.4;cursor:default}.sq:active:not(:disabled){transform:scale(.97)}
+.fclinks{display:flex;gap:8px}.fclinks button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px 4px;font:inherit;font-size:14px;cursor:pointer}
+@media(max-width:699px){
+  /* Focus */
+  html[data-lay="2"] .kpis,html[data-lay="2"] .info,html[data-lay="2"] .tabbar{display:none}
+  html[data-lay="2"] #fc{display:block}
+  html[data-lay="2"] .card.diag>*:not(#fc){display:none!important}
+  html[data-lay="2"].lay-vals .card.diag>.vsec{display:block!important}
+  /* Sheet */
+  html[data-lay="1"] .kpis,html[data-lay="1"] .info,html[data-lay="1"] .tabbar,html[data-lay="1"] .runbar,html[data-lay="1"] .rprog,html[data-lay="1"] .card.diag>.loginfo,html[data-lay="1"] .route{display:none!important}
+  html[data-lay="1"] .card.diag #dg{display:block!important}
+  html[data-lay="1"] body{padding-bottom:150px}
+  html[data-lay="1"] .fab{bottom:160px}
+  html[data-lay="1"] .sheet{display:block;position:fixed;left:8px;right:8px;bottom:8px;z-index:36;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 -6px 24px rgba(0,0,0,.18);padding:6px 14px 12px;max-height:78vh;overflow-y:auto}
+  .shh{display:block;width:100%;height:22px;border:0;background:transparent;cursor:pointer}.shh i{display:block;width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto}
+  .shrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .shrem .shl{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.shrem b{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+  .shnx{font-size:13px;text-align:right;color:var(--muted);min-width:0}
+  .shgo{width:100%;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font:inherit;font-size:17px;font-weight:700;padding:14px;margin-top:8px;cursor:pointer}.shgo.arr{background:#2e9e5b;color:#fff}
+  .shmore{display:none;margin-top:10px}.sheet.open .shmore{display:block}
+  .shtiles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}.shtiles div{background:var(--soft);border-radius:10px;padding:6px 8px}.shtiles span{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase}.shtiles b{font-size:14px}
+  .shlist{margin:6px 0}.shv{display:flex;align-items:center;gap:8px;padding:9px 4px;border-top:1px solid var(--line);font-size:14px;cursor:pointer}
+  .shv i{width:16px;height:16px;border-radius:50%;border:3px solid #b8ad96;box-sizing:border-box;flex:none}.shv.done i{background:#1f7a6c;border-color:#1f7a6c}.shv.next i{border-color:var(--accent)}
+  .shv .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.shv .k,.shv .w{color:var(--muted);font-size:12.5px;white-space:nowrap}.shv.next .w{color:var(--accent);font-weight:600}
+  /* Cards */
+  html[data-lay="3"] .card.diag{display:grid;grid-template-columns:repeat(3,100%);grid-auto-flow:column;overflow-x:auto;scroll-snap-type:x mandatory;align-items:start;overscroll-behavior-x:contain}
+  html[data-lay="3"] .card.diag>*{scroll-snap-align:start;min-width:0;padding:0 4px}
+  html[data-lay="3"] .route{display:block!important;grid-column:1;grid-row:1}
+  html[data-lay="3"] .runbar{grid-column:1;grid-row:2}html[data-lay="3"] .rprog{grid-column:1;grid-row:3}html[data-lay="3"] .card.diag>.loginfo{grid-column:1;grid-row:4}
+  html[data-lay="3"] .vbar{grid-column:2;grid-row:1}html[data-lay="3"] .card.diag #dg{display:block!important;grid-column:2;grid-row:2}html[data-lay="3"] #mm{grid-column:2;grid-row:3}
+  html[data-lay="3"] .card.diag>.vsec{grid-column:3;grid-row:1/5}
+  html[data-lay="3"] .vsel [data-w=route]{display:none}
+  html[data-lay="3"] .dots{display:flex;justify-content:center;gap:8px;margin:8px 0}
+  .dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--accent)}
+}

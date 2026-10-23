@@ -66,6 +66,8 @@
           <label><span>Gas flow</span><select id="u_gas"></select></label>
           <label><span>Oil flow</span><select id="u_oil"></select></label>
         </div>
+        <div class="gh">Phone layout</div>
+        <label class="pl"><span>Layout</span><select id="layS"><option value="0">Standard</option><option value="1">Sheet</option><option value="2">Focus</option><option value="3">Cards</option></select></label>
         <div class="gh">Data</div>
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
         <div class="gh">About</div>
@@ -97,11 +99,12 @@
       <div class="info"><div class="cat" id="cat"></div></div>
 
       <section class="card diag">
-        <div class="route" id="route"></div>
+        <div class="fcus" id="fc"></div>
         <div class="dhead vbar">
           <div class="seg vsel" id="vsel"><button type="button" data-w="route">Route</button><button type="button" data-w="local">Local</button><button type="button" data-w="global">Global</button></div>
           <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
         </div>
+        <div class="route" id="route"></div>
         <svg id="dg" viewBox="0 0 900 235" role="img" aria-label="Pipeline diagram"></svg>
         <svg id="mm" viewBox="0 0 1000 44" preserveAspectRatio="none" role="img" aria-label="Whole pipeline overview"></svg>
         <div class="runbar">
@@ -135,6 +138,7 @@
         </div>
       </div>
       </section>
+      <div class="dots" id="dots"><i></i><i></i><i></i></div>
     </main>
   </div>
 </div>
@@ -153,6 +157,7 @@
   <div id="authStat" style="display:none"><p id="authMsg"></p><div class="mbt" id="authBtns"></div></div>
   <div class="mbt"><span class="grow"></span><button type="button" class="link" id="authX">Close</button></div>
 </div></div>
+<div class="sheet" id="sh"></div>
 <nav class="tabbar" id="tabbar"><button type="button" data-a="run"><b>▶</b><span>Run</span></button><button type="button" data-a="runs"><b>☰</b><span>Runs</span></button><button type="button" data-a="fml"><b>ƒ</b><span>Formulas</span></button><button type="button" data-a="set"><b>⚙</b><span>Settings</span></button></nav>
 <button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡<i class="fabn" id="fabN"></i></button>
 <div class="mdl" id="ideaDlg" role="dialog" aria-modal="true"><div class="mbox wide">
