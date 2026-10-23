@@ -412,3 +412,4 @@ html[data-ui="1"] body{overflow-x:hidden}
 .annrow{padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}.annrow.new{background:var(--soft);border-radius:8px;padding:7px 8px}
 .annbar{background:#6b4fd1}.annbar .link{color:#fff;opacity:.9}
 @media(max-width:820px){.bar .annwrap{position:static}}
+.gpanel>*{flex-shrink:0}

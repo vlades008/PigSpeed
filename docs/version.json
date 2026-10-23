@@ -1,6 +1,6 @@
 {
-  "version": "1.6.1",
-  "notes": "Приглашение: страница выбора Android или iPhone",
+  "version": "1.6.2",
+  "notes": "Исправлен переключатель языка в настройках",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
