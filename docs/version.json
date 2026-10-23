@@ -1,6 +1,6 @@
 {
-  "version": "1.7.1",
-  "notes": "Параметры — выпадающее меню в шапке",
+  "version": "1.8.1",
+  "notes": "Возврат к предыдущему виду (плитки отменены)",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
