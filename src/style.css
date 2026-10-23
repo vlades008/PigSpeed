@@ -382,3 +382,5 @@ html[data-ui="1"] body{overflow-x:hidden}
   .bar .sec,.bar .hacctwrap,.bar .gear{position:static}
   .bar .gpanel{left:8px!important;right:8px!important;width:auto!important;max-width:none!important;top:100%!important;margin-left:0!important}
 }
+/* oil gravity is fixed at 35 API (setting removed) */
+#apiF{display:none!important}

@@ -32,7 +32,7 @@
     try{var s0=JSON.parse(localStorage.getItem(KEY)||'null');if(s0&&!('flowTouched' in s0))S.flowTouched=(String(S.flow)!=='250000'&&String(S.flow)!=='4000')}catch(e){}
     if(!S.flowTouched)flowDefault(S.fluid);
     if(!S.dstyleTouched)S.dstyle=1;
-    S.alert=true;S.pb=1;S.dstyle=1;fixTemp(S);                                           // reminders are always on, playback is always real time
+    S.alert=true;S.pb=1;S.dstyle=1;S.api='35';fixTemp(S);                                           // reminders are always on, playback is always real time
   }
   function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}runsTouch()}
   var VT=['Ball valve','Gate valve','Check valve'];
@@ -754,7 +754,7 @@
   function closeRuns(){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}
   function loadSection(snap){
     SNAP.forEach(function(k){if(k in snap)S[k]=Array.isArray(snap[k])?snap[k].slice():snap[k]});
-    fixTemp(S);S.vt=Array.isArray(S.vt)?S.vt:[];while(S.vt.length<S.valves.length)S.vt.push(1);
+    fixTemp(S);S.api='35';S.vt=Array.isArray(S.vt)?S.vt:[];while(S.vt.length<S.valves.length)S.vt.push(1);
     S.flowTouched=true;toUI();applyLang();save();update();
   }
   // ---- team cloud

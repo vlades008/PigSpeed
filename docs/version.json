@@ -1,6 +1,6 @@
 {
-  "version": "1.5.8",
-  "notes": "Исправлено положение меню Запуски на экране",
+  "version": "1.5.9",
+  "notes": "Убрана настройка плотности нефти",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"
