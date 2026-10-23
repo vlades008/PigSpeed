@@ -46,7 +46,9 @@ service cloud.firestore {
                       && request.resource.data.text.size() < 4000
                       && (!('shot' in request.resource.data) || request.resource.data.shot.size() < 900000);
         allow read: if admin(t) || (member(t) && resource.data.uid == request.auth.uid);
-        allow update, delete: if admin(t);
+        allow update: if admin(t) || (member(t) && resource.data.uid == request.auth.uid
+                      && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['replies']));
+        allow delete: if admin(t);
       }
 
       match /announcements/{a} {

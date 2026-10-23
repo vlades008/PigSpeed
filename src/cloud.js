@@ -101,6 +101,7 @@ window.Cloud = (function () {
       return T().collection('announcements').orderBy('at', 'desc').limit(20).onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.id = d.id; a.push(m); }); fn(a); }, function () {});
     },
     sendIdea: function (o) { return T().collection('ideas').add(o); },
+    replyIdea: function (id, r) { return T().collection('ideas').doc(id).update({ replies: firebase.firestore.FieldValue.arrayUnion(r) }); },
     watchIdeas: function (admin, uid, fn) {
       var q = T().collection('ideas'); if (!admin) q = q.where('uid', '==', uid);
       return q.onSnapshot(function (s) { var a = []; s.forEach(function (d) { var m = d.data(); m.id = d.id; a.push(m); }); a.sort(function (x, y) { return y.at - x.at; }); fn(a); }, function () {});
@@ -150,6 +151,7 @@ function mockCloud(spec) {
     announce: function (o) { var d = load(); d.announcements['a' + Date.now() + Math.random().toString(36).slice(2, 5)] = o; put(d); return Promise.resolve(); },
     watchAnnouncements: function (fn) { return watch('announcements', function (a) { a.sort(function (x, y) { return y.at - x.at; }); fn(a.slice(0, 20)); }); },
     sendIdea: function (o) { var d = load(); d.ideas['i' + Date.now()] = o; put(d); return Promise.resolve(); },
+    replyIdea: function (id, r) { var d = load(); if (d.ideas[id]) d.ideas[id].replies = (d.ideas[id].replies || []).concat([r]); put(d); return Promise.resolve(); },
     watchIdeas: function (admin, uid, fn) { return watch('ideas', function (a) { a = a.filter(function (x) { return admin || x.uid === uid; }); a.sort(function (x, y) { return y.at - x.at; }); fn(a); }); },
     setIdeaStatus: function (id, st, reason) { var d = load(); if (d.ideas[id]) { d.ideas[id].status = st; d.ideas[id].reason = reason || ''; d.ideas[id].closedAt = st === 'new' ? 0 : Date.now(); } put(d); return Promise.resolve(); },
     delIdea: function (id) { var d = load(); delete d.ideas[id]; put(d); return Promise.resolve(); },
