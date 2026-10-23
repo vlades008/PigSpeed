@@ -21,7 +21,7 @@
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
       </div>
     </div>
-    <select id="ui" class="gsel" aria-label="Interface" title="Interface"><option value="0">Standard</option><option value="1">Control room</option><option value="2">Route map</option></select>
+    <div class="vswitch uisw" id="uiSeg" title="Interface"><span class="vl" data-v="2">Route</span><button type="button" role="switch" id="uiSw" aria-checked="false" aria-label="Route / Control room"><i></i></button><span class="vl" data-v="1">Control</span></div>
     <div class="gear">
       <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
       <div class="gpanel" id="gpanel">
