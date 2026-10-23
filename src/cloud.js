@@ -23,10 +23,10 @@ window.Cloud = (function () {
   function init() {
     if (ready) return ready;
     ready = script(CDN + 'firebase-app-compat.js')
-      .then(function () { return script(CDN + 'firebase-auth-compat.js'); })
-      .then(function () { return script(CDN + 'firebase-firestore-compat.js'); })
+      .then(function () { return Promise.all([script(CDN + 'firebase-auth-compat.js'), script(CDN + 'firebase-firestore-compat.js')]); })
       .then(function () {
         firebase.initializeApp(cfg); auth = firebase.auth(); db = firebase.firestore();
+        try { db.settings({ experimentalAutoDetectLongPolling: true, merge: true }); } catch (e) {}
         try { db.enablePersistence({ synchronizeTabs: true }).catch(function () {}); } catch (e) {}
       });
     return ready;
@@ -39,10 +39,14 @@ window.Cloud = (function () {
     if (!u) return emit({ status: 'out' });
     var user = me(u), pwd = u.providerData && u.providerData.length && u.providerData[0].providerId === 'password';
     if (pwd && !u.emailVerified) return emit({ status: 'verify', user: user });
+    var email = (u.email || '').toLowerCase(), cached = null;
+    try { cached = JSON.parse(localStorage.getItem('pigSpeedCalc.acct.v1') || 'null'); } catch (e) {}
+    if (cached && cached.uid === u.uid && cached.role) emit({ status: 'member', user: user, role: cached.role });   // shown at once, confirmed below
+    var inviteP = T().collection('invites').doc(email).get().catch(function () { return null; });
     T().collection('members').doc(u.uid).get().then(function (m) {
       if (m.exists) return emit({ status: 'member', user: user, role: m.data().role });
-      var email = (u.email || '').toLowerCase();
-      return T().collection('invites').doc(email).get().then(function (inv) {
+      return inviteP.then(function (inv) {
+        inv = inv || { exists: false };
         if (inv.exists) {
           var role = inv.data().role;
           return T().collection('members').doc(u.uid).set({ role: role, email: email, name: user.name, joined: Date.now() })
