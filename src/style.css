@@ -780,3 +780,7 @@ html[data-txt="2"] .tile b{font-weight:500;letter-spacing:-.02em}
 html[data-txt="2"] h1,html[data-txt="2"] h2,html[data-txt="2"] h3{letter-spacing:.02em;font-weight:600}
 html[data-txt="2"] .vt input{font-family:var(--fnum)}
 .seg button{font-size:12px;padding:0 2px;white-space:nowrap}
+
+@media(min-width:700px){.phoneonly{display:none}}
+.gpanel.pfix{box-sizing:border-box;z-index:45}
+body{overflow-x:hidden}
