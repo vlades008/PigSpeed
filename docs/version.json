@@ -1,6 +1,6 @@
 {
-  "version": "1.6.0",
-  "notes": "Приложение для Android, объявления об идеях, архив идей, страница скачивания",
+  "version": "1.6.1",
+  "notes": "Приглашение: страница выбора Android или iPhone",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"

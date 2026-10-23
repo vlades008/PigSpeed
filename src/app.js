@@ -1069,8 +1069,8 @@
   refreshInstall();
   var JOIN=null;
   try{var jm=/[?&]join=([^&]+)/.exec(location.search);if(jm){JOIN=decodeURIComponent(jm[1]).trim().toLowerCase();history.replaceState(null,'',location.pathname)}}catch(e){}
-  function joinUrl(em){var base=(typeof UPDATE_URL!=='undefined'&&UPDATE_URL)?UPDATE_URL:(location.origin+location.pathname);return base+'?join='+encodeURIComponent(em)}
-  function inviteText(em){return 'Здравствуйте! Вас пригласили в команду Pig Speed.\n1. Откройте ссылку: '+joinUrl(em)+'\n2. Придумайте пароль и нажмите «Продолжить».\n3. Откройте письмо от Firebase на '+em+' и нажмите ссылку подтверждения (если письма нет, проверьте папку «Спам»).\n4. Вернитесь в приложение и нажмите «Я подтвердил».'}
+  function joinUrl(em){var base=(typeof UPDATE_URL!=='undefined'&&UPDATE_URL)?UPDATE_URL:(location.origin+location.pathname);return base+'get.html?join='+encodeURIComponent(em)}
+  function inviteText(em){return 'Здравствуйте! Вас пригласили в команду Pig Speed.\n1. Откройте ссылку: '+joinUrl(em)+'\n2. Выберите свой телефон: Android (скачайте приложение) или iPhone (откройте в Safari).\n3. Создайте аккаунт с этой почтой: '+em+', придумайте пароль.\n4. Откройте письмо от Firebase и нажмите ссылку подтверждения (если письма нет, проверьте папку «Спам»), затем нажмите «Я подтвердил».'}
   function copyText(s){
     function fb(){var ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}
     if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(s).catch(fb);fb();
