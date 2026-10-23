@@ -48,7 +48,7 @@
         <div id="runList"></div>
       </div>
     </div>
-    <div class="seg uiseg" id="uiSeg" title="Interface"><button type="button" data-v="3">Tiles</button><button type="button" data-v="2">Route</button><button type="button" data-v="1">Control</button></div>
+    <div class="vswitch uisw" id="uiSeg" title="Interface"><span class="vl" data-v="2">Route</span><button type="button" role="switch" id="uiSw" aria-checked="false" aria-label="Route / Control room"><i></i></button><span class="vl" data-v="1">Control</span></div>
     <div class="gear">
       <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
       <div class="gpanel" id="gpanel">
@@ -99,7 +99,6 @@
       <section class="card diag">
         <button type="button" id="rvBtn" class="add rvbtn"><span>Pipe diagram</span></button>
         <div class="route" id="route"></div>
-        <div class="t3" id="t3"></div>
         <div class="dhead">
           <div class="vswitch" id="viewSeg"><span class="vl" data-v="0">Local</span><button type="button" role="switch" id="viewSw" aria-checked="false" aria-label="Local / Global"><i></i></button><span class="vl" data-v="1">Global</span></div>
           <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
