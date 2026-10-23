@@ -806,3 +806,63 @@ body{overflow-x:hidden}
 .lscb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .lscb[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 .card.diag:not(.vw-local) .lscb{display:none}
+
+/* ===== desktop layouts (>= 980 px): data-dsk 1 Workbench, 2 Console ===== */
+.dock{display:none}.deskonly{display:none}
+@media(min-width:980px){.deskonly{display:block}}
+.dl,.dr{display:contents}
+/* context rules: a control shows only where it can be used */
+html[data-dsk] .vtog{pointer-events:none;cursor:default;background:transparent;border-color:transparent;padding:0}
+html[data-dsk] .vtog .chev{display:none}
+html[data-dsk] .vsec .vhead{margin-bottom:6px}
+html[data-dsk] .vsec.nov .rep{display:none}
+html[data-dsk] .card.diag:not(.vw-local) #lscBtn{display:none}
+html[data-dsk] body:not(.is-running) .vt th:nth-child(7),html[data-dsk] body:not(.is-running) .vt td:nth-child(7){display:none}
+html[data-dsk] body.ro #vadd,html[data-dsk] body.ro .vt .x,html[data-dsk] body.ro .vt th:nth-child(8),html[data-dsk] body.ro .vt td:nth-child(8){display:none}
+html[data-dsk] .fab{bottom:14px}
+html[data-dsk] .sqb{width:auto;min-width:58px;padding:0 10px}
+/* shared: roomy, scales with the window */
+html[data-dsk] .app{padding:14px clamp(14px,2vw,32px) 28px}
+html[data-dsk] .card{border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+html[data-dsk] .card.diag{padding:clamp(12px,1.4vw,20px)}
+html[data-dsk] .vsec{margin-top:14px}
+html[data-dsk] .vt{width:100%}
+
+/* --- 1 Workbench: parameters always visible on the left, result and valves in the middle --- */
+html[data-dsk="1"] .app{max-width:1760px}
+html[data-dsk="1"] .layout{display:grid;grid-template-columns:clamp(320px,25vw,400px) minmax(0,1fr);gap:clamp(12px,1.4vw,22px);align-items:start}
+html[data-dsk="1"] .dock{display:block;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;border-radius:16px;scrollbar-width:thin}
+html[data-dsk="1"] #inpPanel{display:flex;position:static;width:auto;max-width:none;max-height:none;overflow:visible;box-shadow:none;margin:0;border-radius:16px;padding:14px 16px}
+html[data-dsk="1"] #parBtn{display:none}
+html[data-dsk="1"] .tgtbox{margin-top:12px}
+html[data-dsk="1"] .tiles{grid-template-columns:minmax(210px,1.4fr) repeat(3,minmax(110px,1fr))}
+html[data-dsk="1"] .tile.hot b{font-size:clamp(34px,3vw,48px)}
+
+/* --- 2 Console: diagram wide on the left, one run column on the right --- */
+html[data-dsk="2"] .app{max-width:1840px}
+html[data-dsk="2"] .card.diag{display:grid;grid-template-columns:minmax(0,1fr) clamp(380px,29vw,500px);column-gap:clamp(14px,1.6vw,26px);align-items:start}
+html[data-dsk="2"] .dl{display:block;min-width:0}
+html[data-dsk="2"] .dr{display:flex;flex-direction:column;gap:12px;min-width:0;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;scrollbar-width:thin}
+html[data-dsk="2"] .dr>*{margin:0}
+html[data-dsk="2"] .dr .vsec{border-top:1px solid var(--line);padding-top:12px}
+html[data-dsk="2"] .runbar{flex-direction:column;align-items:stretch;gap:10px}
+html[data-dsk="2"] .runbar .add.start,html[data-dsk="2"] .runbar .add.okb{width:100%;min-height:64px;font-size:19px;border-radius:14px}
+html[data-dsk="2"][data-clk] .tiles{grid-template-columns:1fr 1fr;grid-template-rows:none;flex:none}
+html[data-dsk="2"][data-clk] .tile.hot{grid-column:1/-1;grid-row:auto;justify-self:stretch}
+html[data-dsk="2"][data-clk="1"] .tile.hot b{font-size:clamp(40px,3.4vw,56px)}
+html[data-dsk="2"][data-clk] .tiles>.tile:last-child{grid-column:1/-1}
+html[data-dsk="2"][data-clk="2"] .tile.hot{justify-self:center}
+html[data-dsk="2"] .vt th:nth-child(5),html[data-dsk="2"] .vt td:nth-child(5){display:none}
+html[data-dsk="2"] .card.diag.lc-on #lc{max-height:46vh}
+@media(max-width:1180px){html[data-dsk="2"] .card.diag{grid-template-columns:minmax(0,1fr) 360px}}
+html[data-dsk] .card.diag.lc-on #lc{max-height:min(34vh,330px);width:100%}
+html[data-dsk] #dg{max-height:min(40vh,380px)}
+html[data-dsk] .dhead{margin-bottom:8px}
+html[data-dsk] .vsel{min-width:240px}
+html[data-dsk="2"] .card.diag.lc-on #lc{max-height:min(48vh,460px)}
+html[data-dsk="2"] #dg{max-height:min(52vh,520px)}
+html[data-dsk="2"][data-clk="1"] .tile.hot b{font-size:clamp(42px,3.6vw,60px)!important}
+html[data-dsk="2"] .runbar .add.okb{min-height:44px;font-size:15px;border-radius:12px}
+html[data-dsk] .tile span{letter-spacing:.02em}
+html[data-dsk="1"] .tiles{grid-template-columns:minmax(170px,1.2fr) repeat(3,minmax(124px,1fr))}
+html[data-dsk="1"] .runbar .add.start,html[data-dsk="1"] .runbar .add.okb{min-width:150px;min-height:56px;border-radius:12px}

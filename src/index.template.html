@@ -15,7 +15,7 @@
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
     <div class="hacctwrap"><div id="acct" class="hacct"></div><div class="gpanel" id="acctMenu"></div><div class="gpanel wide" id="teamPanel"><div id="teamBox" class="teambox open"></div></div></div>
     <div class="annwrap"><button type="button" id="annBtn" class="sqb" style="display:none" title="Announcements" aria-label="Announcements"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="lb">News</span><i class="fabn" id="annN"></i></button><div class="gpanel wide" id="annPanel"></div></div>
-    <div class="parwrap"><button type="button" id="parBtn" class="sqb" aria-expanded="false" title="Parameters"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="lb">Parameters</span><span class="psum" id="pSum" hidden></span></button>
+    <div class="parwrap" id="parWrap"><button type="button" id="parBtn" class="sqb" aria-expanded="false" title="Parameters"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="lb">Parameters</span><span class="psum" id="pSum" hidden></span></button>
       <section class="card inp gpanel wide" id="inpPanel">
       <div class="seg" id="fluid"><button type="button" data-v="0">Gas</button><button type="button" data-v="1">Oil</button><button type="button" data-v="2">Mix (oil + gas)</button></div>
       <div class="gt">Pipe</div>
@@ -62,11 +62,14 @@
         <div class="seg" data-for="txtS"></div>
         <div class="gh">Clock style</div>
         <div class="seg" data-for="clkS"></div>
+        <div class="deskonly"><div class="gh">Desktop layout</div>
+        <div class="seg" data-for="dskS"></div></div>
         <div class="phoneonly"><div class="gh">Phone layout</div>
         <div class="seg" data-for="layS"></div></div>
         <select id="uiS" hidden><option value="2">Light</option><option value="1">Control room</option></select>
         <select id="txtS" hidden><option value="0">Standard</option><option value="1">Editorial</option><option value="2">Technical</option></select>
         <select id="clkS" hidden><option value="1">Hero countdown</option><option value="2">Progress ring</option></select>
+        <select id="dskS" hidden><option value="1">Workbench</option><option value="2">Console</option></select>
         <select id="layS" hidden><option value="0">Standard</option><option value="1">Sheet</option><option value="2">Focus</option></select>
       </div>
     </div>
@@ -103,7 +106,7 @@
   <div class="phead" id="phead"></div>
 
   <div class="layout">
-    
+    <aside class="dock" id="dock"></aside>
 
     <main class="main">
       <div class="warn" id="warn"></div>
