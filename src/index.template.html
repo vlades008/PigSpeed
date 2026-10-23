@@ -53,7 +53,23 @@
         <div id="runList"></div>
       </div>
     </div>
-    <button type="button" id="themeBtn" class="sqb" role="switch" aria-checked="false" title="Light / Control room" aria-label="Light / Control room"><svg class="ic-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/></svg><svg class="ic-ctl" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span class="lb">Theme</span></button>
+    <div class="pal">
+      <button type="button" id="palBtn" class="sqb" aria-expanded="false" aria-label="Customize" title="Customize"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 2-.8 2-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="14.5" cy="7" r="1"/></svg><span class="lb">Customize</span></button>
+      <div class="gpanel" id="palPanel">
+        <div class="gh">Theme</div>
+        <div class="seg" data-for="uiS"></div>
+        <div class="gh">Text style</div>
+        <div class="seg" data-for="txtS"></div>
+        <div class="gh">Clock style</div>
+        <div class="seg" data-for="clkS"></div>
+        <div class="gh">Phone layout</div>
+        <div class="seg" data-for="layS"></div>
+        <select id="uiS" hidden><option value="2">Light</option><option value="1">Control room</option></select>
+        <select id="txtS" hidden><option value="0">Standard</option><option value="1">Editorial</option><option value="2">Technical</option></select>
+        <select id="clkS" hidden><option value="1">Hero countdown</option><option value="2">Progress ring</option></select>
+        <select id="layS" hidden><option value="0">Standard</option><option value="1">Sheet</option><option value="2">Focus</option></select>
+      </div>
+    </div>
     <div class="gear">
       <button type="button" id="gearBtn" class="sqb" aria-label="Settings" aria-expanded="false" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg><span class="lb">Settings</span></button>
       <div class="gpanel" id="gpanel">
@@ -71,11 +87,7 @@
           <label><span>Gas flow</span><select id="u_gas"></select></label>
           <label><span>Oil flow</span><select id="u_oil"></select></label>
         </div>
-        <div class="gh">Clock style</div>
-        <label class="pl"><span>Style</span><select id="clkS"><option value="1">Hero countdown</option><option value="2">Progress ring</option></select></label>
-        <div class="gh">Phone layout</div>
-        <label class="pl"><span>Layout</span><select id="layS"><option value="0">Standard</option><option value="1">Sheet</option><option value="2">Focus</option></select></label>
-        <div class="gh">Data</div>
+                <div class="gh">Data</div>
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
         <div class="gh">About</div>
         <a class="add" id="apkLink" href="#" style="display:none"><span>Download Android app (APK)</span></a>
