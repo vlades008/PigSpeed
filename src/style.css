@@ -663,3 +663,26 @@ body.is-running .kpi.tgt,body.ro .kpi.tgt{display:none}
 }
 
 .vact #vdCancel{color:var(--ink)}
+
+/* valves sub menu */
+.vtog{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:14px;padding:0 14px;min-height:48px;font-size:16px;font-weight:600;cursor:pointer;flex:1;min-width:0}
+.vtog:hover{border-color:#378ADD}
+.vtog svg{color:#378ADD;flex:none}.vtog span{flex:1;text-align:left}
+.vtog b{background:#378ADD;color:#fff;border-radius:12px;min-width:24px;padding:2px 8px;font-size:13px;text-align:center}
+.vtog .chev{width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-3px 2px 0 4px;transition:transform .2s}
+.vtog[aria-expanded=true] .chev{transform:rotate(-135deg);margin-top:3px}
+.vsec .vhead{flex-wrap:nowrap;margin-bottom:8px}
+.vsec.vc .tw,.vsec.vc .vbtns,.vsec.vc #runWarn,.vsec.vc #vempty{display:none!important}
+html[data-lay="2"].lay-vals .card.diag>.vsec.vc .tw,html[data-lay="2"].lay-vals .card.diag>.vsec.vc .vbtns{display:block!important}
+.vsec .vbtns .add{min-height:40px;border-radius:12px;font-size:14px;padding:0 14px}
+@media(max-width:699px){.vsec .vhead{flex-wrap:wrap}.vsec .vtog{flex-basis:100%}.vsec .vbtns{width:100%}.vsec .vbtns>*{flex:1}.vsec .vbtns .add{min-height:46px;width:100%}}
+/* valve popup, bigger buttons */
+.vbox{border-radius:18px;padding:20px 20px 16px}
+.vbox h3{font-size:19px;margin-bottom:12px}
+.vchips button{min-height:46px;border-radius:14px;font-size:15px;padding:0 18px;width:100%}
+.vact{gap:10px}
+.vact .add{min-height:48px;border-radius:14px;font-size:15px;padding:0 20px}
+.vact .vok{background:linear-gradient(180deg,#4a98ea,#2f78cf);box-shadow:0 4px 12px rgba(55,138,221,.35);min-width:120px}
+.vact .vdel{border-color:rgba(200,60,60,.5)}
+.vtog svg{width:22px!important;height:22px!important;max-width:22px}
+#vdMore{color:var(--ink)}

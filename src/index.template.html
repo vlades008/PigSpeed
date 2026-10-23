@@ -112,9 +112,9 @@
         <div class="rprog"><i id="rprog"></i></div>
         <div class="clk loginfo" id="logInfo"></div>
 
-      <div class="vsec">
+      <div class="vsec vc" id="vsec">
         <div class="vhead">
-          <h2>Valves</h2>
+          <button type="button" class="vtog" id="vtog" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6"/><path d="M8 3h8"/><circle cx="12" cy="13" r="4"/><path d="M2 13h6M16 13h6"/><path d="M12 17v4"/></svg><span>Valves</span><b id="vcnt">0</b><i class="chev"></i></button>
           <div class="vbtns">
             <button type="button" class="add" id="vadd">+ Add valve</button>
             <div class="rep"><button type="button" class="add" id="repBtn"><span>Report</span></button><div class="gpanel" id="repPanel"><button type="button" class="add" id="repPrint"><span>Print / PDF</span></button><button type="button" class="add" id="repCsv"><span>Download CSV</span></button></div></div>
@@ -179,7 +179,7 @@
   <label class="vf"><span>Name</span><input id="vdName" autocomplete="off"></label>
   <label class="vf"><span id="vdPosL">Distance from launcher</span><div class="vdd"><input id="vdPos" inputmode="decimal" autocomplete="off"><em id="vdU">km</em></div></label>
   <div class="vsl" id="vdSl"><div class="vticks" id="vdTicks"></div><input type="range" id="vdRange" min="0" max="1000" step="1" aria-label="Distance"><div class="vends"><span>Launcher</span><span>Receiver</span></div></div>
-  <div class="vchips" id="vdChips"><button type="button" data-f="0.25">¼</button><button type="button" data-f="0.5">½</button><button type="button" data-f="0.75">¾</button><button type="button" id="vdNow">Pig position now</button></div>
+  <div class="vchips" id="vdChips"><button type="button" id="vdNow">Pig position now</button></div>
   <div class="vdp" id="vdPrev"></div>
   <div class="lerr" id="vdErr"></div>
   <div class="vact"><button type="button" class="add vdel" id="vdDel">Delete</button><span class="sp"></span><button type="button" class="add" id="vdCancel">Cancel</button><button type="button" class="add" id="vdMore">Add more</button><button type="button" class="add vok" id="vdOk">Add</button></div>
