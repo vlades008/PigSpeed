@@ -512,7 +512,13 @@
     function rt(x){return '<span class="rt">√<span>'+x+'</span></span>'}
     function nv(k,t){return '<u class="nv" data-nf="'+k+'">'+t+'</u>'}
     function sec(t){o.push('<h4>'+t+'</h4>')}
-    function ln(sym,num){o.push('<div class="fl">'+m(live&&num!=null?num:sym)+'</div>')}
+    var UR=[[' mm',' мм'],[' m^(2)',' м^(2)'],[' m^(3)/h',' м^(3)/ч'],[' m/s',' м/с'],[' kg/m^(3)',' кг/м^(3)']];
+    function ln(sym,num){
+      var s=live&&num!=null?num:sym;
+      if(ru)UR.forEach(function(u){s=s.split(u[0]).join(u[1])});
+      var h=m(s);if(ru)h=h.replace(/(\d)\.(\d)/g,'$1,$2');
+      o.push('<div class="fl">'+h+'</div>');
+    }
     function nt(t){o.push('<p>'+t+'</p>')}
     function lg(en,rus){if(!live)o.push('<p class="lg">'+(ru?rus:en)+'</p>')}
     var idm=vals.od-2*vals.wt,A=Math.PI*Math.pow(idm/1000,2)/4,q=r.qline*3600,sl=parseFloat(String(S.slip).replace(',','.'))||100;
