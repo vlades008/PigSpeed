@@ -623,3 +623,43 @@ body.is-running .kpi.tgt,body.ro .kpi.tgt{display:none}
 .tourtip{position:fixed;background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;box-shadow:0 10px 36px rgba(0,0,0,.4);z-index:101}
 .tourtip .tt{font-weight:700;font-size:16px;margin-bottom:4px}.tourtip .tx{font-size:14px;line-height:1.4;color:var(--ink);opacity:.9}
 .tourtip .tf{display:flex;align-items:center;gap:8px;margin-top:10px}.tourtip .ts{font-size:12px;color:var(--muted)}
+
+/* valve popup */
+.vbox{width:min(440px,100%);max-height:calc(100vh - 32px);overflow:auto}
+.vf{display:block;margin-bottom:10px}.vf>span{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.vf input{width:100%;height:40px;font-size:16px;padding:6px 10px;box-sizing:border-box}
+.vdd{display:flex;align-items:center;gap:8px}.vdd input{flex:1}.vdd em{font-style:normal;color:var(--muted);min-width:24px}
+.vdd input.bad{border-color:var(--bad);background:var(--badbg)}
+.vsl{position:relative;margin:4px 2px 8px;--f:50%}
+.vsl input[type=range]{width:100%;margin:0;height:28px;accent-color:#378ADD;display:block;position:relative;z-index:1;background:none}
+.vticks{position:absolute;left:8px;right:8px;top:0;height:28px;pointer-events:none;z-index:2}
+.vticks i{position:absolute;top:6px;width:3px;height:16px;margin-left:-1px;border-radius:2px;background:#8a93a2;opacity:.9}
+.vends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.vchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+.vchips button{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:16px;padding:6px 14px;font-size:14px;cursor:pointer;min-height:34px}
+.vchips button:hover{border-color:#378ADD}
+.vdp{min-height:20px;font-size:14px;color:var(--ink);margin:2px 0}
+.vdp b{font-variant-numeric:tabular-nums}
+.vbox .lerr{min-height:16px;margin:2px 0 6px}
+.vact{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}.vact .sp{flex:1}
+.vact .add{min-height:38px;padding:0 14px}.vact .add:disabled{opacity:.45;cursor:default}
+.vact .vok{background:#378ADD;color:#fff;border-color:#378ADD;font-weight:600}
+.vact .vdel{color:var(--bad)}
+.vundo{position:fixed;left:50%;bottom:18px;transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:60;background:#1f2733;color:#fff;border-radius:22px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:12px;font-size:14px;transition:.25s;max-width:calc(100vw - 24px)}
+.vundo.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.vundo button{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:16px;padding:6px 14px;font-size:14px;cursor:pointer}
+.vt tr.flash td{animation:vflash 2.2s ease-out}
+@keyframes vflash{0%,40%{background:rgba(55,138,221,.28)}100%{background:transparent}}
+.vt .vb{cursor:pointer}
+@media(max-width:699px){
+  .vdl{align-items:flex-end;padding:0}
+  .vdl .vbox{width:100%;max-width:none;border-radius:18px 18px 0 0;padding:16px 16px calc(14px + env(safe-area-inset-bottom));max-height:92vh}
+  .vf input{height:46px}
+  .vchips button{min-height:40px;padding:8px 16px}
+  .vact{display:grid;grid-template-columns:1fr 1fr;gap:8px}.vact .sp{display:none}
+  .vact .add{min-height:46px;font-size:15px}
+  .vact .vok{grid-column:1/-1;order:-1}
+  .vundo{bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+
+.vact #vdCancel{color:var(--ink)}

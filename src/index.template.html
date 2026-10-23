@@ -173,6 +173,17 @@
   </div>
 </div></div>
 <div class="mdl" id="lightbox"><img id="lbImg" alt=""></div>
+<div class="vundo" id="vUndo"></div>
+<div class="mdl vdl" id="vDlg" role="dialog" aria-modal="true"><div class="mbox vbox">
+  <h3 id="vdTitle">New valve</h3>
+  <label class="vf"><span>Name</span><input id="vdName" autocomplete="off"></label>
+  <label class="vf"><span id="vdPosL">Distance from launcher</span><div class="vdd"><input id="vdPos" inputmode="decimal" autocomplete="off"><em id="vdU">km</em></div></label>
+  <div class="vsl" id="vdSl"><div class="vticks" id="vdTicks"></div><input type="range" id="vdRange" min="0" max="1000" step="1" aria-label="Distance"><div class="vends"><span>Launcher</span><span>Receiver</span></div></div>
+  <div class="vchips" id="vdChips"><button type="button" data-f="0.25">¼</button><button type="button" data-f="0.5">½</button><button type="button" data-f="0.75">¾</button><button type="button" id="vdNow">Pig position now</button></div>
+  <div class="vdp" id="vdPrev"></div>
+  <div class="lerr" id="vdErr"></div>
+  <div class="vact"><button type="button" class="add vdel" id="vdDel">Delete</button><span class="sp"></span><button type="button" class="add" id="vdCancel">Cancel</button><button type="button" class="add" id="vdMore">Add more</button><button type="button" class="add vok" id="vdOk">Add</button></div>
+</div></div>
 <div class="mdl" id="arrDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>End the run?</h3><p>This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.</p><div class="mbt"><button type="button" class="add" id="arrNo"><span>Cancel</span></button><button type="button" class="add okb2" id="arrYes"><span>Yes, end the run</span></button></div></div></div>
 <div class="toast" id="toast"></div>
 <script id="img">{{VLAD}}</script>
