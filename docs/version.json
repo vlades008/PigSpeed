@@ -1,6 +1,6 @@
 {
-  "version": "1.12.2",
-  "notes": "Убран вид «Карточки»",
+  "version": "1.12.3",
+  "notes": "Компактная строка результатов; расход для целевой скорости скрывается во время запуска",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"

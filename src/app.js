@@ -121,7 +121,7 @@
   function toolKind(){var t=toolIdx();return t===0?'egt':'mfl'}
   function toolLenM(od){var m=toolKind()==='egt'?CAT.lenEgt:CAT.lenMfl;var v=catKey(m,od);return v?v/1000:1.5}
   function barrelRatio(od){var c=catKey(CAT.barrel,od);return c&&od>0?Math.max(1.08,Math.min(1.5,c/od)):1.25}
-  function setStartLabel(){if($('arrBtn'))$('arrBtn').style.display=(anim&&!RO)?'inline-block':'none';$('dg').classList.toggle('run',!!anim);if(!anim&&$('runWarn'))$('runWarn').style.display='none';$('startBtn').style.display=(anim||RO)?'none':'';if($('stopBtn'))$('stopBtn').disabled=!anim||RO;[].forEach.call($('fluid').children,function(b){b.disabled=!!anim})}
+  function setStartLabel(){document.body.classList.toggle('is-running',!!anim);if($('arrBtn'))$('arrBtn').style.display=(anim&&!RO)?'inline-block':'none';$('dg').classList.toggle('run',!!anim);if(!anim&&$('runWarn'))$('runWarn').style.display='none';$('startBtn').style.display=(anim||RO)?'none':'';if($('stopBtn'))$('stopBtn').disabled=!anim||RO;[].forEach.call($('fluid').children,function(b){b.disabled=!!anim})}
   var RKEY='pigSpeedCalc.run.v1', pendingRun=null, lastClk=0, lastMM=0;
   function lite(){return window.innerWidth<820||!!(window.matchMedia&&(matchMedia('(pointer:coarse)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches))}
   try{pendingRun=JSON.parse(localStorage.getItem(RKEY)||'null')}catch(e){}
