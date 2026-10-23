@@ -386,3 +386,6 @@ html[data-ui="1"] body{overflow-x:hidden}
 #apiF{display:none!important}
 /* gas specific gravity is fixed at 0.65 (setting removed) */
 #sgF{display:none!important}
+
+#installBox{display:flex;flex-direction:column;gap:6px}
+.iosguide{font-size:12.5px;color:var(--muted);background:var(--soft);border-radius:10px;padding:8px 10px;line-height:1.4}

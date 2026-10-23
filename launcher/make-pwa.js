@@ -8,7 +8,7 @@ fs.mkdirSync(out, { recursive: true });
 
 let html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 html = html.replace('</title>',
-  '</title>\n<link rel="manifest" href="manifest.webmanifest">\n<meta name="theme-color" content="#17304f">\n<link rel="apple-touch-icon" href="icon-192.png">');
+  '</title>\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="PigSpeed">\n<meta name="apple-mobile-web-app-status-bar-style" content="default">\n<link rel="manifest" href="manifest.webmanifest">\n<meta name="theme-color" content="#17304f">\n<link rel="apple-touch-icon" href="icon-192.png">');
 html = html.replace('</body>',
   '<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});</script>\n</body>');
 fs.writeFileSync(path.join(out, 'index.html'), html);
