@@ -423,7 +423,8 @@
     [x0,x1].forEach(function(x){o.push('<path d="M'+x+' '+(top+wpx-(gl?12:0))+'V'+(bot-wpx+(gl?12:0))+'" stroke="#fff" stroke-opacity=".75" stroke-width="1.5" stroke-dasharray="5 5"/>')});
     if(!gl)for(var ax=pa+60;ax<pb-60;ax+=220){o.push('<path d="M'+ax+' '+(cy+ih/2-7)+'h24m-6 -5l6 5l-6 5" stroke="#fff" stroke-opacity=".8" stroke-width="2" fill="none"/>')}
     if(ds&&!gl){
-      o.push('<defs><pattern id="flowp" x="0" y="'+(cy-22)+'" width="90" height="44" patternUnits="userSpaceOnUse"><path d="M10 12l14 10-14 10M50 12l14 10-14 10" fill="none" stroke="'+(ds===2?'#7ff0ff':'#ffffff')+'" stroke-opacity="'+(ds===2?'.5':'.55')+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+(lite()?'':'<animateTransform attributeName="patternTransform" type="translate" from="0 0" to="90 0" dur="2.6s" repeatCount="indefinite"/>')+'</pattern></defs>');
+      // flow direction: a static chevron tile (no animation, so the diagram stays light)
+      o.push('<defs><pattern id="flowp" x="0" y="'+(cy-22)+'" width="90" height="44" patternUnits="userSpaceOnUse"><path d="M10 12l14 10-14 10M50 12l14 10-14 10" fill="none" stroke="'+(ds===2?'#7ff0ff':'#ffffff')+'" stroke-opacity="'+(ds===2?'.5':'.55')+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></pattern></defs>');
       o.push('<rect x="'+pa+'" y="'+(cy-22)+'" width="'+(pb-pa)+'" height="44" fill="url(#flowp)"/>');
       if(ds===1){
         o.push('<rect x="'+pa+'" y="'+(top+wpx+3)+'" width="'+(pb-pa)+'" height="'+Math.max(4,ih*0.1)+'" rx="'+Math.max(2,ih*0.05)+'" fill="#fff" fill-opacity=".4"/>');
