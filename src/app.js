@@ -802,19 +802,20 @@
     var v=vvp();
     if(window.innerWidth<700||v.w<700){
       var bar=document.querySelector('.bar'),top=bar?bar.getBoundingClientRect().bottom+4:60;top=Math.max(4,Math.min(top,v.h-160));
-      p.classList.add('pfix');p.style.cssText='position:fixed!important;left:'+(v.l+8)+'px!important;right:auto!important;width:'+(v.w-16)+'px!important;max-width:none!important;margin:0!important;top:'+(v.t+top)+'px!important;max-height:'+(v.h-top-10)+'px;overflow-y:auto';return;
+      if(!p.classList.contains('pfix'))p.classList.add('pfix');p.style.cssText='position:fixed!important;left:'+(v.l+8)+'px!important;right:auto!important;width:'+(v.w-16)+'px!important;max-width:none!important;margin:0!important;top:'+(v.t+top)+'px!important;max-height:'+(v.h-top-10)+'px;overflow-y:auto';return;
     }
-    if(p.classList.contains('pfix'))p.removeAttribute('style');p.classList.remove('pfix');p.style.position='';p.style.left='';p.style.top='';p.style.width='';p.style.right='';p.style.marginLeft='0px';p.style.maxWidth=Math.max(200,v.w-16)+'px';p.style.maxHeight='';p.style.overflowY='';
-    var r=p.getBoundingClientRect(),ov=r.right-(v.l+v.w-8);if(ov>0)p.style.marginLeft=(-ov)+'px';
-    var r2=p.getBoundingClientRect();if(r2.left<v.l+8)p.style.marginLeft=((parseFloat(p.style.marginLeft)||0)+(v.l+8-r2.left))+'px';
-    var r3=p.getBoundingClientRect(),room=v.t+v.h-r3.top-10;if(r3.height>room&&room>120){p.style.maxHeight=room+'px';p.style.overflowY='auto'}
+    p.removeAttribute('style');if(!p.classList.contains('pfix'))p.classList.add('pfix');
+    var an=p.previousElementSibling&&p.previousElementSibling.getBoundingClientRect?p.previousElementSibling:p.parentNode,ar=an.getBoundingClientRect(),w=Math.min(p.offsetWidth,v.w-16),h=p.offsetHeight;
+    var cb=p.closest('.bar')||p.closest('.card'),bound=cb?cb.getBoundingClientRect().right:v.l+v.w,left=ar.left;if(left+w>bound-4)left=bound-4-w;left=Math.max(v.l+8,Math.min(left,v.l+v.w-w-8));
+    var top=Math.max(4,ar.bottom+4);if(top+Math.min(h,200)>v.h)top=Math.max(4,v.h-Math.min(h,200)-8);
+    p.style.cssText='position:fixed;left:'+left+'px;right:auto;top:'+(v.t+top)+'px;margin:0;width:'+w+'px;max-height:'+(v.h-top-10)+'px;overflow-y:auto';
   }
   // every header menu is kept inside the visible screen whenever it opens or the screen changes
   (function(){
     var ids=['gpanel','secPanel','teamPanel','annPanel','repPanel','inpPanel','acctMenu','palPanel'];
     function fitOpen(){ids.forEach(function(id){var p=$(id);if(p&&p.classList.contains('open'))fitPanel(p)})}
     ids.forEach(function(id){var p=$(id);if(!p)return;new MutationObserver(function(){if(p.classList.contains('open'))setTimeout(function(){fitPanel(p)},0)}).observe(p,{attributes:true,attributeFilter:['class']})});
-    window.addEventListener('resize',fitOpen);if(window.visualViewport){visualViewport.addEventListener('resize',fitOpen);visualViewport.addEventListener('scroll',fitOpen)}
+    window.addEventListener('resize',fitOpen);window.addEventListener('scroll',fitOpen,{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',fitOpen);visualViewport.addEventListener('scroll',fitOpen)}
   })();
   function closeRuns(){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}
   function loadSection(snap){

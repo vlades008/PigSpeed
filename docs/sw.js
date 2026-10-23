@@ -1,4 +1,4 @@
-const CACHE = 'pigspeed-1792770176921';
+const CACHE = 'pigspeed-1792770687955';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
