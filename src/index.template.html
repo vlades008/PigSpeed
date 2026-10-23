@@ -36,20 +36,16 @@
           <label><span>Pressure</span><select id="u_p"><option value="0">kPa</option><option value="1">MPa</option><option value="2">psi</option><option value="3">bar</option></select></label>
           <label><span>Length</span><select id="u_len"><option value="0">km</option><option value="1">m</option></select></label>
           <label><span>Wall thickness</span><select id="u_wt"><option value="0">mm</option><option value="1">inch</option></select></label>
-          <label><span>Temperature</span><select id="u_t"><option value="0">°C</option><option value="1">°R (Rankine)</option></select></label>
           <label><span>Speed</span><select id="u_spd"><option value="0">m/s</option><option value="1">mph</option><option value="2">km/h</option></select></label>
           <label><span>Gas flow</span><select id="u_gas"></select></label>
           <label><span>Oil flow</span><select id="u_oil"></select></label>
         </div>
-        <div class="gh">Display</div>
-        <label class="pl"><span>Diagram style</span><select id="dstyle"><option value="0">Classic</option><option value="1">Glass</option><option value="2">Blueprint</option></select></label>
         <div class="gh">Data</div>
         <div class="srow"><button type="button" class="add" id="secExp"><span>Export</span></button><button type="button" class="add" id="secImp"><span>Import</span></button><input type="file" id="secFile" accept=".json" hidden></div>
         <div class="gh">About</div>
         <div class="gver" id="ver"></div>
         <details class="wnew" id="wnew"><summary>What's new</summary><div id="whatsnew"></div></details>
-        <button type="button" class="add" id="aboutIdea"><span>Send an idea</span></button>
-        <div class="gfoot"><span>Values are saved in this browser.</span><button class="link" id="reset" type="button">Reset to defaults</button></div>
+                <div class="gfoot"><span>Values are saved in this browser.</span><button class="link" id="reset" type="button">Reset to defaults</button></div>
       </div>
     </div>
   </header>
@@ -70,7 +66,7 @@
       <div class="fg">
         <div class="field" data-f="p" id="pF"><label for="p" id="pL" data-ti="Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.">Pressure (absolute)</label><div class="row"><input id="p" inputmode="decimal" autocomplete="off"><select id="pu"><option>kPa</option><option>MPa</option><option>psi</option><option>bar</option></select></div><div class="msg"></div></div>
         <div class="field" data-f="pout" id="poutF"><label for="pout" data-ti="Pressure at the receiver end. Leave empty if the pressure does not change along the line.">Outlet pressure</label><div class="row"><input id="pout" inputmode="decimal" autocomplete="off"><span class="unitnote" id="poutU"></span></div><div class="msg"></div></div>
-        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu"><option value="0">°C</option><option value="1">°R (Rankine)</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu" class="hide"><option value="0">°C</option></select><span class="unitnote">°C</span></div><div class="msg"></div></div>
         <div class="field" data-f="sg" id="sgF"><label for="sg" data-ti="Gas density relative to air, usually 0.55–0.75.">Gas specific gravity (air = 1)</label><div class="row"><input id="sg" inputmode="decimal" autocomplete="off"></div><div class="msg"></div></div>
         <div class="field" data-f="api" id="apiF"><label for="api" data-ti="Oil API gravity: about 35 is a medium oil, a higher number is lighter.">Oil gravity</label><div class="row"><input id="api" inputmode="decimal" autocomplete="off"><select disabled><option>°API</option></select></div><div class="msg"></div></div>
         <div class="field full" data-f="gor" id="gF"><label for="gor" data-ti="Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.">Gas-oil ratio (GOR), per stock-tank bbl</label><div class="row"><input id="gor" inputmode="decimal" autocomplete="off"><select disabled><option>SCF/BBL</option></select></div><div class="msg"></div></div>
