@@ -1,6 +1,6 @@
 {
-  "version": "1.7.0",
-  "notes": "Менеджеры приглашают инженеров, сворачиваемая карточка параметров",
+  "version": "1.7.1",
+  "notes": "Параметры — выпадающее меню в шапке",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"

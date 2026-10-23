@@ -15,6 +15,32 @@
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
     <div class="hacctwrap"><div id="acct" class="hacct"></div><div class="gpanel wide" id="teamPanel"><div id="teamBox" class="teambox open"></div></div></div>
     <div class="annwrap"><button type="button" id="annBtn" class="gbtn nocaret" style="display:none" title="Announcements" aria-label="Announcements">🔔<i class="fabn" id="annN"></i></button><div class="gpanel wide" id="annPanel"></div></div>
+    <div class="parwrap"><button type="button" id="parBtn" class="gbtn" aria-expanded="false"><span class="ptitle">Parameters</span><span class="psum" id="pSum"></span></button>
+      <section class="card inp gpanel wide" id="inpPanel">
+      <div class="seg" id="fluid"><button type="button" data-v="0">Gas</button><button type="button" data-v="1">Oil</button><button type="button" data-v="2">Mix (oil + gas)</button></div>
+      <div class="gt">Pipe</div>
+      <div class="fg">
+        <div class="field full"><label for="name">Line name</label><input id="name" autocomplete="off"></div>
+        <div class="field full" data-f="od"><label for="od">Outside diameter</label><select id="od" style="width:100%"></select><div class="msg"></div></div>
+        <div class="field" data-f="wt"><label for="wt">Wall thickness</label><div class="row"><input id="wt" inputmode="decimal" autocomplete="off"><select id="wtu"><option>mm</option><option>inch</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="len"><label for="len">Line length</label><div class="row"><input id="len" inputmode="decimal" autocomplete="off"><select id="lenu"><option>km</option><option>m</option></select></div><div class="msg"></div></div>
+      </div>
+      <div class="gt">Conditions</div>
+      <div class="fg">
+        <div class="field" data-f="p" id="pF"><label for="p" id="pL" data-ti="Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.">Pressure (absolute)</label><div class="row"><input id="p" inputmode="decimal" autocomplete="off"><select id="pu"><option>kPa</option><option>MPa</option><option>psi</option><option>bar</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="pout" id="poutF"><label for="pout" data-ti="Pressure at the receiver end. Leave empty if the pressure does not change along the line.">Outlet pressure</label><div class="row"><input id="pout" inputmode="decimal" autocomplete="off"><span class="unitnote" id="poutU"></span></div><div class="msg"></div></div>
+        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu" class="hide"><option value="0">°C</option></select><span class="unitnote">°C</span></div><div class="msg"></div></div>
+        <div class="field" data-f="sg" id="sgF"><label for="sg" data-ti="Gas density relative to air, usually 0.55–0.75.">Gas specific gravity (air = 1)</label><div class="row"><input id="sg" inputmode="decimal" autocomplete="off"></div><div class="msg"></div></div>
+        <div class="field" data-f="api" id="apiF"><label for="api" data-ti="Oil API gravity: about 35 is a medium oil, a higher number is lighter.">Oil gravity</label><div class="row"><input id="api" inputmode="decimal" autocomplete="off"><select disabled><option>°API</option></select></div><div class="msg"></div></div>
+        <div class="field full" data-f="gor" id="gF"><label for="gor" data-ti="Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.">Gas-oil ratio (GOR), per stock-tank bbl</label><div class="row"><input id="gor" inputmode="decimal" autocomplete="off"><select disabled><option>SCF/BBL</option></select></div><div class="msg"></div></div>
+      </div>
+      <div class="gt">Flow</div>
+      <div class="fg">
+        <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
+      </div>
+      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details>
+    </section>
+    </div>
     <div class="sec">
       <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Runs</span><i class="rdot" id="rdot"></i></button>
       <div class="gpanel wide" id="secPanel">
@@ -55,31 +81,7 @@
   <div class="phead" id="phead"></div>
 
   <div class="layout">
-    <section class="card inp">
-      <button type="button" class="phdr" id="pHead" aria-expanded="true"><span class="ptitle">Parameters</span><span class="psum" id="pSum"></span><i class="pch">▾</i></button>
-      <div class="seg" id="fluid"><button type="button" data-v="0">Gas</button><button type="button" data-v="1">Oil</button><button type="button" data-v="2">Mix (oil + gas)</button></div>
-      <div class="gt">Pipe</div>
-      <div class="fg">
-        <div class="field full"><label for="name">Line name</label><input id="name" autocomplete="off"></div>
-        <div class="field full" data-f="od"><label for="od">Outside diameter</label><select id="od" style="width:100%"></select><div class="msg"></div></div>
-        <div class="field" data-f="wt"><label for="wt">Wall thickness</label><div class="row"><input id="wt" inputmode="decimal" autocomplete="off"><select id="wtu"><option>mm</option><option>inch</option></select></div><div class="msg"></div></div>
-        <div class="field" data-f="len"><label for="len">Line length</label><div class="row"><input id="len" inputmode="decimal" autocomplete="off"><select id="lenu"><option>km</option><option>m</option></select></div><div class="msg"></div></div>
-      </div>
-      <div class="gt">Conditions</div>
-      <div class="fg">
-        <div class="field" data-f="p" id="pF"><label for="p" id="pL" data-ti="Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.">Pressure (absolute)</label><div class="row"><input id="p" inputmode="decimal" autocomplete="off"><select id="pu"><option>kPa</option><option>MPa</option><option>psi</option><option>bar</option></select></div><div class="msg"></div></div>
-        <div class="field" data-f="pout" id="poutF"><label for="pout" data-ti="Pressure at the receiver end. Leave empty if the pressure does not change along the line.">Outlet pressure</label><div class="row"><input id="pout" inputmode="decimal" autocomplete="off"><span class="unitnote" id="poutU"></span></div><div class="msg"></div></div>
-        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu" class="hide"><option value="0">°C</option></select><span class="unitnote">°C</span></div><div class="msg"></div></div>
-        <div class="field" data-f="sg" id="sgF"><label for="sg" data-ti="Gas density relative to air, usually 0.55–0.75.">Gas specific gravity (air = 1)</label><div class="row"><input id="sg" inputmode="decimal" autocomplete="off"></div><div class="msg"></div></div>
-        <div class="field" data-f="api" id="apiF"><label for="api" data-ti="Oil API gravity: about 35 is a medium oil, a higher number is lighter.">Oil gravity</label><div class="row"><input id="api" inputmode="decimal" autocomplete="off"><select disabled><option>°API</option></select></div><div class="msg"></div></div>
-        <div class="field full" data-f="gor" id="gF"><label for="gor" data-ti="Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.">Gas-oil ratio (GOR), per stock-tank bbl</label><div class="row"><input id="gor" inputmode="decimal" autocomplete="off"><select disabled><option>SCF/BBL</option></select></div><div class="msg"></div></div>
-      </div>
-      <div class="gt">Flow</div>
-      <div class="fg">
-        <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
-      </div>
-      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details>
-    </section>
+    
 
     <main class="main">
       <div class="warn" id="warn"></div>

@@ -501,21 +501,23 @@
       return o;
     });
   }
-  var autoFolded=false;
-  function pCard(){return document.querySelector('.card.inp')}
-  function setFold(f){var c=pCard();if(!c)return;c.classList.toggle('folded',!!f);$('pHead').setAttribute('aria-expanded',String(!f))}
-  function foldUser(){var f=!pCard().classList.contains('folded');autoFolded=false;S.pfold=f?1:0;save();setFold(f)}
-  function autoFold(){if(!pCard().classList.contains('folded')){setFold(true);autoFolded=true}}
-  function autoUnfold(){if(autoFolded){autoFolded=false;setFold(S.pfold===1)}}
   function renderPSum(){
     var e=$('pSum');if(!e)return;var f=+S.fluid;
-    e.textContent=tr(['Gas','Oil','Oil + gas'][f])+' · Ø'+S.od+' · '+S.len+' '+tr(['km','m'][+S.lenu])+' · '+S.p+' '+tr(['kPa','MPa','psi','bar'][+S.pu])+' · '+S.t+' °C · '+S.flow+' '+tr((f===0?GAS_U:OIL_U)[f===0?S.gasu:S.oilu])+'  ✎';
+    e.textContent=tr(['Gas','Oil','Oil + gas'][f])+' · Ø'+S.od+' · '+S.p+' '+tr(['kPa','MPa','psi','bar'][+S.pu]);
   }
-  function applyFoldBoot(){
-    var narrow=window.innerWidth<700,f=S.pfold===-1?(narrow&&RUNS.some(function(r){return r.st!=='planned'})):S.pfold===1;
-    setFold(f);if(anim)autoFold();
-  }
-  $('pHead').addEventListener('click',foldUser);
+  function closePar(){var p=$('inpPanel');if(p)p.classList.remove('open');var b=$('parBtn');if(b)b.setAttribute('aria-expanded','false')}
+  function autoFold(){closePar()}
+  function autoUnfold(){}
+  function applyFoldBoot(){}
+  $('parBtn').addEventListener('click',function(e){
+    e.stopPropagation();var p=$('inpPanel'),on=!p.classList.contains('open');
+    ['gpanel','secPanel','teamPanel','annPanel','repPanel'].forEach(function(id){var el=$(id);if(el)el.classList.remove('open')});
+    ['gearBtn','secBtn'].forEach(function(id){$(id).setAttribute('aria-expanded','false')});
+    p.classList.toggle('open',on);this.setAttribute('aria-expanded',String(on));if(on)fitPanel(p);
+  });
+  document.addEventListener('click',function(e){if(!e.target.closest('.parwrap'))closePar()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closePar()});
+  ['secBtn','gearBtn','annBtn'].forEach(function(id){var el=$(id);if(el)el.addEventListener('click',closePar)});
   function renderFormulas(r,vals){
     renderPSum();
     var b=$('fmlBody');if(!b)return;
@@ -858,7 +860,7 @@
     function b(t,fn,cls){var x=document.createElement('button');x.type='button';x.className='add '+(cls||'');x.innerHTML='<span>'+t+'</span>';x.onclick=fn;box.appendChild(x);return x}
     if(signed()){
       var c=document.createElement('span');c.className='chip';c.textContent=ME.name+' · '+tr(ROLE)+(CSTATE==='offline'?' · '+tr('offline'):'');box.appendChild(c);
-      if(ROLE==='admin'||ROLE==='manager')b(tr('Team'),function(ev){if(ev&&ev.stopPropagation)ev.stopPropagation();var p=$('teamPanel'),on=!p.classList.contains('open');['gpanel','secPanel','repPanel'].forEach(function(id){var e=$(id);if(e)e.classList.remove('open')});$('gearBtn').setAttribute('aria-expanded','false');$('secBtn').setAttribute('aria-expanded','false');p.classList.toggle('open',on);if(on){p.style.left=Math.max(0,this.offsetLeft-4)+'px';fitPanel(p)}renderTeam()});
+      if(ROLE==='admin'||ROLE==='manager')b(tr('Team'),function(ev){if(ev&&ev.stopPropagation)ev.stopPropagation();var p=$('teamPanel'),on=!p.classList.contains('open');['gpanel','secPanel','repPanel','inpPanel'].forEach(function(id){var e=$(id);if(e)e.classList.remove('open')});$('gearBtn').setAttribute('aria-expanded','false');$('secBtn').setAttribute('aria-expanded','false');$('parBtn').setAttribute('aria-expanded','false');p.classList.toggle('open',on);if(on){p.style.left=Math.max(0,this.offsetLeft-4)+'px';fitPanel(p)}renderTeam()});
       b(tr('Sign out'),function(){Cloud.signOut()});
     }else if(CSTATE==='verify'||CSTATE==='nomember')b(tr('Finish sign-in'),openAuth);
     else b(tr('Sign in'),openAuth);
@@ -955,7 +957,7 @@
   $('tabbar').addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b)return;var a=b.dataset.a;
     if(a==='run'){window.scrollTo({top:0,behavior:'smooth'});return}
-    if(a==='fml'){$('fml').open=true;$('fml').scrollIntoView({behavior:'smooth',block:'start'});return}
+    if(a==='fml'){window.scrollTo(0,0);setTimeout(function(){var p=$('inpPanel');if(!p.classList.contains('open'))$('parBtn').click();$('fml').open=true;$('fml').scrollIntoView({behavior:'smooth',block:'start'})},50);return}
     window.scrollTo(0,0);setTimeout(function(){$(a==='runs'?'secBtn':'gearBtn').click()},50);
   });
   // ---- ideas and bug reports
