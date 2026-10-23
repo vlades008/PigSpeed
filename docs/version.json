@@ -1,6 +1,6 @@
 {
-  "version": "1.6.2",
-  "notes": "Исправлен переключатель языка в настройках",
+  "version": "1.6.3",
+  "notes": "Язык переключается тумблером; убрана кнопка остановки запуска",
   "date": "2026-10-23",
   "apk": "downloads/PigSpeedCalc.apk",
   "exe": "downloads/PigSpeedCalc.exe"

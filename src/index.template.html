@@ -27,9 +27,8 @@
       <button type="button" id="gearBtn" aria-label="Settings" aria-expanded="false" title="Settings">⚙</button>
       <div class="gpanel" id="gpanel">
         <div class="gh">Language</div>
-        <div class="seg lang" id="lang"><button type="button" data-v="en">EN</button><button type="button" data-v="ru">RU</button></div>
+        <div class="vswitch uisw" id="lang"><span class="vl" data-v="en">EN</span><button type="button" role="switch" id="langSw" aria-checked="false" aria-label="EN / RU"><i></i></button><span class="vl" data-v="ru">RU</span></div>
         <div class="gh">Run</div>
-        <button type="button" class="add stopb" id="stopBtn" disabled><span>Stop the run</span></button>
         <label class="pl" data-ti="You get a reminder this many minutes before the pig reaches a valve and before it arrives at the receiver."><span>Remind me before valves and arrival</span><span class="lead"><input id="leadIn" inputmode="numeric" autocomplete="off"><b>min</b></span></label>
         <div class="chks"><label class="chk"><input type="checkbox" id="aSound"><span>Sound</span></label><label class="chk"><input type="checkbox" id="aBanner"><span>Banner</span></label><label class="chk"><input type="checkbox" id="aVib"><span>Vibration</span></label></div>
         <div class="gh">Units</div>

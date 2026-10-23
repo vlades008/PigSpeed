@@ -362,7 +362,7 @@
       if(RU[en]){el.dataset.en=en;el.textContent=S.lang==='ru'?RU[en]:en}
     });
     [].forEach.call(document.querySelectorAll('[data-ti]'),function(el){el.title=tr(el.getAttribute('data-ti'))});
-    [].forEach.call($('lang').children,function(b){b.setAttribute('aria-pressed',String(b.dataset.v===S.lang))});
+    $('langSw').setAttribute('aria-checked',String(S.lang==='ru'));[].forEach.call(document.querySelectorAll('#lang .vl'),function(l){l.classList.toggle('on',l.dataset.v===S.lang)});
   }
   function drawDiagram(r,vals){
     animStop();
@@ -1110,7 +1110,6 @@
   $('arrNo').addEventListener('click',function(){$('arrDlg').classList.remove('open')});
   $('arrYes').addEventListener('click',function(){$('arrDlg').classList.remove('open');finishRun()});
   $('arrDlg').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
-  $('stopBtn').addEventListener('click',function(){var gp=$('gpanel');if(gp)gp.classList.remove('open');stopRunUser()});
   $('logOk').addEventListener('click',confirmLog);
   $('logCancel').addEventListener('click',closeLog);
   ['logAt','logLaunch'].forEach(function(id){$(id).addEventListener('keydown',function(e){if(e.key==='Enter')confirmLog();else if(e.key==='Escape')closeLog()})});
@@ -1125,7 +1124,7 @@
   $('secFile').addEventListener('change',importAll);
   $('startBtn').addEventListener('click',animStart);
   $('toolSel').addEventListener('change',function(){var v=+this.value;S.toolOn=v>=0;if(v>=0)S.tool=v;save();update()});
-  $('lang').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.lang=b.dataset.v;save();ensureOd();$('od').value=S.od;renderValves();applyLang();renderRuns();setFluid(S.fluid,true);update()});
+  $('lang').addEventListener('click',function(e){var l=e.target.closest('.vl'),v=l?l.dataset.v:(e.target.closest('#langSw')?(S.lang==='ru'?'en':'ru'):'');if(!v||v===S.lang)return;S.lang=v;save();ensureOd();$('od').value=S.od;renderValves();applyLang();renderRuns();setFluid(S.fluid,true);update()});
   $('fluid').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setFluid(+b.dataset.v)});
   $('vadd').addEventListener('click',function(){keepRun(function(){var L=num('len');S.valves.push(L>0?String(+(L/2).toFixed(3)):'');S.vt.push(1);S.vnames.push('');save();renderValves();update()})});
   $('reset').addEventListener('click',function(){var lg=S.lang;S={};for(var k in DEF)S[k]=DEF[k];S.lang=lg;S.valves=[];S.vt=[];S.vnames=[];S.flowTouched=false;flowDefault(S.fluid);toUI();save();update()});
