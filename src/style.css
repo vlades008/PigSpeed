@@ -564,3 +564,15 @@ html[data-ui="1"] .rs.pig .rd{background:#ffb347;border-color:#3a2a10}html[data-
 .w4{left:6px;right:6px;top:8px;height:28px}.w5{left:5px;right:5px;bottom:6px;height:30px;background:var(--accent)!important;opacity:.85!important}
 .w6{left:10px;right:10px;top:12px;height:22px;background:var(--accent)!important;opacity:.85!important}.w7{left:8px;right:8px;bottom:8px;height:26px}
 .w8{left:6px;right:6px;top:10px;height:50px}.w9{left:20px;right:20px;bottom:8px;height:6px;border-radius:3px}
+
+/* layout picker as a live preview bar */
+.laybar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -8px 28px rgba(0,0,0,.22);padding:10px 12px 12px}
+.laybar.open{display:block}
+.lbh{display:flex;flex-direction:column;gap:2px;margin-bottom:6px}.lbh b{font-size:15px}.lbh span{font-size:12.5px;color:var(--muted)}
+.laybar .lays{grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 8px}
+.laybar .lopt{padding:6px 2px;border-radius:12px;gap:2px}.laybar .lopt b{font-size:12px}
+.wfw{display:block;width:34px;height:48px;overflow:hidden}.wfw .wf{transform:scale(.58);transform-origin:0 0;margin:0}
+.lbb{display:flex;align-items:center;gap:8px}
+html.lay-picking body{padding-bottom:200px}
+html.lay-picking .sheet{bottom:200px!important}
+html.lay-picking .fab{bottom:210px!important}
