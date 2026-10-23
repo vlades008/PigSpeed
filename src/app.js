@@ -829,15 +829,15 @@
     function b(t,fn,cls){var x=document.createElement('button');x.type='button';x.className='add '+(cls||'');x.innerHTML='<span>'+t+'</span>';x.onclick=fn;box.appendChild(x);return x}
     if(signed()){
       var c=document.createElement('span');c.className='chip';c.textContent=ME.name+' · '+tr(ROLE)+(CSTATE==='offline'?' · '+tr('offline'):'');box.appendChild(c);
-      if(ROLE==='admin')b(tr('Team'),function(ev){if(ev&&ev.stopPropagation)ev.stopPropagation();$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false');if(!$('secPanel').classList.contains('open'))$('secBtn').click();$('teamBox').classList.add('open');renderTeam()});
+      if(ROLE==='admin')b(tr('Team'),function(ev){if(ev&&ev.stopPropagation)ev.stopPropagation();var p=$('teamPanel'),on=!p.classList.contains('open');['gpanel','secPanel','repPanel'].forEach(function(id){var e=$(id);if(e)e.classList.remove('open')});$('gearBtn').setAttribute('aria-expanded','false');$('secBtn').setAttribute('aria-expanded','false');p.classList.toggle('open',on);if(on){p.style.left=Math.max(0,this.offsetLeft-4)+'px'}renderTeam()});
       b(tr('Sign out'),function(){Cloud.signOut()});
     }else if(CSTATE==='verify'||CSTATE==='nomember')b(tr('Finish sign-in'),openAuth);
     else b(tr('Sign in'),openAuth);
   }
   function renderTeam(){
-    var box=$('teamBox');if(!box)return;
-    if(!(signed()&&ROLE==='admin')){box.classList.remove('open');box.innerHTML='';stopMembers();return}
-    if(!box.classList.contains('open')){stopMembers();return}
+    var box=$('teamBox'),p=$('teamPanel');if(!box||!p)return;
+    if(!(signed()&&ROLE==='admin')){p.classList.remove('open');box.innerHTML='';stopMembers();return}
+    if(!p.classList.contains('open')){stopMembers();return}
     if(!unMem){unMem=Cloud.watchMembers(function(a){TEAMM=a;drawTeam()});unInv=Cloud.watchInvites(function(a){TEAMI=a;drawTeam()})}
     drawTeam();
   }
@@ -1042,7 +1042,9 @@
   $('logCancel').addEventListener('click',closeLog);
   ['logAt','logLaunch'].forEach(function(id){$(id).addEventListener('keydown',function(e){if(e.key==='Enter')confirmLog();else if(e.key==='Escape')closeLog()})});
   $('repBtn').addEventListener('click',function(e){e.stopPropagation();$('repPanel').classList.toggle('open');$('secPanel').classList.remove('open');$('gpanel').classList.remove('open')});
-  document.addEventListener('click',function(e){if(!e.target.closest('.rep'))$('repPanel').classList.remove('open')});
+  document.addEventListener('click',function(e){if(!e.target.closest('.rep'))$('repPanel').classList.remove('open');if(!e.target.closest('.hacctwrap')){$('teamPanel').classList.remove('open');stopMembers()}});
+  ['secBtn','gearBtn'].forEach(function(id){$(id).addEventListener('click',function(){$('teamPanel').classList.remove('open');stopMembers()})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('teamPanel').classList.remove('open');stopMembers()}});
   $('repPrint').addEventListener('click',function(){fillPrintHead();$('repPanel').classList.remove('open');window.print()});
   $('repCsv').addEventListener('click',function(){$('repPanel').classList.remove('open');downloadCsv()});
   $('secExp').addEventListener('click',exportAll);

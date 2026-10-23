@@ -12,13 +12,12 @@
 <div class="app">
   <header class="bar">
     <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
-    <div id="acct" class="hacct"></div>
+    <div class="hacctwrap"><div id="acct" class="hacct"></div><div class="gpanel wide" id="teamPanel"><div id="teamBox" class="teambox open"></div></div></div>
     <div class="sec">
       <button type="button" id="secBtn" class="gbtn" aria-expanded="false"><span>Runs</span><i class="rdot" id="rdot"></i></button>
       <div class="gpanel wide" id="secPanel">
         <div class="srow"><button type="button" class="add" id="runNew"><span>+ New run</span></button><span class="hint" id="secMsg"></span></div>
         <div id="runList"></div>
-        <div id="teamBox" class="teambox"></div>
       </div>
     </div>
     <div class="vswitch uisw" id="uiSeg" title="Interface"><span class="vl" data-v="2">Route</span><button type="button" role="switch" id="uiSw" aria-checked="false" aria-label="Route / Control room"><i></i></button><span class="vl" data-v="1">Control</span></div>
