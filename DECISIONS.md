@@ -17,7 +17,7 @@
 Opening a run with write access can finish it: when its estimated time has passed, the app marks it done. Leaving the overview therefore never reopens another person's run with write access.
 
 ## A run finishes only when someone confirms the arrival (slice 2a)
-Past its estimate a real run keeps running and counts as overdue, for the engineer and anyone watching. Confirming takes an editable time, which is saved as actual. Reminder at the estimate, then every 30 min. Playback at other speeds still ends by itself. Old app versions can still finish runs themselves until updated, so Overview keeps the "Arrival not confirmed" label. A forgotten run stays overdue until its engineer confirms, stops or deletes it.
+Past its estimate a real run keeps running and counts as overdue, for the engineer and anyone watching. Confirming takes an editable time, which is saved as actual. Reminder at the estimate, then every 30 min. Playback at other speeds still ends by itself. Publishing reaches online APK and web users at once; an offline APK or the exe keeps its bundled version and can still finish runs itself until updated, so Overview keeps the "Arrival not confirmed" label. A forgotten run stays overdue until its engineer confirms, stops or deletes it.
 
 ## Recording mode (slice 2b)
 - On for the current user's writable live run at x1, whatever their role: engineers, admins in the engineer view, and signed-out users on their own device. Someone watching a colleague's run stays on the classic read-only screen.
