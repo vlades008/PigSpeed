@@ -870,7 +870,7 @@ html[data-dsk="1"] .runbar .add.start,html[data-dsk="1"] .runbar .add.okb{min-wi
 /* ===== manager overview: list of team runs beside the read-only run ===== */
 .ovp,.ovbar{display:none}
 body.ov .ovp{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px;margin:0}
-body.ov .parwrap,body.ov .sec,body.ov .robar,body.ov #tourBtn,body.ov #palPanel .deskonly,body.ov #palPanel .phoneonly,body.ov #vempty,body.ov #runWarn{display:none!important}
+body.ov .parwrap,body.ov .sec,body.ov .robar,body.ov #palPanel .deskonly,body.ov #palPanel .phoneonly,body.ov #vempty,body.ov #runWarn{display:none!important}
 html[data-ui="2"] body.ov{padding-bottom:0}
 body.ovnone .main{display:none}
 .ovchips{display:flex;flex-wrap:wrap;gap:6px}
@@ -1134,7 +1134,7 @@ body[data-stage="team"] .layout{display:none!important}
 .planp [hidden],.detp [hidden],.ovp [hidden]{display:none!important}
 
 /* retired chrome */
-#parBtn,#secBtn,#tourBtn,.robar,.fab,html[data-ui] .fab,html[data-ui][data-dsk] .fab,.runbar .add,.phead,.ovchips:empty{display:none!important}
+#parBtn,#secBtn,.robar,.fab,html[data-ui] .fab,html[data-ui][data-dsk] .fab,.runbar .add,.phead,.ovchips:empty{display:none!important}
 body:not([data-stage="plan"]) #runWarn{display:none!important}
 .tile.hot,html[data-clk][data-ui][data-dsk] .tile.hot,html[data-clk="1"][data-ui] .tile.hot.live{display:none!important}
 html[data-ui] .runbar,html[data-ui][data-dsk] .runbar{margin-top:10px}

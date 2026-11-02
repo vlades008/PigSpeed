@@ -19,7 +19,7 @@ Planner and tracker for in-line inspection runs (Interscan tools: Geometry EGT, 
 - `npm run release`: build + `PigSpeedCalc.exe` + `android/` web package + `PigSpeedCalc.apk` (about 10 s). `npm run release:fast` skips the APK.
 
 ## Roles
-Role and run state pick the menu (`DECISIONS.md`). Manager and admin start in the read-only Overview (`body.ov`, section "manager overview" in `app.js`); everyone else gets the classic screen, which turns into Recording mode (`body.rec`, section "recording mode" in `app.js`) while their own run is live. A run ends only through the arrival dialog. Test with `?mock=uid:Name:role`. In a hidden preview pane animation frames do not run: replace `requestAnimationFrame` with a timer in the test.
+Screens: `body[data-stage]` is plan, track, runs, overview or team (`setStage` in `app.js`, section "screens"; styles at the end of `style.css`). Role and run state pick the menu (`DECISIONS.md`). Manager and admin start in the read-only Overview (`body.ov`, section "manager overview" in `app.js`); everyone else gets the classic screen, which turns into Recording mode (`body.rec`, section "recording mode" in `app.js`) while their own run is live. A run ends only through the arrival dialog. Test with `?mock=uid:Name:role`. In a hidden preview pane animation frames do not run: replace `requestAnimationFrame` with a timer in the test.
 
 ## Other files
 - `PigSpeedCalc.exe`: Windows launcher that embeds `index.html` and opens it in an Edge/Chrome app window (`launcher/PigSpeedCalc.cs`, icon `launcher/PigSpeedCalc.ico`, `launcher/make-icon.ps1`).

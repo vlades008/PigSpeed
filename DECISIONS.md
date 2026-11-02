@@ -32,8 +32,13 @@ Past its estimate a real run keeps running and counts as overdue, for the engine
 - Rejected: keeping the options and restyling each one (too many combinations to keep working).
 - Code for Sheet, Focus and Console no longer runs and can be deleted in a clean-up, along with the older CSS it uses.
 
+## Screens rebuilt, one job each (approved by the owner from a clickable test version, 2026-11-02)
+- Engineer: Plan (result first, short rows that open), Track (recording mode, or short details, or the summary after arrival), Runs (search, status groups, row actions). Manager and admin: Overview (list and short details, diagram on request) and Team.
+- Why: restyling alone was rejected; what the owner liked in the sketches was few things per screen.
+- Settings stays a popup behind the gear and News behind the bell. The tour was rewritten and shows once to everyone.
+
 ## Slices
-1. Manager overview (done). 2. Recording mode, stop false finishes (done, pending a try on a real phone). 3. Plan and Runs tabs, run summary. 4. Settings page, Team tab, new tour. Fewer looks is done.
+Done: manager overview, recording mode, confirmed arrivals, one look, rebuilt screens. Left: Settings as a page, clean-up of old layout code.
 
 ## Left out of slice 1 on purpose
 - Warning for a valve expected but not recorded: a stuck pig shows On plan until overdue. Top candidate for the next round.

@@ -1458,32 +1458,31 @@
     var b=e.target.closest('button');if(!b||b.disabled||!b.dataset.a)return;layAct(b.dataset.a,b)})});
   window.addEventListener('resize',function(){var ph=isPhone();if(ph!==lastPh){lastPh=ph;keepRun(function(){applyLay();update()})}});
   // ---- spotlight tour, by role
-  var TOURK='pigSpeedCalc.tour',tourSeen={},TOUR=null,tourSession=false;
+  var TOURK='pigSpeedCalc.tour2',tourSeen={},TOUR=null,tourSession=false;
   try{tourSeen=JSON.parse(localStorage.getItem(TOURK)||'{}')||{}}catch(e){tourSeen={}}
   function L(en,ru){return S.lang==='ru'?ru:en}
   function tourRole(){return signed()?ROLE:'engineer'}
   function vis(sel){var e=sel&&document.querySelector(sel);if(!e)return null;var r=e.getBoundingClientRect();return (r.width>0&&r.height>0)?e:null}
   function tStart(){var l=curLay();return l===1?'#shGo':l===2?'#fcGo':'#startBtn'}
   function tourSteps(role){
-    var ph=isPhone(),lay=curLay(),S1=[];
-    var welcome={sel:null,t:L('Welcome to Pig Speed','Добро пожаловать в Pig Speed'),x:{engineer:L('A 30-second tour for engineers: how to plan a run, start it and log valve passages.','Короткий тур для инженера: как рассчитать запуск, стартовать и отмечать прохождение задвижек.'),manager:L('A short tour for managers: you watch every team run live and can invite engineers.','Короткий тур для руководителя: вы наблюдаете за всеми запусками команды в реальном времени и приглашаете инженеров.'),admin:L('A short tour for administrators: runs, team, invitations and ideas.','Короткий тур для администратора: запуски, команда, приглашения и идеи.')}[role]};
-    var par={sel:'#parBtn',t:L('Parameters','Параметры'),x:L('Open this menu to enter the pipe, pressure, temperature and flow.','Откройте это меню, чтобы ввести трубу, давление, температуру и расход.')};
-    var parOpen={sel:'#inpPanel',before:function(){if(!$('inpPanel').classList.contains('open'))$('parBtn').click()},t:L('Enter your line','Введите данные линии'),x:L('Choose the fluid, diameter, pressure and flow. Below you find the flow for a target speed and the formulas behind every number.','Выберите среду, диаметр, давление и расход. Ниже — расход для целевой скорости и формулы каждого числа.')};
-    var res={sel:lay===2?'#fc .t3big':lay===1?'#sh .shrow':'.tiles',t:L('Speed and time','Скорость и время'),x:L('Pig speed and the planned duration appear at once. Red means the tool is outside its limits.','Скорость снаряда и расчётное время считаются сразу. Красный цвет — выход за возможности оборудования.')};
-    var views={sel:'#vsel',t:L('Diagram views','Виды схемы'),x:ph?L('Switch between Route, Local (the pig animation) and Global (the whole line to scale).','Переключайтесь между Маршрутом, Локальным видом (анимация снаряда) и Глобальным (вся линия в масштабе).'):L('Switch between Local (the pig animation) and Global (the whole line to scale).','Переключайтесь между Локальным видом (анимация снаряда) и Глобальным (вся линия в масштабе).')};
-    var valves={sel:lay===2?'#fc [data-a=vals]':'#vadd',before:function(){if(lay!==2)$('vtog').getAttribute('aria-expanded')==='true'||$('vtog').click()},t:L('Valves','Задвижки'),x:L('Add valves by distance. Each one gets its expected arrival time and a countdown.','Добавляйте задвижки по расстоянию. Для каждой считается время прохода и обратный отсчёт.')};
-    var start={sel:tStart(),t:L('Start the run','Старт запуска'),x:L('Press Start when the pig is launched. The clock follows real time and survives page reloads.','Нажмите «Старт», когда снаряд запущен. Часы идут по реальному времени и переживают перезагрузку страницы.')};
-    var passed={sel:lay===2?'#fcValve':lay===1?'#shValve':'#vlist .vlog',before:function(){if(lay===0&&$('vtog').getAttribute('aria-expanded')!=='true')$('vtog').click();if(lay===1){shOpen=true;shSig='';updSh()}},t:L('Log a passage','Отметка прохождения'),x:L('When the pig passes a valve, log the real time. The speed and all later times are recalculated. A banner can also ask "Is the pig passing now?" with a one-tap answer.','Когда снаряд прошёл задвижку, отметьте реальное время — скорость и все следующие времена пересчитаются. Баннер также спросит «Снаряд проходит сейчас?» — достаточно одного нажатия.')};
-    var runs=function(txt){return {sel:'#secBtn',t:L('Runs','Запуски'),x:txt}};
+    function on(s){return function(){if(UI.stage!==s)setStage(s,true)}}
+    var welcome={sel:null,t:L('The app has new screens','В приложении новые экраны'),x:{engineer:L('A short tour: plan a run, record it on site, and find it later.','Короткий тур: рассчитайте запуск, записывайте его на месте и находите позже.'),manager:L('A short tour: see every team run and what needs attention.','Короткий тур: все запуски команды и то, что требует внимания.'),admin:L('A short tour: see every team run, manage the team, and run a line yourself.','Короткий тур: все запуски команды, управление командой и собственная работа на линии.')}[role]||L('A short tour: plan a run, record it on site, and find it later.','Короткий тур: рассчитайте запуск, записывайте его на месте и находите позже.')};
     var bell={sel:'#annBtn',t:L('News','Новости'),x:L('Announcements land here: idea answers and invitations.','Сюда приходят объявления: ответы на идеи и приглашения.')};
-    var acctTeam=function(txt){return {sel:'#acctMenu',before:function(){var m=$('acctMenu');if(!m.classList.contains('open')){var b=document.querySelector('#acct .sqb');if(b)b.click()}},t:L('Team','Команда'),x:txt}};
-    var ideas=function(txt){return {sel:'#ideaBtn',t:L('Ideas','Идеи'),x:txt}};
-    var sets={sel:'#gearBtn',t:L('Settings','Настройки'),x:L('Units, reminders and alerts, the dim screen for the field, backup of your runs, language and the layout for phones.','Единицы, напоминания и оповещения, затемнение экрана в поле, резервная копия запусков, язык и вид для телефона.')};
-    var theme={sel:'#gearBtn',t:L('Settings','Настройки'),x:L('Theme, language, units and reminders live here.','Тема, язык, единицы и напоминания находятся здесь.')};
+    var sets={sel:'#gearBtn',t:L('Settings','Настройки'),x:L('Language, theme, units, reminders, dim screen and backup of your runs.','Язык, тема, единицы, напоминания, затемнение экрана и резервная копия запусков.')};
+    var acct={sel:'#acct .sqb',t:L('Your account','Ваш аккаунт'),x:role==='admin'?L('Switch between Overview and Engineer view here. Send an idea or a bug, or sign out.','Здесь можно переключаться между обзором и видом инженера, отправить идею или ошибку и выйти.'):L('Send an idea or a bug with a screenshot, or sign out.','Здесь можно отправить идею или ошибку со снимком экрана и выйти.')};
     var end={sel:null,t:L('That is all','Это всё'),x:L('You can replay this tour any time in Settings > Show the tour.','Этот тур можно повторить в Настройках: «Показать обзор».')};
-    if(role==='manager')return [welcome,runs(L('Every team run is here. Live runs have a red dot. Open one to watch it in real time (read-only).','Здесь все запуски команды. Идущие отмечены красной точкой. Откройте запуск — смотрите его в реальном времени (только чтение).')),bell,acctTeam(L('Team: see all members and invite engineers. Engineers get access when they sign up with the invited email.','Команда: список участников и приглашение инженеров. Инженер получает доступ, когда регистрируется с приглашённой почтой.')),par,ideas(L('Send ideas or bugs with a screenshot; answers come back here.','Отправляйте идеи и ошибки со снимком экрана — ответы приходят сюда.')),sets,end];
-    if(role==='admin')return [welcome,runs(L('You can open, edit and delete any team run. Live runs have a red dot.','Вы можете открывать, править и удалять любые запуски команды. Идущие отмечены красной точкой.')),acctTeam(L('Team: invite people as engineer, manager or admin, then send the invitation by copy, share, Gmail or Outlook. Change roles here too.','Команда: приглашайте как инженера, руководителя или администратора, затем отправляйте приглашение — копией, через «Поделиться», Gmail или Outlook. Здесь же меняются роли.')),ideas(L('Your ideas inbox: reply privately, mark Done or Not doing with a reason, archive. The red number counts new items.','Ваш ящик идей: отвечайте автору лично, отмечайте «Готово» или «Не будем» с причиной, архив. Красное число — новые.')),bell,par,sets,theme,end];
-    return [welcome,par,parOpen,res,views,valves,start,passed,runs(L('Your runs. Runs you create while signed in are shared with the team automatically.','Ваши запуски. Запуски, созданные после входа, автоматически видны команде.')),sets,ideas(L('Send an idea or a bug with a screenshot.','Отправьте идею или ошибку со снимком экрана.')),end].filter(function(s){return s});
+    if(role==='manager'||(role==='admin'&&OV.on))return [welcome,
+      {sel:'#ovPanel',before:on('overview'),t:L('Every team run','Все запуски команды'),x:L('Problems come first: overdue, not confirmed, then late. Find any run with search, or switch between Now, Planned and Finished.','Сначала проблемные: просроченные, неподтверждённые, затем опаздывающие. Найдите запуск поиском или переключайтесь между «Сейчас», «Запланированы» и «Завершены».')},
+      {sel:'#detPanel',before:on('overview'),t:L('Run details','Подробности запуска'),x:L('Time left, last record and next valve. The diagram, valves and report open from here. You only watch: engineers record the run.','Оставшееся время, последняя запись и следующая задвижка. Отсюда открываются схема, задвижки и отчёт. Вы только наблюдаете: запуск записывает инженер.')},
+      {sel:'#tabbar [data-s="team"]',before:on('overview'),t:L('Team','Команда'),x:role==='admin'?L('Invite people as engineer, manager or admin, and change roles.','Приглашайте инженеров, руководителей и администраторов и меняйте роли.'):L('See the members and invite engineers. They get access when they sign up with the invited email.','Список участников и приглашение инженеров. Доступ появляется после регистрации с приглашённой почтой.')},
+      bell,sets,acct,end];
+    return [welcome,
+      {sel:'.plres',before:on('plan'),t:L('Plan: the result first','План: сначала результат'),x:L('Pig speed and duration update as you type. Red means the tool is outside its limits.','Скорость и время обновляются при вводе. Красный цвет означает выход за возможности снаряда.')},
+      {sel:'#inpPanel',before:on('plan'),t:L('One row per topic','Одна строка на тему'),x:L('Tap a row to edit it: pipe, fluid, conditions, flow, tool and valves.','Нажмите строку, чтобы изменить её: труба, среда, условия, расход, снаряд и задвижки.')},
+      {sel:'#planGo',before:on('plan'),t:L('Start the run','Начните запуск'),x:L('Press it when the pig is launched. The clock follows real time and survives a reload.','Нажмите, когда снаряд запущен. Часы идут по реальному времени и не сбрасываются при перезагрузке.')},
+      {sel:'#tabbar [data-s="track"]',before:on('plan'),t:L('Track: record on site','Прогон: запись на месте'),x:L('A live run opens here. One big button records each valve, and Undo fixes a wrong tap. The run ends only when you confirm the arrival.','Идущий запуск открывается здесь. Большая кнопка записывает каждую задвижку, а «Отменить» исправит ошибку. Запуск завершается только после подтверждения прибытия.')},
+      {sel:'#tabbar [data-s="runs"]',before:on('plan'),t:L('Runs','Запуски'),x:signed()?L('All your runs, with search. Runs you create while signed in are shared with the team.','Все ваши запуски с поиском. Запуски, созданные после входа, видны команде.'):L('All your runs, with search.','Все ваши запуски с поиском.')},
+      signed()?bell:null,sets,signed()?acct:null,end].filter(function(s){return s});
   }
   function tourPlace(){
     if(!TOUR)return;var st=TOUR.steps[TOUR.i],el=st.sel?vis(st.sel):null,hole=$('tourHole'),tip=$('tourTip'),vw=window.innerWidth,vh=window.innerHeight;
@@ -1510,18 +1509,17 @@
     $('tourHole').style.display='none';setTimeout(tourPlace,320);
   }
   function tourStart(role){
-    if(TOUR)return;TOUR={steps:tourSteps(role||tourRole()),i:-1,dir:1,role:role||tourRole()};
+    if(TOUR)return;TOUR={steps:tourSteps(role||tourRole()),i:-1,dir:1,role:role||tourRole(),stage:UI.stage};
     $('tour').classList.add('open');tourGo(1);
   }
   function tourEnd(done){
     if(!TOUR)return;tourSeen[TOUR.role]=1;try{localStorage.setItem(TOURK,JSON.stringify(tourSeen))}catch(e){}
     ['inpPanel','secPanel','gpanel','annPanel','teamPanel','acctMenu'].forEach(function(id){var e=$(id);if(e)e.classList.remove('open')});
-    if(curLay()===1&&shOpen){shOpen=false;shSig='';updSh()}
+    var back=TOUR.stage;if(back&&back!==UI.stage)setStage(back,true);
     TOUR=null;$('tour').classList.remove('open');$('tourHole').style.display='none';
   }
   function tourAuto(){
-    return;                                                         // the tour describes the old screens until it is rewritten
-    if(OV.on||TOUR||tourSession||anim)return;
+    if(TOUR||tourSession||REC.on)return;
     var r=tourRole();if(tourSeen[r])return;
     if($('authDlg').classList.contains('open')||$('arrDlg').classList.contains('open')||$('vDlg').classList.contains('open'))return;
     tourSession=true;tourStart(r);
