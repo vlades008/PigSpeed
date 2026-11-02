@@ -163,12 +163,15 @@
     });
     $('tArrL').textContent=run?tr('Arrival at receiver'):tr('If launched now');
     $('tArr').textContent=fmtClock(base+T);
-    $('tRem').textContent=fmtRem(T-p*T);
-    $('tEl').textContent=PSC.fmtDur(p*T/3.6e6);
+    var over=overMs(),remT=$('tRem').parentNode;
+    $('tRem').textContent=over>0?'+'+fmtRem(over):fmtRem(T-p*T);remT.classList.toggle('over',over>0);
+    remT.querySelector('span').textContent=tr(over>0?'Overdue':'Remaining');
+    $('tEl').textContent=PSC.fmtDur((p*T+Math.max(0,over))/3.6e6);
     $('tEl').title=run?tr('Launched')+' '+fmtClock(run.launch):'';
     var live=!!(run&&!run.done&&anim);$('tRem').parentNode.classList.toggle('live',live);
     $('ringF').style.strokeDashoffset=String(339.3*(1-Math.min(1,p)));var pb=$('rprog');pb.style.width=Math.min(100,p*100)+'%';pb.classList.toggle('done',p>=1);renderRoute();renderLay();
-    if(S.alert&&run&&!run.done&&anim){
+    if(S.alert&&run&&!run.done&&anim&&!OV.on){
+      if(over>0&&!RO&&(!alerted.arr||now-alerted.arr>=30*60000)){alerted.arr=now;toast(tr('Has the pig arrived?'),{label:tr('Confirm arrival'),fn:openArr})}
       var lead=(+S.lead||5)*60000;
       g.valves.forEach(function(v){if(!v.ok||obs[v.i])return;var r2=(v.tf-p)*T;if(r2>0&&r2<=lead&&!alerted['v'+v.i]){alerted['v'+v.i]=1;toast(vName(v.i)+' · '+tr('left')+' '+fmtRem(r2))}if(r2<=0&&r2>-120000&&!alerted['p'+v.i]&&(+S.pb||1)===1){alerted['p'+v.i]=1;toast(vName(v.i)+' · '+tr('Is the pig passing now?'),{label:tr('Yes, now'),fn:function(){logNow(v.i)}})}});
       var re=(1-p)*T;if(re>0&&re<=lead&&!alerted.end){alerted.end=1;toast(tr('Arrival at receiver')+' · '+tr('left')+' '+fmtRem(re))}
@@ -243,12 +246,14 @@
     var distM=v.frac*(+num('len'))*[1000,1][+S.lenu],act=distM/(elapsed/1000),pl=distM/(planned0/1000),dev=Math.round((act/pl-1)*100);
     $('logInfo').textContent=tr('Actual')+': '+vName(i)+' '+fmtClock(at).split(' ')[0]+' · '+tr('average speed')+' '+fmt(act,2)+' '+tr('m/s')+' ('+tr('plan')+' '+fmt(pl,2)+', '+(dev>0?'+':'')+dev+'%)';
   }
-  function finishRun(){
+  function overMs(){var run=window.__run;return run&&!run.done&&anim&&(+S.pb||1)===1?Date.now()-(run.launch+run.dur):0}
+  function remTxt(d){var o=overMs();return o>0?'+'+fmtRem(o):fmtRem(d.T-d.p*d.T)}
+  function finishRun(at){
     var run=window.__run,g=window.__dg;if(!anim||!run||!g)return;
-    var actual=Date.now()-run.launch,planned=g.hours*3.6e6,pb=+S.pb||1;
-    cancelAnimationFrame(anim.raf);anim=null;run.done=true;removeRun();lockWake(false);
+    at=at||Date.now();
+    cancelAnimationFrame(anim.raf);anim=null;run.done=true;run.dur=at-run.launch;removeRun();lockWake(false);
     applyProgress(1);setStartLabel();updateValveClocks();
-    runFinished(false);
+    runFinished(at);
   }
   function fillPrintHead(){
     var o=[],f=S.fluid,u=function(a,i){return tr(a[i])};
@@ -373,8 +378,9 @@
     var lastDraw=0,FR=lite()?60:33;
     function frame(now){
       if(!anim)return;
-      var p=Math.min(1,(now-anim.t0)/anim.dur);if(now-lastDraw>=FR||p>=1){lastDraw=now;applyProgress(p)}
-      if(p<1)anim.raf=requestAnimationFrame(frame);else{anim=null;if(window.__run)window.__run.done=true;removeRun();lockWake(false);setStartLabel();updateValveClocks();runFinished(true)}
+      var p=Math.min(1,(now-anim.t0)/anim.dur),real=(+S.pb||1)===1;   // a real run waits at the receiver until someone confirms the arrival
+      if(now-lastDraw>=(p>=1&&real?1000:FR)||(p>=1&&!real)){lastDraw=now;applyProgress(p)}
+      if(p<1||real)anim.raf=requestAnimationFrame(frame);else{anim=null;if(window.__run)window.__run.done=true;removeRun();lockWake(false);setStartLabel();updateValveClocks()}
     }
     anim.raf=requestAnimationFrame(frame);
   }
@@ -383,8 +389,8 @@
     removeRun();
     var g=window.__dg,pb=+S.pb||1;
     if(!g||!g.hours||!s.hours||Math.abs(g.hours-s.hours)>1e-6*Math.max(1,s.hours)||(+s.pb||1)!==pb)return;
-    var dur=s.dur||s.hours*3600000/pb,el=Date.now()-s.launch;
-    if(el<0||el>=dur){if(s.rec){if(RO){window.__run={launch:s.launch,done:true,dur:dur,obs:s.obs||{}};applyProgress(1);updateValveClocks()}else runFinished(true,s)}return}
+    var dur=s.dur||s.hours*3600000/pb,el=Math.max(0,Date.now()-s.launch);
+    if(el>=dur&&!s.rec)return;
     resumeAnim({t0:performance.now()-el,dur:dur,obs:s.obs||{}});
   }
   function keepRun(fn){var run=snapRun();fn();if(run){resumeAnim(run);$('runWarn').style.display='block'}}
@@ -422,7 +428,8 @@
    'm³/day':'м³/сут','BBL/day':'барр/сут','m³/h':'м³/ч','BBL/h':'барр/ч','SCF/BBL':'фут³/барр','Gas flow rate':'Расход газа','Oil flow rate':'Расход нефти','Oil flow rate (gas follows from GOR)':'Расход нефти (газ — по GOR)',
    'Enter a number':'Введите число','Must be greater than zero':'Должно быть больше нуля','Wrong Outer Diameter or Wall Thickness':'Неверный наружный диаметр или толщина стенки',
    ': the inner diameter must be at least 1 mm.':': внутренний диаметр должен быть не менее 1 мм.','Length':'Длина','Valves':'Задвижки','+ Add valve':'+ Добавить задвижку','Time for the tool to reach each valve, counted from the start of the line.':'Время, за которое снаряд дойдёт до каждой задвижки, от начала линии.','Valve':'Задвижка','Real scale':'Реальный масштаб','Customize':'Вид','Text style':'Стиль текста','Light':'Светлая','Control room':'Пульт','Editorial':'Редакционный','Technical':'Технический','Standard':'Стандарт','Sheet':'Лист','Focus':'Фокус','Theme':'Тема','Clock style':'Стиль часов','Style':'Стиль','Hero countdown':'Крупный отсчёт','Desktop layout':'Макет для ПК','Workbench':'Рабочий стол','Console':'Пульт','Progress ring':'Кольцо прогресса','current':'текущая','Close':'Закрыть','Pig position now':'Где снаряд сейчас','New valve':'Новая задвижка','Distance from launcher':'Расстояние от камеры запуска','Pig position now':'Где снаряд сейчас','Launcher':'Камера запуска','Receiver':'Камера приёма','Add more':'Добавить ещё','Add':'Добавить','Save':'Сохранить','Delete':'Удалить','Cancel':'Отмена','Edit valve':'Изменить задвижку','Set the line length first':'Сначала задайте длину участка','Enter one number':'Введите одно число','Pig arrives in':'Снаряд дойдёт через','about':'около','Will add':'Будет добавлено','valves':'задвижек','Added':'Добавлено','Deleted':'Удалено','Undo':'Отменить','e.g. 12.5 or 6, 12, 29':'напр. 12,5 или 6, 12, 29','Show the tour':'Показать обзор','Skip':'Пропустить','Back':'Назад','Next':'Далее','Choose a layout':'Выберите вид','Tap one to see it right away. The other layouts stay in Settings.':'Нажмите на вид, чтобы сразу увидеть его. Остальные виды можно выбрать в настройках.','Keep this layout':'Оставить этот вид','Everything on one page':'Всё на одной странице','Diagram and a bottom sheet':'Схема и нижняя шторка','One big countdown':'Один большой таймер','Swipe between cards':'Листайте карточки вбок','Dim screen':'Затемнить экран','Dim':'Тёмный','Tap to close':'Нажмите, чтобы закрыть','Is the pig passing now?':'Снаряд проходит сейчас?','Yes, now':'Да, сейчас','Phone layout':'Вид на телефоне','Next valve':'Следующая задвижка','Valve passed':'Задвижка пройдена','All valves passed':'Все задвижки пройдены','in about':'через','Layout':'Вид','Sheet':'Шторка','Focus':'Фокус','Cards':'Карточки','Details':'Подробнее','Light':'Светлая','News':'Новости','Theme':'Тема','Reply':'Ответить','Your reply to the author':'Ваш ответ автору','Write a reply':'Напишите ответ','Reply to your idea':'Ответ на вашу идею','Reply from':'Ответ от','Alerts':'Новости','Parameters':'Параметры','invited a person':'пригласил(а)','Only engineers can be invited.':'Приглашать можно только инженеров.','Announcements':'Объявления','Nothing yet.':'Пока ничего нет.','done':'готово',"won't be done":'не будем делать','returned to work':'возвращена в работу','author':'автор','Archive':'Архив','All':'Все','Bugs':'Ошибки','Questions':'Вопросы','No new ideas.':'Новых идей нет.','✓ Done':'✓ Готово',"✕ Won't do":'✕ Не будем','Save':'Сохранить','Reopen':'Вернуть','No comment':'Без комментария','Reason (the author will see it)':'Причина (её увидит автор)','Comment for the author (optional)':'Комментарий для автора (по желанию)','Write the reason first':'Сначала напишите причину','Download Android app (APK)':'Скачать приложение для Android (APK)','Install app':'Установить приложение','On iPhone open this page in Safari, tap Share (the square with an arrow) and choose “Add to Home Screen”. The app then updates itself.':'На iPhone откройте эту страницу в Safari, нажмите «Поделиться» (квадрат со стрелкой) и выберите «На экран Домой». Дальше приложение обновляется само.','Signing in…':'Вход…','Language':'Язык','Alerts':'Оповещения','Sound':'Звук','Banner':'Баннер','Vibration':'Вибрация','Units':'Единицы','Pressure':'Давление','Length':'Длина','Wall thickness':'Стенка','Temperature':'Температура','Speed':'Скорость','Gas flow':'Расход газа','Oil flow':'Расход нефти','Data':'Данные','About':'О приложении',"What's new":'Что нового','Send an idea':'Отправить идею','Remind me before valves and arrival':'Напоминать перед задвижками и прибытием','min':'мин','Control':'Пульт','Settings':'Настройки','Interface':'Интерфейс','Standard':'Стандартный','Control room':'Пульт','Route map':'Маршрут','Pipe diagram':'Схема трубы','Route':'Маршрут','Launcher':'Камера запуска','Ready':'Готов','Arrived':'Прибыл','Live':'В пути','Pig now':'Снаряд сейчас','Enter the pipe data to see the route.':'Введите данные трубы, чтобы увидеть маршрут.','Ideas from users':'Идеи пользователей','Close':'Закрыть','Your idea':'Ваша идея','Idea':'Идея','Bug':'Ошибка','Question':'Вопрос','What would make the app better?':'Что сделало бы приложение лучше?','📷 Capture this screen':'📷 Снимок экрана','Send':'Отправить','Capturing…':'Делаю снимок…','Could not capture the screen':'Не удалось сделать снимок экрана','Write a few words first':'Сначала напишите пару слов','Could not send':'Не удалось отправить','Thank you! Sent':'Спасибо! Отправлено','Your ideas':'Ваши идеи','Ideas':'Идеи','No ideas yet.':'Идей пока нет.','Done':'Готово',"Won't do":'Не будем делать','New':'Новая','Sign in to send ideas.':'Войдите, чтобы отправлять идеи.','Sign in':'Войти','Sign out':'Выйти','Create account':'Создать аккаунт','Account':'Аккаунт','Name':'Имя','Email':'Эл. почта','Password':'Пароль','Continue':'Продолжить','Forgot password?':'Забыли пароль?','Team':'Команда','Invite':'Пригласить','invited':'приглашён','engineer':'инженер','manager':'руководитель','admin':'администратор','offline':'нет связи','Finish sign-in':'Завершить вход','Share with team':'Поделиться с командой','Confirm your email':'Подтвердите почту','We sent a link to':'Мы отправили ссылку на','Open it, then press the button.':'Откройте её и нажмите кнопку.','I confirmed it':'Я подтвердил','Send again':'Отправить ещё раз','Sent':'Отправлено','Waiting for an invitation':'Ожидание приглашения','Your account is not in the team yet. Ask the administrator to invite':'Вашего аккаунта пока нет в команде. Попросите администратора пригласить','Check again':'Проверить снова','Wrong email or password':'Неверная почта или пароль','This email is already registered':'Эта почта уже зарегистрирована','Password must have at least 6 characters':'Пароль не короче 6 символов','Enter a valid email':'Введите корректную почту','No connection':'Нет соединения','Too many attempts, try again later':'Слишком много попыток, попробуйте позже','Google sign-in does not work in this app, use email and password':'Вход через Google не работает в этом приложении, используйте почту и пароль','Error':'Ошибка','Enter email and password':'Введите почту и пароль','Enter your name':'Введите имя','Enter your email first':'Сначала введите почту','Password reset email sent':'Письмо для сброса пароля отправлено','launched by':'запущен:','passed at':'пройдена в','finished':'завершён','You are viewing':'Вы просматриваете','Closed':'Закрыть','Runs':'Запуски','+ New run':'+ Новый запуск','New run from this':'Новый запуск из этого','Live now':'Сейчас идут','Planned':'Запланированы','Finished':'Завершены','Run':'Запуск','Duplicate':'Дублировать','Delete':'Удалить','Delete?':'Удалить?','No runs yet.':'Запусков пока нет.','Imported':'Импортировано','You are viewing this run':'Вы просматриваете этот запуск','This run is finished. You can still delete valves; to launch again, start a new run from its settings.':'Запуск завершён. Задвижки по-прежнему можно удалять; чтобы запустить снова, создайте новый запуск из этих настроек.','New version':'Новая версия','Update':'Обновить','Download':'Скачать','Later':'Позже','Stop the run':'Остановить запуск','End the run?':'Завершить запуск?','This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.':'Снаряд будет считаться прибывшим в приёмник, запуск завершится: часы остановятся, а плановое и фактическое время сохранятся в истории. Отменить это нельзя.','Cancel':'Отмена','Yes, end the run':'Да, завершить запуск','Symbols':'Буквы','Live numbers':'Числа','Formulas':'Формулы','Elapsed':'Прошло','Covered':'Пройдено','click to add':'нажмите, чтобы добавить','Covered':'Пройдено','of':'из','Distance':'Расстояние','Launch':'Запуск','Receiver':'Приём','Diagram style':'Стиль схемы','Classic':'Классика','Glass':'Стекло','Blueprint':'Чертёж','Pipe':'Труба','Conditions':'Условия','Flow':'Расход','Auto: MFL (default)':'Авто: MFL (по умолчанию)','Tool':'Снаряд','Launch time':'Время пуска','Passed at':'Прошла в','passed at':'прошла в','Apply':'Применить','Actual':'Факт','average speed':'средняя скорость','plan':'план','Enter time as HH:MM:SS':'Введите время в формате ЧЧ:ММ:СС','Passage is earlier than the launch':'Проход раньше пуска','Passage is in the future':'Время прохода в будущем','Set playback speed to ×1 to log passages':'Для отметки поставьте скорость воспроизведения ×1 (меню-шестерёнка)','Enter the real time the pig passed this valve. The actual speed and all remaining times are recalculated.':'Введите реальное время прохода снаряда через эту задвижку. Фактическая скорость и все оставшиеся времена пересчитаются.','✓ Accepted at receiver':'✓ Принят в приёмнике','Report':'Отчёт','Print / PDF':'Печать / PDF','Download CSV':'Скачать CSV','History of runs':'История прогонов','Export':'Экспорт','Import':'Импорт','No finished runs yet.':'Завершённых прогонов пока нет.','planned':'план','actual':'факт','Mark that the pig really passed this valve now. The remaining times are recalculated from the actual speed (works at playback ×1).':'Отметить, что снаряд только что прошёл эту задвижку. Остальные времена пересчитываются по фактической скорости (при воспроизведении ×1).','Gas density relative to air, usually 0.55–0.75.':'Плотность газа относительно воздуха, обычно 0,55–0,75.','Oil API gravity: about 35 is a medium oil, a higher number is lighter.':'Плотность нефти в градусах API: около 35 — средняя нефть, больше — легче.','Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.':'Газ на каждый баррель товарной нефти (фут³/барр). Нужен, чтобы найти свободный газ в трубе.','Temperature of the fluid in the pipe.':'Температура среды в трубе.','Flow measured at standard conditions, not at the pressure in the pipe.':'Расход при стандартных условиях, а не при давлении в трубе.','The speed you want the pig to have. The app shows the flow that gives it.':'Скорость, которую вы хотите получить. Приложение покажет расход для неё.','Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.':'Давление на стороне камеры запуска. Если манометр показывает избыточное давление, отметьте это в меню-шестерёнке.','Pressure at the receiver end. Leave empty if the pressure does not change along the line.':'Давление на стороне камеры приёма. Оставьте пустым, если давление по линии не меняется.','Pig speed as a percentage of the flow speed. Use 100 if there is no bypass or slip.':'Скорость снаряда в процентах от скорости потока. Оставьте 100, если нет перепуска и проскальзывания.','Speed below the tool limit':'Скорость ниже предела снаряда','Speed above the tool limit':'Скорость выше предела снаряда','Trip longer than the tool can run':'Время прогона больше ресурса снаряда','Line longer than the tool range':'Линия длиннее дальности снаряда','Pressure outside the tool limits':'Давление вне допустимого диапазона снаряда','Gas pressure below the tool limit':'Давление газа ниже предела снаряда','Temperature outside the tool limits':'Температура вне допустимого диапазона снаряда','Pipe bore too small for the tool':'Внутренний диаметр трубы мал для снаряда','Within equipment limits':'В пределах возможностей оборудования','Allowed flow':'Допустимый расход','Allowed':'Допустимо','Allowed flow for 0.2–4 m/s':'Допустимый расход для 0,2–4 м/с','Pig passes the valve between':'Снаряд проходит задвижку с','tool length':'длина снаряда','h':'ч','m':'м','Run':'Прогон','Calculation':'Расчёт','Display':'Вид схемы','Reminders before valves and arrival':'Напоминания перед задвижками и приёмом','1 min':'1 мин','2 min':'2 мин','5 min':'5 мин','10 min':'10 мин','Pressure is gauge (add atmosphere)':'Давление избыточное (добавить атмосферное)','Pressure (gauge)':'Давление, изб.','Standard conditions':'Стандартные условия','Pig speed / flow speed, %':'Скорость снаряда / скорость потока, %','Outlet pressure':'Давление на выходе','same as inlet':'как на входе','Outlet pressure cannot be higher than inlet pressure.':'Давление на выходе не может быть выше давления на входе.','Speed at inlet / outlet':'Скорость на входе / выходе','Arrival':'Прибытие','Remaining':'Осталось','Launched':'Пуск','Arrival at receiver':'Прибытие в приёмник','If launched now':'Если запустить сейчас','left':'осталось','d':'д','passed':'пройдена','Run already started. The new valve distance is applied to the current run.':'Прогон уже запущен. Новое расстояние задвижки применено к текущему прогону.','View':'Вид','Local':'Локально','Global':'Глобально','True scale, diameter : length':'Истинный масштаб, диаметр : длина','Pressure (absolute)':'Давление, абс.','Gas specific gravity (air = 1)':'Отн. плотность газа','Oil gravity':'Плотность нефти','Gas-oil ratio (GOR), per stock-tank bbl':'Газовый фактор (GOR), на баррель товарной нефти','Z factor':'Коэффициент сжимаемости Z','Line volume per standard volume':'Объём в трубе на стандартный объём','Line volume per stock-tank volume':'Объём в трубе на объём товарной нефти','Flow at line conditions':'Расход в рабочих условиях','Z factor correlation used outside its best range, result is approximate.':'Корреляция Z применена вне лучшей области, результат приблизительный.','Standing oil correlation used outside its tested range (API 16.5-63.8, GOR 20-1425 scf/STB), result is approximate.':'Корреляция Стэндинга применена вне проверенного диапазона (API 16,5-63,8, GOR 20-1425 фут³/барр), результат приблизительный.','°API':'°API','Playback speed':'Скорость воспроизведения','Start':'Старт','Stop':'Стоп','×1 (real time)':'×1 (реальное время)','Pipe sections':'Участки','Save current':'Сохранить текущий','Save':'Сохранить','Open':'Открыть','Saved':'Сохранено','No saved sections yet.':'Сохранённых участков пока нет.','valves':'задв.','Section':'Участок','Text size in diagram':'Размер текста на схеме','Fluid':'Среда','Pipe length vs tool':'Длина трубы к снаряду','Position':'Положение','Time to reach':'Время до задвижки','No valves yet. Press "+ Add valve" to add one.':'Задвижек пока нет. Нажмите «+ Добавить задвижку».','Time is counted from the start of the line, at constant speed.':'Время считается от начала линии при постоянной скорости.','Ball valve':'Шаровой кран','Gate valve':'Задвижка','Check valve':'Обратный клапан','Outside the line':'За пределами линии','wall':'стенка','target':'цель','Oil + gas':'Нефть + газ','in':'дюйм',
-   'Overview':'Обзор','Now':'Сейчас','Engineer view':'Вид инженера','On plan':'По плану','+%s late':'+%s к плану','Overdue %s':'Просрочен на %s','Arrives %s':'Прибытие %s','Expected %s':'Ожидался %s','Arrival not confirmed':'Прибытие не подтверждено','Not confirmed':'Не подтверждено','no record yet':'записей пока нет','No team runs yet. They appear here as soon as an engineer creates one.':'Запусков команды пока нет. Они появятся здесь, когда инженер создаст запуск.','No runs in progress.':'Сейчас нет идущих запусков.','No planned runs.':'Нет запланированных запусков.','No finished runs.':'Нет завершённых запусков.'};
+   'Overview':'Обзор','Now':'Сейчас','Engineer view':'Вид инженера','On plan':'По плану','+%s late':'+%s к плану','Overdue %s':'Просрочен на %s','Arrives %s':'Прибытие %s','Expected %s':'Ожидался %s','Arrival not confirmed':'Прибытие не подтверждено','Not confirmed':'Не подтверждено','no record yet':'записей пока нет','No team runs yet. They appear here as soon as an engineer creates one.':'Запусков команды пока нет. Они появятся здесь, когда инженер создаст запуск.','No runs in progress.':'Сейчас нет идущих запусков.','No planned runs.':'Нет запланированных запусков.','No finished runs.':'Нет завершённых запусков.',
+   'Overdue':'Просрочено','Has the pig arrived?':'Снаряд прибыл?','Confirm arrival':'Подтвердить','Pig arrived at':'Время прибытия','Plan %s, actual %s':'План %s, факт %s','Arrival is earlier than the launch':'Прибытие раньше пуска','Arrival is in the future':'Прибытие в будущем','Arrival is earlier than the last recorded valve':'Прибытие раньше последней записанной задвижки'};
   function tr(s){return S.lang==='ru'&&RU[s]||s}
   function trf(s,v){return tr(s).replace('%s',v)}
   function applyLang(){
@@ -780,13 +787,12 @@
     var c=curRun(),run=window.__run,g=window.__dg;if(!c||!run||RO||(+S.pb||1)!==1)return;
     c.st='running';c.launch=run.launch;c.hours=g&&g.hours;c.pb=1;c.dur=run.dur;c.obs=run.obs||{};c.updated=Date.now();runsSave();renderRuns();pushRun(c);
   }
-  function runFinished(auto,s){
+  function runFinished(at){
     var c=curRun();if(!c||RO||c.st==='done')return;
-    var run=window.__run,g=window.__dg;if(!s&&(+S.pb||1)!==1)return;
+    var run=window.__run,g=window.__dg;if((+S.pb||1)!==1)return;
     buzz([80,60,80]);
-    var launch=s?s.launch:(run?run.launch:c.launch),dur=s?s.dur:(run&&run.dur),planned=(g&&g.hours?g.hours:(c.hours||0))*3.6e6;
-    var actual=auto&&dur?Math.min(Date.now()-launch,dur):Date.now()-launch;
-    autoUnfold();c.st='done';c.finish={at:Date.now(),planned:planned,actual:actual,auto:!!auto};c.updated=Date.now();runsSave();pushRun(c);renderRuns();setRO(true);
+    var launch=run?run.launch:c.launch,planned=(g&&g.hours?g.hours:(c.hours||0))*3.6e6,actual=at-launch;
+    autoUnfold();c.st='done';c.dur=actual;c.finish={at:at,planned:planned,actual:actual,auto:false};c.updated=Date.now();runsSave();pushRun(c);renderRuns();setRO(true);
   }
   function stopRunUser(){
     if(RO)return;animStop();autoUnfold();var c=curRun();
@@ -948,7 +954,7 @@
   });
   $('ovBack').addEventListener('click',function(){if(OV.pushed)history.back();else ovClose()});
   window.addEventListener('popstate',function(){if(OV.on&&OV.detail&&!isDesk())ovClose()});
-  setInterval(renderOv,20000);
+  setInterval(renderOv,5000);
   function closeRuns(){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}
   function loadSection(snap){
     snap=Object.assign({},snap);fixGas(snap);
@@ -1177,7 +1183,7 @@
   function updFc(){
     var d=layData();
     $('fcName').textContent=S.name||'';var ch=$('fcChip');ch.textContent=tr(d.state==='done'?'Arrived':d.state==='live'?'Live':'Ready');ch.className='rchip s-'+d.state;
-    $('fcRem').textContent=d.has?fmtRem(d.T-d.p*d.T):'–';$('fcBar').style.width=Math.min(100,d.p*100)+'%';
+    $('fcRem').textContent=d.has?remTxt(d):'–';$('fcBar').style.width=Math.min(100,d.p*100)+'%';
     $('fcDist').textContent=d.has?fmt(d.dd,d.dd<10?2:1)+' / '+fmt(d.LL,d.LL<10?2:1)+' '+d.unit:'';
     $('fcArr').textContent=d.has?tr('Arrival at receiver')+' '+fmtClock(d.base+d.T):'';
     $('fcSpd').textContent=d.has?tr('Pig speed')+': '+$('vel').textContent:'';
@@ -1188,7 +1194,7 @@
   }
   function updSh(){
     var d=layData(),sh=$('sh');sh.classList.toggle('open',shOpen);
-    $('shRem').textContent=d.has?fmtRem(d.T-d.p*d.T):'–';$('shNx').innerHTML=nextLine(d);$('shNx').classList.toggle('soon',!!(d.nx&&d.run&&!d.run.done&&(d.nx.tf*d.T-d.p*d.T)<=(+S.lead||5)*60000));
+    $('shRem').textContent=d.has?remTxt(d):'–';$('shNx').innerHTML=nextLine(d);$('shNx').classList.toggle('soon',!!(d.nx&&d.run&&!d.run.done&&(d.nx.tf*d.T-d.p*d.T)<=(+S.lead||5)*60000));
     var md=mainMode(d),go=$('shGo');go.style.display=md?'':'none';go.dataset.mode=md;go.className='shgo'+(md==='arr'?' arr':'');go.textContent=mainLabel(md);
     if(!shOpen)return;
     $('shCov').textContent=d.has?fmt(d.dd,d.dd<10?2:1)+' / '+fmt(d.LL,d.LL<10?2:1)+' '+d.unit:'–';
@@ -1205,7 +1211,7 @@
   function openDim(){$('dim').classList.add('open');updDim()}
   function updDim(){
     if(!$('dim').classList.contains('open'))return;var d=layData();
-    $('dimRem').textContent=d.has?fmtRem(d.T-d.p*d.T):'–';$('dimNext').innerHTML=nextLine(d);$('dimBar').style.width=Math.min(100,d.p*100)+'%';
+    $('dimRem').textContent=d.has?remTxt(d):'–';$('dimNext').innerHTML=nextLine(d);$('dimBar').style.width=Math.min(100,d.p*100)+'%';
   }
   $('dim').addEventListener('click',function(){this.classList.remove('open')});
   $('dimBtn').addEventListener('click',function(){var gp=$('gpanel');if(gp)gp.classList.remove('open');openDim()});
@@ -1555,9 +1561,25 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false');$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
   $('vsel').addEventListener('click',function(e){var b=e.target.closest('button');if(b&&b.dataset.w!==vwNow())setVw(b.dataset.w)});
   $('leadIn').addEventListener('change',function(){var v=Math.round(parseFloat(String(this.value).replace(',','.')));if(v>=1&&v<=240){S.lead=v;save()}this.value=S.lead});
-  $('arrBtn').addEventListener('click',function(){$('arrDlg').classList.add('open');$('arrNo').focus()});
+  function arrRead(){
+    var at=parseClockToday($('arrAt').value),run=window.__run,obs=(run&&run.obs)||{},err='';
+    if(at===null)err='Enter time as HH:MM:SS';
+    else if(run&&at<=run.launch+1000)err='Arrival is earlier than the launch';
+    else if(at>Date.now()+5000)err='Arrival is in the future';
+    else if(Object.keys(obs).some(function(k){return obs[k]>at}))err='Arrival is earlier than the last recorded valve';
+    return {at:at,err:err};
+  }
+  function arrInfo(){
+    var a=arrRead(),run=window.__run,g=window.__dg;
+    $('arrInfo').textContent=!a.err&&run&&g&&g.hours?tr('Plan %s, actual %s').replace('%s',fmtRem(g.hours*3.6e6)).replace('%s',fmtRem(a.at-run.launch)):'';
+    return a;
+  }
+  function openArr(){$('arrAt').value=nowClock();$('arrErr').textContent='';arrInfo();$('arrDlg').classList.add('open');$('arrNo').focus()}
+  $('arrAt').addEventListener('input',function(){$('arrErr').textContent='';arrInfo()});
+  $('arrAt').addEventListener('keydown',function(e){if(e.key==='Enter')$('arrYes').click()});
+  $('arrBtn').addEventListener('click',openArr);
   $('arrNo').addEventListener('click',function(){$('arrDlg').classList.remove('open')});
-  $('arrYes').addEventListener('click',function(){$('arrDlg').classList.remove('open');finishRun()});
+  $('arrYes').addEventListener('click',function(){var a=arrRead();if(a.err){$('arrErr').textContent=tr(a.err);return}$('arrDlg').classList.remove('open');finishRun(a.at)});
   $('arrDlg').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
   $('logOk').addEventListener('click',confirmLog);
   $('logCancel').addEventListener('click',closeLog);

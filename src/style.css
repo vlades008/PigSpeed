@@ -904,3 +904,10 @@ html[data-ui="1"] .ovl>em.wrn{color:#f4b860}
   body.ov.ovd .dock{display:none}
   body.ov.ovd .ovbar{display:flex}
 }
+
+/* run past its estimate: waits for the arrival to be confirmed */
+html[data-clk][data-ui] .tile.hot.live.over{background:var(--bad)!important;border-color:var(--bad)}
+.tile.hot.over b{color:var(--bad)}
+#arrDlg .vf{display:flex;flex-direction:column;gap:4px;margin-bottom:6px;font-size:13px}
+#arrDlg .vf input{width:100%;min-height:44px;font-size:18px;font-variant-numeric:tabular-nums}
+#arrErr{color:var(--bad);font-size:12px;min-height:16px;margin:2px 0 6px}

@@ -16,6 +16,9 @@
 ## Overview is always read-only, also for admins
 Opening a run with write access can finish it: when its estimated time has passed, the app marks it done. Leaving the overview therefore never reopens another person's run with write access.
 
+## A run finishes only when someone confirms the arrival (slice 2a)
+Past its estimate a real run keeps running and counts as overdue, for the engineer and anyone watching. Confirming takes an editable time, which is saved as actual. Reminder at the estimate, then every 30 min. Playback at other speeds still ends by itself. Old app versions can still finish runs themselves until updated, so Overview keeps the "Arrival not confirmed" label. A forgotten run stays overdue until its engineer confirms, stops or deletes it.
+
 ## Slices
 1. Manager overview (done). 2. Recording mode, stop false finishes. 3. Plan and Runs tabs, run summary. 4. Settings page, Team tab, fewer looks, new tour.
 
@@ -24,4 +27,3 @@ Opening a run with write access can finish it: when its estimated time has passe
 - Project or customer grouping: runs have no such field.
 - Fixed plan baseline: editing parameters after launch moves the plan.
 - Header stays for now: News, Customize, Settings. Team stays in the account menu.
-- Overdue run details: the run screen shows the run as arrived, with elapsed capped at the estimate; the list is the correct signal.
