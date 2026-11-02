@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node tools/build.js",
     "test": "node tools/overview-test.js",
+    "test-build": "node tools/test-build.js",
     "dev": "node tools/dev.js",
     "release": "node tools/release.js",
     "release:fast": "node tools/release.js --no-apk"

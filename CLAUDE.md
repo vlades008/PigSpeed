@@ -14,6 +14,7 @@ Planner and tracker for in-line inspection runs (Interscan tools: Geometry EGT, 
 ## Commands (all from this folder)
 - `npm run dev`: preview at http://localhost:8790, rebuilds on every save in `src/` and reloads the page. In the app use `preview_start` with name "pigspeed" (`.claude/launch.json`).
 - `npm test`: overview status rules (`tools/overview-test.js`).
+- `npm run test-build`: `test-build/` gets an exe and APK of the current code with sample data and a role switch (mock cloud, own data, installs beside the real app; not published).
 - `npm run build`: only `index.html` (about a second). Fails without touching `index.html` if an inline script has a syntax error.
 - `npm run release`: build + `PigSpeedCalc.exe` + `android/` web package + `PigSpeedCalc.apk` (about 10 s). `npm run release:fast` skips the APK.
 
@@ -22,7 +23,7 @@ Role and run state pick the menu (`DECISIONS.md`). Manager and admin start in th
 
 ## Other files
 - `PigSpeedCalc.exe`: Windows launcher that embeds `index.html` and opens it in an Edge/Chrome app window (`launcher/PigSpeedCalc.cs`, icon `launcher/PigSpeedCalc.ico`, `launcher/make-icon.ps1`).
-- `PigSpeedCalc.apk`: Android WebView wrapper (`apk/`) that opens the published site when online and its bundled `index.html` only when the site cannot load, so a rebuilt APK shows old code until `docs/` is published, and publishing reaches online APK users at once. To test unpublished code, build from a copy of `apk/` whose `MainActivity` loads `file:///android_asset/index.html`; its data and sign-in are separate from the installed site, signed with `C:\Users\vlade\AndroidBuild\pigspeed.keystore` (keep it, a new key means uninstalling first). JDK and Android SDK live in `C:\Users\vlade\AndroidBuild`, not in the repo.
+- `PigSpeedCalc.apk`: Android WebView wrapper (`apk/`) that opens the published site when online and its bundled `index.html` only when the site cannot load, so a rebuilt APK shows old code until `docs/` is published, and publishing reaches online APK users at once. To show unpublished code use `npm run test-build`, signed with `C:\Users\vlade\AndroidBuild\pigspeed.keystore` (keep it, a new key means uninstalling first). JDK and Android SDK live in `C:\Users\vlade\AndroidBuild`, not in the repo.
 - `android/`: generated installable web app (PWA); only `INSTALL-ANDROID.md` is hand-written. `apk/INSTALL-APK.md`: phone install steps.
 - `NOTES.md`: formulas, sources, limits.
 - `.gitignore` keeps binaries and generated `android/` out of git; `index.before-redesign.html` and `style-previews/` are old local copies, safe to delete.
