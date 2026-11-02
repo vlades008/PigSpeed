@@ -69,7 +69,7 @@ const DEMO = `<script>(function(){
     b.innerHTML='<span style="flex:1 1 150px"><b>TEST</b> '+(ru?'с примерами, вид: ':'with sample data, viewing as ')+who+'</span>';
     function btn(t,fn){var x=document.createElement('button');x.type='button';x.textContent=t;x.style.cssText='min-height:40px;padding:0 12px;border:1px solid #8cbcff;border-radius:8px;background:transparent;color:#fff;font:inherit;cursor:pointer';x.onclick=fn;b.appendChild(x)}
     btn(ru?(other==='engineer'?'Вид инженера':'Вид руководителя'):(other==='engineer'?'Engineer view':'Manager view'),function(){useRun(other,JSON.parse(localStorage.getItem('pigSpeedCalc.runs.v1')));location.reload()});
-    btn(ru?'Сбросить примеры':'Reset samples',function(){var l=/ru/i.test(document.documentElement.lang);localStorage.clear();localStorage.setItem('pigSpeedCalc.v2',JSON.stringify({lang:l?'ru':'en'}));location.reload()});
+    btn(ru?'Сбросить примеры':'Reset samples',function(){var l=/ru/i.test(document.documentElement.lang);localStorage.clear();localStorage.setItem('pigSpeedCalc.v2',JSON.stringify({lang:l?'ru':'en',gv2:1}));location.reload()});
     document.body.insertBefore(b,document.body.firstChild);
   }
   try{if(!localStorage.getItem(SEEDED))seed();strip()}catch(e){console.error(e)}
