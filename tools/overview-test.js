@@ -61,6 +61,11 @@ assert.deepStrictEqual(Array.from(o.now, x => x.run.name), ['over-big', 'over-sm
 assert.deepStrictEqual(Array.from(o.done, x => x.run.name), ['done', 'done-old']);
 assert.deepStrictEqual(Array.from(o.planned, x => x.run.name), ['planned']);
 
+// an engineer's list also holds own local runs and old history
+const mine = PSC.overview([{ st: 'planned', params: {}, updated: 2, name: 'local' }, { st: 'done', hist: true, params: null, finish: { at: NOW - H, planned: H, actual: H }, name: 'old' }, { st: 'done', params: null, name: 'broken' }], NOW, true);
+assert.deepStrictEqual(Array.from(mine.planned, x => x.run.name), ['local']);
+assert.deepStrictEqual(Array.from(mine.done, x => x.run.name), ['old']);
+
 // next valve to record
 const V = [{ i: 0, tf: .2, ok: true }, { i: 1, tf: .5, ok: true }, { i: 2, tf: .8, ok: true }, { i: 3, tf: .9, ok: false }];
 const nx = o => { const v = PSC.nextValve(V, o); return v ? v.i : null; };

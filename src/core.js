@@ -110,9 +110,9 @@ var PSC = (function(){
     if(delay>ONPLAN_MS)return {group:'now',state:'late',rank:2,arrival:arrival,planned:planned,delay:delay};
     return {group:'now',state:'onplan',rank:3,arrival:arrival,planned:planned,delay:delay};
   }
-  function overview(runs,now){
+  function overview(runs,now,all){
     var o={now:[],planned:[],done:[]};
-    runs.forEach(function(r){if(r.team&&r.params){var s=runStatus(r,now);o[s.group].push({run:r,status:s})}});
+    runs.forEach(function(r){if(all?(r.params||r.hist):(r.team&&r.params)){var s=runStatus(r,now);o[s.group].push({run:r,status:s})}});
     o.now.sort(function(a,b){
       var s=a.status,t=b.status;if(s.rank!==t.rank)return s.rank-t.rank;
       return s.state==='overdue'?t.over-s.over:s.state==='unconfirmed'?t.at-s.at:s.state==='late'?t.delay-s.delay:s.arrival-t.arrival;

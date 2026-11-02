@@ -870,7 +870,7 @@ html[data-dsk="1"] .runbar .add.start,html[data-dsk="1"] .runbar .add.okb{min-wi
 /* ===== manager overview: list of team runs beside the read-only run ===== */
 .ovp,.ovbar{display:none}
 body.ov .ovp{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px;margin:0}
-body.ov .parwrap,body.ov .sec,body.ov .robar,body.ov .tabbar,body.ov #tourBtn,body.ov #palPanel .deskonly,body.ov #palPanel .phoneonly,body.ov #vempty,body.ov #runWarn{display:none!important}
+body.ov .parwrap,body.ov .sec,body.ov .robar,body.ov #tourBtn,body.ov #palPanel .deskonly,body.ov #palPanel .phoneonly,body.ov #vempty,body.ov #runWarn{display:none!important}
 html[data-ui="2"] body.ov{padding-bottom:0}
 body.ovnone .main{display:none}
 .ovchips{display:flex;flex-wrap:wrap;gap:6px}
@@ -898,11 +898,6 @@ html[data-ui="1"] .ovl>em.wrn{color:#f4b860}
 .ovbar b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #ovBack{min-height:44px;flex:none}
 @media(max-width:979px){
-  body.ov .layout{display:block}
-  body.ov .dock{display:block}
-  body.ov:not(.ovd) .main{display:none}
-  body.ov.ovd .dock{display:none}
-  body.ov.ovd .ovbar{display:flex}
 }
 
 /* run past its estimate: waits for the arrival to be confirmed */
@@ -955,11 +950,6 @@ html[data-dsk="1"] body.rec #inpPanel{display:none;position:absolute;width:440px
 html[data-dsk="1"] body.rec #inpPanel.open{display:flex}
 @media(min-width:980px){.recp .rsm{display:none}}
 @media(max-width:979px){
-  body.rec .layout{display:block}
-  body.rec .dock{display:block}
-  body.rec:not(.recd) .main{display:none}
-  body.rec:not(.recd) .recp{min-height:calc(100dvh - 24px)}
-  body.rec.recd .dock{margin-bottom:10px}
   body.rec .bar{margin:0;min-height:0}
   body.rec .bar .brand,body.rec .bar .sqb,body.rec .fab,body.rec .tabbar{display:none!important}
   html[data-ui="2"] body.rec{padding-bottom:0}
@@ -1104,7 +1094,6 @@ html[data-ui] .vt tr.next .vrem{background:transparent;padding:0;font-weight:600
 }
 @media(max-width:979px){
   html[data-ui] body.rec .bar{min-height:0;margin:0}
-  html[data-ui] body.rec:not(.recd) .recp{min-height:calc(100dvh - 20px)}
 }
 @media(max-width:560px){
   html[data-ui] .runbar,html[data-ui][data-dsk] .runbar{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
@@ -1132,3 +1121,166 @@ html[data-ui] .ritem.st-done .rd{background:var(--muted)}
 html[data-ui] .ritem.st-planned .rd{background:var(--line)}
 html[data-ui="2"] .chk input,html[data-ui="2"] input[type=range]{accent-color:var(--accent)}
 html[data-ui="1"] .chk input,html[data-ui="1"] input[type=range]{accent-color:var(--accent)}
+
+/* ===== screens: one job each. body[data-stage] = plan, track, runs, overview, team ===== */
+.planp,.detp,.ovp,.recp,.teamhome,.ovbar{display:none}
+body[data-stage="plan"] .planp{display:flex}
+body[data-stage="track"]:not(.live) .detp,body[data-stage="overview"] .detp{display:flex}
+body[data-stage="runs"] .ovp,body[data-stage="overview"] .ovp{display:flex}
+body.rec .recp{display:flex}
+body[data-stage="team"] .teamhome{display:block}
+body[data-stage="team"] .layout{display:none!important}
+.planp,.detp,.ovp{flex-direction:column;gap:12px;padding:16px;margin:0}
+.planp [hidden],.detp [hidden],.ovp [hidden]{display:none!important}
+
+/* retired chrome */
+#parBtn,#secBtn,#tourBtn,.robar,.fab,html[data-ui] .fab,html[data-ui][data-dsk] .fab,.runbar .add,.phead,.ovchips:empty{display:none!important}
+body:not([data-stage="plan"]) #runWarn{display:none!important}
+.tile.hot,html[data-clk][data-ui][data-dsk] .tile.hot,html[data-clk="1"][data-ui] .tile.hot.live{display:none!important}
+html[data-ui] .runbar,html[data-ui][data-dsk] .runbar{margin-top:10px}
+body.ovnone .main{display:none}
+
+/* header and tabs */
+html[data-ui] .bar{position:relative;gap:4px;margin-bottom:12px;min-height:48px;border-bottom:0}
+html[data-ui] .brand{flex:0 1 auto;align-items:baseline;gap:10px;margin-right:0;min-width:0}
+html[data-ui] .brand .sub{display:none}
+.stt{font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+html[data-ui] .tabbar{position:static;display:flex;flex:1 1 auto;justify-content:flex-start;gap:2px;margin:0 16px;padding:0;background:transparent;border:0;box-shadow:none}
+html[data-ui] .tabbar button{display:inline-flex;flex-direction:row;align-items:center;gap:6px;min-height:40px;padding:0 14px;border:0;border-radius:8px;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+html[data-ui] .tabbar button:hover{color:var(--ink);background:var(--soft)}
+html[data-ui] .tabbar button[aria-current="page"]{background:var(--soft);color:var(--ink);font-weight:600}
+.tabbar svg{display:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+html[data-ui] .tabbar button b{display:inline;font-weight:600;font-size:12px;color:var(--accent);font-variant-numeric:tabular-nums}
+html[data-ui] .tabbar button b:empty{display:none}
+html[data-ui] .tabbar button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+html[data-ui] .sqb .lb{display:none}
+html[data-ui] .sqb,html[data-ui] #gearBtn.sqb,html[data-ui][data-dsk] .sqb{flex:0 0 44px;width:44px;padding:0;justify-content:center}
+.annwrap,.sec,.gear{flex:none}
+
+/* page frames */
+.app{max-width:1240px}
+html[data-dsk="1"] .app{max-width:1240px}
+html[data-dsk="1"] body[data-stage="plan"] .layout{grid-template-columns:minmax(380px,440px) minmax(0,1fr)}
+html[data-dsk="1"] body[data-stage="track"] .layout{grid-template-columns:minmax(340px,380px) minmax(0,1fr)}
+html[data-dsk="1"] body[data-stage="overview"] .layout{grid-template-columns:minmax(340px,400px) minmax(0,1fr)}
+html[data-dsk="1"] body[data-stage="runs"] .layout{display:block;max-width:760px;margin:0 auto}
+html[data-dsk="1"] body[data-stage="runs"] .dock{position:static;max-height:none;overflow:visible}
+html[data-dsk="1"] .dock{top:12px;border-radius:10px}
+body[data-stage="runs"] .main{display:none}
+body[data-stage="overview"] .main{display:flex;flex-direction:column;gap:12px}
+body[data-stage="overview"]:not(.dgv) .card.diag{display:none}
+.teamhome{max-width:760px;margin:0 auto}
+#teamPanel.page{display:flex!important;position:static!important;width:auto!important;max-width:none!important;max-height:none!important;box-shadow:none;padding:16px}
+
+/* Plan */
+.plres{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.plres small{display:block;font-size:13px;color:var(--muted)}
+.plres b{display:block;font-size:clamp(28px,8vw,36px);font-weight:600;line-height:1.15;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plres b small{display:inline;font-size:15px;font-weight:500;letter-spacing:0}
+html[data-ui] .planp .info{margin:0}
+html[data-ui] .planp .warn{margin:0}
+html[data-ui] #inpPanel,html[data-ui][data-dsk] #inpPanel,html[data-dsk="1"] #inpPanel{display:block;position:static;width:auto;max-width:none;max-height:none;overflow:visible;padding:0;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.prow{border-top:1px solid var(--line)}
+.prow:last-child{border-bottom:1px solid var(--line)}
+.prh{display:grid;grid-template-columns:auto minmax(0,1fr) 14px;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 2px;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.prh:hover .prl{color:var(--accent)}
+.prh:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}
+.prl{font-weight:500}
+.prv{color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;font-size:14px}
+.prc{width:8px;height:8px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .15s}
+.prow.open .prc{transform:rotate(225deg) translate(-2px,-2px)}
+.prow.small .prc{transform:rotate(-45deg)}
+.prow.bad .prl,.prow.bad .prv{color:var(--bad)}
+.prb{display:none;padding:2px 2px 16px;flex-direction:column;gap:10px}
+.prow.open .prb{display:flex}
+.prb #toolSel{width:100%}
+.prb #fluid{width:100%}
+.prb .fg{width:100%}
+html[data-ui] .prb .tgtbox{margin:0}
+.prb .fml>summary{display:none}
+.prb .vsec{margin:0;padding:0;border:0}
+.prb .vtog,.prb .rep{display:none!important}
+.prb .vhead{justify-content:flex-end;margin:0 0 6px}
+.prb .tw{overflow-x:auto}
+.plgo{width:100%;min-height:52px;padding:0 16px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.plgo:hover{filter:brightness(1.06)}
+.plgo:disabled{opacity:.45;cursor:default}
+.plgo:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.plgo:active{transform:scale(.99)}
+.planp .plgo{position:sticky;bottom:12px;box-shadow:0 0 0 8px var(--card)}
+
+/* Track and run details */
+.dthd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.dthd b{display:block;font-size:17px;font-weight:600}
+.dthd small{display:block;font-size:13px;color:var(--muted)}
+.dttag{flex:none;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.dttag.bad{color:var(--bad)}
+.dttag.wrn{color:#a15c00}
+html[data-ui="1"] .dttag.wrn{color:#f4b860}
+.reclab:empty,.recbig:empty{display:none}
+.dtrows{display:flex;flex-direction:column}
+.dtr{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.dtr span{color:var(--muted)}
+.dtr b{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.dtbtns{display:flex;flex-wrap:wrap;gap:8px}
+.dtbtns .plgo{flex:1 1 100%}
+.dtbtns .add{flex:1 1 auto;min-height:44px}
+html[data-dsk="1"] body[data-stage="track"] #detDiag{display:none!important}
+#recPanel.card{margin:0}
+
+/* Runs and Overview */
+.ovtop{display:flex;gap:8px}
+.ovtop input{flex:1 1 auto;min-width:0;height:44px}
+.ovtop .add{flex:none;min-height:44px}
+html[data-ui] .ovtop .add.okb2{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+body.ov #ovNew{display:none}
+.ovw{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;border-top:1px solid var(--line)}
+.ovw:first-child{border-top:0}
+html[data-ui] .ovr,html[data-ui] .ovr:first-child{border:0;grid-column:1}
+html[data-ui] body.ov .ovw .ovr{grid-column:1/-1}
+.ovk{grid-column:2;width:44px;border:0;background:transparent;color:var(--muted);font-size:18px;cursor:pointer}
+.ovk:hover,.ovk[aria-expanded="true"]{color:var(--ink);background:var(--soft)}
+.ovk:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ova{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;padding:0 8px 12px}
+.ova .add{min-height:44px}
+html[data-ui] .ova .ovdel{color:var(--bad)}
+
+/* narrow screens: one thing on screen, tabs at the bottom */
+@media(max-width:979px){
+  html[data-ui] body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  html[data-ui] .app{padding-top:4px}
+  .layout,html[data-ui] .layout{display:block}
+  .dock{display:block}
+  .main{display:none}
+  body.dgv .main{display:block;margin-top:12px}
+  body[data-stage="overview"].ovd .dock{display:none}
+  body[data-stage="overview"].ovd .main{display:flex}
+  body[data-stage="overview"]:not(.ovd) .main{display:none}
+  body[data-stage="overview"].ovd .ovbar{display:flex}
+  html[data-ui] .brand h1{display:none}
+  html[data-ui] .brand{flex:1 1 auto}
+  .stt{font-size:16px;font-weight:600;color:var(--ink)}
+  html[data-ui] .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:35;margin:0;gap:0;padding:4px 8px calc(4px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+  html[data-ui] .tabbar button{flex-direction:column;gap:2px;min-height:52px;padding:2px;font-size:12px;background:transparent}
+  html[data-ui] .tabbar button:hover{background:transparent}
+  html[data-ui] .tabbar button[aria-current="page"]{background:transparent;color:var(--accent)}
+  .tabbar svg{display:block}
+  html[data-ui] .tabbar button{position:relative}
+  html[data-ui] .tabbar button b{position:absolute;left:calc(50% + 14px);top:2px}
+  .planp .plgo{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  html[data-ui] .card.planp,html[data-ui] .card.detp,html[data-ui] .card.ovp{border-radius:10px}
+  /* recording: the button and nothing else */
+  html[data-ui] body.rec{padding-bottom:0}
+  html[data-ui] body.rec .bar{min-height:0;margin:0}
+  body.rec .bar .brand,body.rec .bar .sqb,html[data-ui] body.rec .tabbar{display:none!important}
+  body.rec:not(.dgv) .recp{min-height:calc(100dvh - 24px)}
+  body.rec .toast{bottom:auto;top:62px}
+}
+@media(max-width:400px){.plres b{font-size:26px}.prv{font-size:13px}}
+@media print{.bar,.tabbar,.dock,.planp,.detp{display:none!important}.main,.card.diag,body[data-stage="overview"]:not(.dgv) .card.diag{display:block!important}}
+
+body[data-stage="plan"] .runbar,body[data-stage="plan"] .rprog{display:none}
+.plat{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media(min-width:980px){.prow.small{display:none}.prow:nth-last-child(2){border-bottom:1px solid var(--line)}}
+html[data-ui] body[data-stage="plan"] .runbar,html[data-ui] body[data-stage="plan"] .rprog{display:none}
+@media(min-width:980px){body[data-stage="runs"] .stt,body[data-stage="overview"] .stt,body[data-stage="team"] .stt{display:none}}

@@ -60,7 +60,7 @@ const DEMO = `<script>(function(){
     localStorage.setItem('psc.mock.v1',JSON.stringify(store));
     localStorage.setItem('pigSpeedCalc.runs.v1',JSON.stringify(rows));
     useRun(role(),rows);
-    localStorage.setItem(SEEDED,'1');location.reload();
+    localStorage.setItem(SEEDED,'1');Storage.prototype.setItem=function(){};location.reload();
   }
   function strip(){
     var ru=/ru/i.test(document.documentElement.lang),r=role(),b=document.createElement('div');

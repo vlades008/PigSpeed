@@ -12,39 +12,12 @@
 <div class="updbar" id="updBar"><div class="updt"><b id="updTxt"></b><span id="updNotes"></span></div><div class="updb"><a class="add" id="updGo" href="#"><span>Update</span></a><button type="button" class="add" id="updLog">What's new</button><button type="button" class="link" id="updNo">Later</button></div></div>
 <div class="app">
   <header class="bar">
-    <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span></div>
+    <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span><span class="stt" id="stT"></span></div>
+    <nav class="tabbar" id="tabbar" aria-label="Screens"></nav>
     <div class="hacctwrap"><div id="acct" class="hacct"></div><div class="gpanel" id="acctMenu"></div><div class="gpanel wide" id="teamPanel"><div id="teamBox" class="teambox open"></div></div></div>
     <div class="annwrap"><button type="button" id="annBtn" class="sqb" style="display:none" title="Announcements" aria-label="Announcements"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="lb">News</span><i class="fabn" id="annN"></i></button><div class="gpanel wide" id="annPanel"></div></div>
     <div class="parwrap" id="parWrap"><button type="button" id="parBtn" class="sqb" aria-expanded="false" title="Parameters"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="lb">Parameters</span><span class="psum" id="pSum" hidden></span></button>
-      <section class="card inp gpanel wide" id="inpPanel">
-      <div class="seg" id="fluid"><button type="button" data-v="0">Gas</button><button type="button" data-v="1">Oil</button><button type="button" data-v="2">Mix (oil + gas)</button></div>
-      <div class="gt">Pipe</div>
-      <div class="fg">
-        <div class="field full"><label for="name">Line name</label><input id="name" autocomplete="off"></div>
-        <div class="field full" data-f="od"><label for="od">Outside diameter</label><select id="od" style="width:100%"></select><div class="msg"></div></div>
-        <div class="field" data-f="wt"><label for="wt">Wall thickness</label><div class="row"><input id="wt" inputmode="decimal" autocomplete="off"><select id="wtu"><option>mm</option><option>inch</option></select></div><div class="msg"></div></div>
-        <div class="field" data-f="len"><label for="len">Line length</label><div class="row"><input id="len" inputmode="decimal" autocomplete="off"><select id="lenu"><option>km</option><option>m</option></select></div><div class="msg"></div></div>
-      </div>
-      <div class="gt">Conditions</div>
-      <div class="fg">
-        <div class="field" data-f="p" id="pF"><label for="p" id="pL" data-ti="Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.">Pressure (absolute)</label><div class="row"><input id="p" inputmode="decimal" autocomplete="off"><select id="pu"><option>kPa</option><option>MPa</option><option>psi</option><option>bar</option></select></div><div class="msg"></div></div>
-        <div class="field" data-f="pout" id="poutF"><label for="pout" data-ti="Pressure at the receiver end. Leave empty if the pressure does not change along the line.">Outlet pressure</label><div class="row"><input id="pout" inputmode="decimal" autocomplete="off"><span class="unitnote" id="poutU"></span></div><div class="msg"></div></div>
-        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu" class="hide"><option value="0">°C</option></select><span class="unitnote">°C</span></div><div class="msg"></div></div>
-        <div class="field" data-f="sg" id="sgF"><label for="sg" data-ti="Gas density relative to air, usually 0.55–0.75.">Gas specific gravity (air = 1)</label><div class="row"><input id="sg" inputmode="decimal" autocomplete="off"></div><div class="msg"></div></div>
-        <div class="field" data-f="api" id="apiF"><label for="api" data-ti="Oil API gravity: about 35 is a medium oil, a higher number is lighter.">Oil gravity</label><div class="row"><input id="api" inputmode="decimal" autocomplete="off"><select disabled><option>°API</option></select></div><div class="msg"></div></div>
-        <div class="field full" data-f="gor" id="gF"><label for="gor" data-ti="Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.">Gas-oil ratio (GOR), per stock-tank bbl</label><div class="row"><input id="gor" inputmode="decimal" autocomplete="off"><select disabled><option>SCF/BBL</option></select></div><div class="msg"></div></div>
-      </div>
-      <div class="gt">Flow</div>
-      <div class="fg">
-        <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
-      </div>
-        <div class="tgtbox">
-          <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
-          <div class="v" id="rflow">–</div><div class="hint" id="rrange"></div>
-          <div class="tin field" data-f="rv"><label for="rv" data-ti="The speed you want the pig to have. The app shows the flow that gives it.">Target pig speed</label><div class="row"><input id="rv" inputmode="decimal" autocomplete="off"><select id="rvu" class="hide"><option>m/s</option><option>mph</option><option>km/h</option></select><span class="unitnote">m/s</span></div><div class="msg"></div></div>
-        </div>
-      <details class="fml" id="fml"><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details>
-    </section>
+      
     </div>
     <div class="sec">
       <button type="button" id="secBtn" class="sqb" aria-expanded="false" title="Runs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg><span class="lb">Runs</span><i class="rdot" id="rdot"></i></button>
@@ -88,8 +61,52 @@
   <div class="phead" id="phead"></div>
   <div class="ovbar" id="ovBar"><button type="button" class="add" id="ovBack"></button><b id="ovName"></b></div>
 
+  <div class="teamhome" id="teamHome"></div>
   <div class="layout">
-    <aside class="dock" id="dock"><section class="card recp" id="recPanel">
+    <aside class="dock" id="dock"><section class="card planp" id="planPanel">
+      <div class="plres"><div><small>Pig speed</small><b id="plV">–</b></div><div><small>Estimated duration</small><b id="plD">–</b></div></div>
+      <div class="plat" id="plA"></div>
+      <div class="warn" id="warn"></div>
+      <div class="info"><div class="cat" id="cat"></div></div>
+      <section class="card inp" id="inpPanel">
+        <div class="prow" data-sec="pipe"><button type="button" class="prh" aria-expanded="false"><span class="prl">Pipe</span><span class="prv" id="sum_pipe"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><div class="fg">
+        <div class="field full"><label for="name">Line name</label><input id="name" autocomplete="off"></div>
+        <div class="field full" data-f="od"><label for="od">Outside diameter</label><select id="od" style="width:100%"></select><div class="msg"></div></div>
+        <div class="field" data-f="wt"><label for="wt">Wall thickness</label><div class="row"><input id="wt" inputmode="decimal" autocomplete="off"><select id="wtu"><option>mm</option><option>inch</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="len"><label for="len">Line length</label><div class="row"><input id="len" inputmode="decimal" autocomplete="off"><select id="lenu"><option>km</option><option>m</option></select></div><div class="msg"></div></div>
+      </div></div></div>
+        <div class="prow" data-sec="fluid"><button type="button" class="prh" aria-expanded="false"><span class="prl">Fluid</span><span class="prv" id="sum_fluid"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><div class="seg" id="fluid"><button type="button" data-v="0">Gas</button><button type="button" data-v="1">Oil</button><button type="button" data-v="2">Mix (oil + gas)</button></div></div></div>
+        <div class="prow" data-sec="cond"><button type="button" class="prh" aria-expanded="false"><span class="prl">Conditions</span><span class="prv" id="sum_cond"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><div class="fg">
+        <div class="field" data-f="p" id="pF"><label for="p" id="pL" data-ti="Pressure at the launcher end. Tick the gauge option in the gear menu if your gauge reads above atmosphere.">Pressure (absolute)</label><div class="row"><input id="p" inputmode="decimal" autocomplete="off"><select id="pu"><option>kPa</option><option>MPa</option><option>psi</option><option>bar</option></select></div><div class="msg"></div></div>
+        <div class="field" data-f="pout" id="poutF"><label for="pout" data-ti="Pressure at the receiver end. Leave empty if the pressure does not change along the line.">Outlet pressure</label><div class="row"><input id="pout" inputmode="decimal" autocomplete="off"><span class="unitnote" id="poutU"></span></div><div class="msg"></div></div>
+        <div class="field" data-f="t" id="tF"><label for="t" data-ti="Temperature of the fluid in the pipe.">Temperature</label><div class="row"><input id="t" inputmode="decimal" autocomplete="off"><select id="tu" class="hide"><option value="0">°C</option></select><span class="unitnote">°C</span></div><div class="msg"></div></div>
+        <div class="field" data-f="sg" id="sgF"><label for="sg" data-ti="Gas density relative to air, usually 0.55–0.75.">Gas specific gravity (air = 1)</label><div class="row"><input id="sg" inputmode="decimal" autocomplete="off"></div><div class="msg"></div></div>
+        <div class="field" data-f="api" id="apiF"><label for="api" data-ti="Oil API gravity: about 35 is a medium oil, a higher number is lighter.">Oil gravity</label><div class="row"><input id="api" inputmode="decimal" autocomplete="off"><select disabled><option>°API</option></select></div><div class="msg"></div></div>
+        <div class="field full" data-f="gor" id="gF"><label for="gor" data-ti="Gas produced with each barrel of stock-tank oil (scf/bbl). Used to find the free gas in the pipe.">Gas-oil ratio (GOR), per stock-tank bbl</label><div class="row"><input id="gor" inputmode="decimal" autocomplete="off"><select disabled><option>SCF/BBL</option></select></div><div class="msg"></div></div>
+      </div></div></div>
+        <div class="prow" data-sec="flow"><button type="button" class="prh" aria-expanded="false"><span class="prl">Flow</span><span class="prv" id="sum_flow"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><div class="fg">
+        <div class="field full" data-f="flow"><label for="flow" data-ti="Flow measured at standard conditions, not at the pressure in the pipe." id="flowL">Flow rate</label><div class="row"><input id="flow" inputmode="decimal" autocomplete="off"><select id="gasu"></select><select id="oilu"></select></div><div class="msg"></div></div>
+      </div>
+        <div class="tgtbox">
+          <div class="k"><span class="kic ic-flow">Flow for target speed</span><span><select id="rgasu" aria-label="Flow unit"></select><select id="roilu" aria-label="Flow unit"></select></span></div>
+          <div class="v" id="rflow">–</div><div class="hint" id="rrange"></div>
+          <div class="tin field" data-f="rv"><label for="rv" data-ti="The speed you want the pig to have. The app shows the flow that gives it.">Target pig speed</label><div class="row"><input id="rv" inputmode="decimal" autocomplete="off"><select id="rvu" class="hide"><option>m/s</option><option>mph</option><option>km/h</option></select><span class="unitnote">m/s</span></div><div class="msg"></div></div>
+        </div></div></div>
+        <div class="prow" data-sec="tool"><button type="button" class="prh" aria-expanded="false"><span class="prl">Tool</span><span class="prv" id="sum_tool"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select></div></div>
+        <div class="prow" data-sec="valves"><button type="button" class="prh" aria-expanded="false"><span class="prl">Valves</span><span class="prv" id="sum_valves"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><div id="secValves"></div></div></div>
+        <div class="prow" data-sec="fml"><button type="button" class="prh" aria-expanded="false"><span class="prl">How it is calculated</span><span class="prv" id="sum_fml"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><details class="fml" id="fml" open><summary><span>Formulas</span></summary><div class="fmode" id="fmode"><button type="button" data-m="0"><span>Symbols</span></button><button type="button" data-m="1"><span>Live numbers</span></button></div><div id="fmlBody"></div></details></div></div>
+        <div class="prow small" data-sec="diag"><button type="button" class="prh" aria-expanded="false"><span class="prl">Diagram</span><span class="prv" id="sum_diag"></span><i class="prc" aria-hidden="true"></i></button></div>
+      </section>
+      <button type="button" class="plgo" id="planGo"></button>
+    </section>
+    <section class="card detp" id="detPanel">
+      <div class="dthd"><div><b id="detName"></b><small id="detWho"></small></div><span class="dttag" id="detTag"></span></div>
+      <div class="reclab" id="detLab"></div><div class="recbig" id="detBig"></div><div class="recsub" id="detSub"></div>
+      <div class="recbar" id="detBarW"><i id="detBar"></i></div>
+      <div class="dtrows" id="detRows"></div>
+      <div class="dtbtns"><button type="button" class="plgo" id="detGo"></button><button type="button" class="add" id="detDiag"><span>Diagram and valves</span></button><button type="button" class="add" id="detPrint"><span>Print / PDF</span></button><button type="button" class="add" id="detCsv"><span>Download CSV</span></button></div>
+    </section>
+    <section class="card recp" id="recPanel">
       <div class="rechd"><b id="recName"></b><div class="recmore"><button type="button" id="recMore" aria-expanded="false" aria-haspopup="true">⋯</button><div class="gpanel" id="recMenu"><button type="button" class="add rsm" data-m="diag"><span>Diagram and valves</span></button><button type="button" class="add rsm" data-m="par"><span>Parameters</span></button><button type="button" class="add rsm" data-m="runs"><span>Runs</span></button><button type="button" class="add rsm" data-m="set"><span>Settings</span></button><button type="button" class="add" data-m="dim"><span>Dim screen</span></button><button type="button" class="add recstop" data-m="stop"><span>Stop run</span></button></div></div></div>
       <div class="reclab" id="recLab"></div><div class="recbig" id="recBig"></div><div class="recsub" id="recSub"></div>
       <div class="recbar"><i id="recBar"></i></div>
@@ -97,16 +114,16 @@
       <div class="recundo" id="recUndo" role="status"><span id="recUndoT"></span><button type="button" class="link" id="recUndoB">Undo</button></div>
       <button type="button" class="recgo" id="recGo"><b id="recGoL"></b><small id="recGoS"></small></button>
       <div class="rec2" id="rec2"><button type="button" class="add" id="recTime"><span id="recTimeL"></span></button><button type="button" class="add" id="recArr"><span>Arrived at receiver</span></button></div>
-    </section><section class="card ovp" id="ovPanel"><div class="ovchips" id="ovChips"></div><div class="ovlist" id="ovList"></div></section></aside>
+    </section><section class="card ovp" id="ovPanel"><div class="ovtop"><input id="ovQ" type="search" autocomplete="off" aria-label="Search runs"><button type="button" class="add okb2" id="ovNew"><span>+ New run</span></button></div><div class="ovchips" id="ovChips"></div><div class="ovlist" id="ovList"></div></section></aside>
 
     <main class="main">
-      <div class="warn" id="warn"></div>
+      
 
       <section class="card diag">
         <div class="fcus" id="fc"></div>
         <div class="dhead vbar">
           <div class="seg vsel" id="vsel"><button type="button" data-w="route">Route</button><button type="button" data-w="local">Local</button><button type="button" data-w="global">Global</button></div>
-          <select id="toolSel" aria-label="Tool"><option value="-1">Auto: MFL (default)</option><option value="0">Geometry (EGT)</option><option value="1">MFL (AMFD)</option><option value="2">TFI</option><option value="3">Vlad</option></select>
+          
           <button type="button" id="lscBtn" class="lscb" aria-pressed="false" title="Real scale" aria-label="Real scale"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3M19 9v3"/></svg></button>
         </div>
         <div class="route" id="route"></div>
@@ -119,7 +136,7 @@
           <button type="button" class="add okb" id="arrBtn"><span>✓ Accepted at receiver</span></button>
           <div class="tiles"><div class="tile spd"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-6"/></svg><span>Speed</span><b id="vel">–</b><select id="velu" class="hide" aria-label="Speed unit"><option>m/s</option><option>mph</option><option>km/h</option></select><div class="rng" hidden><i class="zn" id="rz"></i><b class="mk" id="rmk"></b></div><div class="rlab" hidden id="rlo"></div></div><div class="tile dur"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>Estimated duration</span><b id="dur">–</b></div><div class="tile"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3"/></svg><span>Covered</span><b id="tDist">–</b></div><div class="tile"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Elapsed</span><b id="tEl">0:00:00</b></div><div class="tile hot"><svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="rb" cx="60" cy="60" r="54"/><circle class="rf" id="ringF" cx="60" cy="60" r="54" transform="rotate(-90 60 60)"/></svg><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10M7 20h10"/><path d="M8 4c0 5 8 5 8 8s-8 3-8 8M16 4c0 5-8 5-8 8s8 3 8 8"/></svg><span>Remaining</span><b id="tRem">–</b></div><div class="tile"><svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg><span id="tArrL">Arrival at receiver</span><b id="tArr">–</b></div></div>
         </div>
-        <div class="info"><div class="cat" id="cat"></div></div>
+        
         <div class="rprog"><i id="rprog"></i></div>
         <div class="clk loginfo" id="logInfo"></div>
 
@@ -167,7 +184,6 @@
 <div class="tour" id="tour"><div class="tourhole" id="tourHole"></div><div class="tourtip" id="tourTip"><div class="tt" id="tourT"></div><div class="tx" id="tourX"></div><div class="tf"><span class="ts" id="tourS"></span><span class="grow"></span><button type="button" class="link" id="tourSkip">Skip</button><button type="button" class="add" id="tourBack">Back</button><button type="button" class="add okb2" id="tourNext">Next</button></div></div></div>
 <div class="dim" id="dim"><div class="dimc"><div class="dl">Remaining</div><div class="dn" id="dimRem">–</div><div class="dx" id="dimNext"></div><div class="db"><i id="dimBar"></i></div></div><div class="dh">Tap to close</div></div>
 <div class="sheet" id="sh"></div>
-<nav class="tabbar" id="tabbar"><button type="button" data-a="run"><b>▶</b><span>Run</span></button><button type="button" data-a="runs"><b>☰</b><span>Runs</span></button><button type="button" data-a="fml"><b>ƒ</b><span>Formulas</span></button><button type="button" data-a="set"><b>⚙</b><span>Settings</span></button></nav>
 <button type="button" id="ideaBtn" class="fab" title="Ideas and bugs" aria-label="Ideas and bugs" style="display:none">💡<i class="fabn" id="fabN"></i></button>
 <div class="mdl" id="ideaDlg" role="dialog" aria-modal="true"><div class="mbox wide">
   <h3 id="ideaT">Your idea</h3>
