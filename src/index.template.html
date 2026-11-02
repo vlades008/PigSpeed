@@ -107,7 +107,15 @@
   <div class="ovbar" id="ovBar"><button type="button" class="add" id="ovBack"></button><b id="ovName"></b></div>
 
   <div class="layout">
-    <aside class="dock" id="dock"><section class="card ovp" id="ovPanel"><div class="ovchips" id="ovChips"></div><div class="ovlist" id="ovList"></div></section></aside>
+    <aside class="dock" id="dock"><section class="card recp" id="recPanel">
+      <div class="rechd"><b id="recName"></b><div class="recmore"><button type="button" id="recMore" aria-expanded="false" aria-haspopup="true">⋯</button><div class="gpanel" id="recMenu"><button type="button" class="add rsm" data-m="diag"><span>Diagram and valves</span></button><button type="button" class="add rsm" data-m="par"><span>Parameters</span></button><button type="button" class="add rsm" data-m="runs"><span>Runs</span></button><button type="button" class="add rsm" data-m="set"><span>Settings</span></button><button type="button" class="add" data-m="dim"><span>Dim screen</span></button><button type="button" class="add recstop" data-m="stop"><span>Stop run</span></button></div></div></div>
+      <div class="reclab" id="recLab"></div><div class="recbig" id="recBig"></div><div class="recsub" id="recSub"></div>
+      <div class="recbar"><i id="recBar"></i></div>
+      <div class="reclast"><div><small id="recLastL"></small><b id="recLast"></b></div><button type="button" class="link" id="recEdit">Edit</button></div>
+      <div class="recundo" id="recUndo" role="status"><span id="recUndoT"></span><button type="button" class="link" id="recUndoB">Undo</button></div>
+      <button type="button" class="recgo" id="recGo"><b id="recGoL"></b><small id="recGoS"></small></button>
+      <div class="rec2" id="rec2"><button type="button" class="add" id="recTime"><span id="recTimeL"></span></button><button type="button" class="add" id="recArr"><span>Arrived at receiver</span></button></div>
+    </section><section class="card ovp" id="ovPanel"><div class="ovchips" id="ovChips"></div><div class="ovlist" id="ovList"></div></section></aside>
 
     <main class="main">
       <div class="warn" id="warn"></div>
@@ -207,6 +215,7 @@
 </div></div>
 <div class="mdl" id="logDlg" role="dialog" aria-modal="true"><div class="mbox vbox"><h3>What's new</h3><div class="chl" id="chList"></div><div class="vact"><span class="sp"></span><button type="button" class="add vok" id="chClose">Close</button></div></div></div>
 <div class="mdl" id="arrDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>End the run?</h3><p>This marks the tool as arrived at the receiver and finishes the run: the clock stops and planned vs actual time is saved to the history. It cannot be undone.</p><label class="vf"><span>Pig arrived at</span><input id="arrAt" inputmode="numeric" autocomplete="off" placeholder="HH:MM:SS"></label><div class="hint" id="arrInfo"></div><div class="lerr" id="arrErr"></div><div class="mbt"><button type="button" class="add" id="arrNo"><span>Cancel</span></button><button type="button" class="add okb2" id="arrYes"><span>Yes, end the run</span></button></div></div></div>
+<div class="mdl" id="stopDlg" role="dialog" aria-modal="true"><div class="mbox"><h3>Stop this run?</h3><p>The run goes back to planned. Its launch time and recorded valves are deleted.</p><div class="mbt"><button type="button" class="add" id="stopNo"><span>Cancel</span></button><button type="button" class="add okb2" id="stopYes"><span>Stop run</span></button></div></div></div>
 <div class="toast" id="toast"></div>
 <script id="img">{{VLAD}}</script>
 <script id="cloud">{{CLOUD}}</script>

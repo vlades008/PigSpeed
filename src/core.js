@@ -121,5 +121,12 @@ var PSC = (function(){
     o.done.sort(function(a,b){return b.status.at-a.status.at});
     return o;
   }
-  return {calc:calc,velOut:velOut,fmtDur:fmtDur,tAt:tAt,xAt:xAt,vRel:vRel,runStatus:runStatus,overview:overview};
+  // next valve to record: first one not recorded beyond the furthest recorded valve
+  function nextValve(valves,obs){
+    var far=-1,nx=null;obs=obs||{};
+    valves.forEach(function(v){if(v.ok&&obs[v.i]&&v.tf>far)far=v.tf});
+    valves.forEach(function(v){if(v.ok&&!obs[v.i]&&v.tf>far&&(!nx||v.tf<nx.tf))nx=v});
+    return nx;
+  }
+  return {calc:calc,velOut:velOut,fmtDur:fmtDur,tAt:tAt,xAt:xAt,vRel:vRel,runStatus:runStatus,overview:overview,nextValve:nextValve};
 })();

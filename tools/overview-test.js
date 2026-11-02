@@ -61,4 +61,18 @@ assert.deepStrictEqual(Array.from(o.now, x => x.run.name), ['over-big', 'over-sm
 assert.deepStrictEqual(Array.from(o.done, x => x.run.name), ['done', 'done-old']);
 assert.deepStrictEqual(Array.from(o.planned, x => x.run.name), ['planned']);
 
+// next valve to record
+const V = [{ i: 0, tf: .2, ok: true }, { i: 1, tf: .5, ok: true }, { i: 2, tf: .8, ok: true }, { i: 3, tf: .9, ok: false }];
+const nx = o => { const v = PSC.nextValve(V, o); return v ? v.i : null; };
+assert.strictEqual(nx({}), 0);
+assert.strictEqual(nx(undefined), 0);
+assert.strictEqual(nx({ 0: 1 }), 1);
+// recorded out of order: the button moves past the skipped valve
+assert.strictEqual(nx({ 1: 1 }), 2);
+// all recorded, and a valve outside the line is never offered
+assert.strictEqual(nx({ 0: 1, 1: 1, 2: 1 }), null);
+// valve order comes from the position, not the index
+assert.strictEqual(PSC.nextValve([{ i: 0, tf: .7, ok: true }, { i: 1, tf: .3, ok: true }], {}).i, 1);
+assert.strictEqual(PSC.nextValve([], {}), null);
+
 console.log('overview-test: all checks passed');

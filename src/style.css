@@ -911,3 +911,59 @@ html[data-clk][data-ui] .tile.hot.live.over{background:var(--bad)!important;bord
 #arrDlg .vf{display:flex;flex-direction:column;gap:4px;margin-bottom:6px;font-size:13px}
 #arrDlg .vf input{width:100%;min-height:44px;font-size:18px;font-variant-numeric:tabular-nums}
 #arrErr{color:var(--bad);font-size:12px;min-height:16px;margin:2px 0 6px}
+
+/* ===== recording mode: the engineer's own live run ===== */
+.recp{display:none}
+body.rec .recp{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:16px;margin:0}
+.rechd{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px}
+.rechd>b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px}
+.recmore{flex:none}
+#recMore{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+#recMore:hover{border-color:var(--muted)}
+#recMenu{gap:8px;padding:10px;width:240px}
+#recMenu .add{width:100%;min-height:44px;text-align:left}
+#recMenu .recstop{margin-top:6px;color:var(--bad)}
+.reclab{font-size:14px;color:var(--muted)}
+.recbig{font-size:clamp(46px,15vw,64px);font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.recbig.bad{color:var(--bad)}
+.recbig.wrn{color:#a15c00}
+html[data-ui="1"] .recbig.wrn{color:#f4b860}
+.recsub{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.recbar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.recbar i{display:block;height:100%;background:var(--accent)}
+.reclast{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.reclast small{display:block;font-size:12px;color:var(--muted)}
+.reclast b{font-weight:600;font-variant-numeric:tabular-nums}
+.reclast .link,.recundo .link{min-height:44px;min-width:44px;padding:0 6px}
+.recundo{display:none;align-items:center;justify-content:space-between;gap:10px;padding:0 12px;border-radius:12px;background:var(--soft)}
+.recundo.on{display:flex}
+.recgo{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;min-height:96px;margin-top:auto;padding:12px;border:0;border-radius:16px;background:var(--accent);color:var(--accent-ink);font:inherit;cursor:pointer}
+.recgo b{font-size:22px;font-weight:600}
+.recgo small{font-size:13px;opacity:.9}
+.recgo small:empty{display:none}
+.recgo:active{transform:scale(.98)}
+.recgo.arr{background:#1f7a4a;color:#fff}
+.recgo:focus-visible,#recMore:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.rec2{display:flex;gap:8px}
+.rec2 .add{flex:1;min-height:52px}
+#recPanel .logpop{margin:0}
+#recPanel .logpop .lr input{min-height:44px;font-size:17px;width:130px}
+#recPanel .logpop .add{min-height:44px;min-width:60px}
+body.rec .runbar .add,body.rec #tourBtn{display:none!important}
+html[data-dsk="1"] body.rec #parBtn{display:flex}
+html[data-dsk="1"] body.rec #inpPanel{display:none;position:absolute;width:440px;max-height:76vh;overflow:auto}
+html[data-dsk="1"] body.rec #inpPanel.open{display:flex}
+@media(min-width:980px){.recp .rsm{display:none}}
+@media(max-width:979px){
+  body.rec .layout{display:block}
+  body.rec .dock{display:block}
+  body.rec:not(.recd) .main{display:none}
+  body.rec:not(.recd) .recp{min-height:calc(100dvh - 24px)}
+  body.rec.recd .dock{margin-bottom:10px}
+  body.rec .bar{margin:0;min-height:0}
+  body.rec .bar .brand,body.rec .bar .sqb,body.rec .fab,body.rec .tabbar{display:none!important}
+  html[data-ui="2"] body.rec{padding-bottom:0}
+  body.rec .toast{bottom:auto;top:62px}
+}
+@media print{.dock{display:none!important}body.ov .main,body.rec .main{display:block!important}}
+#recPanel [hidden]{display:none!important}

@@ -19,8 +19,15 @@ Opening a run with write access can finish it: when its estimated time has passe
 ## A run finishes only when someone confirms the arrival (slice 2a)
 Past its estimate a real run keeps running and counts as overdue, for the engineer and anyone watching. Confirming takes an editable time, which is saved as actual. Reminder at the estimate, then every 30 min. Playback at other speeds still ends by itself. Old app versions can still finish runs themselves until updated, so Overview keeps the "Arrival not confirmed" label. A forgotten run stays overdue until its engineer confirms, stops or deletes it.
 
+## Recording mode (slice 2b)
+- On for the current user's writable live run at x1, whatever their role: engineers, admins in the engineer view, and signed-out users on their own device. Someone watching a colleague's run stays on the classic read-only screen.
+- Overrides Standard, Sheet, Focus and Console during the run. Below 980 px the panel fills the screen and the header moves into the ⋯ menu; from 980 px it takes the left column beside the diagram.
+- One tap records the time, 15 s Undo, 1.5 s guard against a double tap. Chosen over a confirmation popup for speed on site; rejected a popup on every tap.
+- The button offers the first unrecorded valve beyond the furthest recorded one, even when the estimate says it has passed (`PSC.nextValve`).
+- Once overdue the main button is arrival. Arrival uses the dialog rather than the inline form in the sketch, so there is one confirmation path.
+
 ## Slices
-1. Manager overview (done). 2. Recording mode, stop false finishes. 3. Plan and Runs tabs, run summary. 4. Settings page, Team tab, fewer looks, new tour.
+1. Manager overview (done). 2. Recording mode, stop false finishes (done, pending a try on a real phone). 3. Plan and Runs tabs, run summary. 4. Settings page, Team tab, fewer looks, new tour.
 
 ## Left out of slice 1 on purpose
 - Warning for a valve expected but not recorded: a stuck pig shows On plan until overdue. Top candidate for the next round.
