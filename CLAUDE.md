@@ -29,7 +29,8 @@ Role and run state pick the menu (`DECISIONS.md`). Manager and admin start in th
 - `.gitignore` keeps binaries and generated `android/` out of git; `index.before-redesign.html` and `style-previews/` are old local copies, safe to delete.
 
 ## Working rules
-- Many small edits: apply them together, run `npm run build` once, check in the preview, and run `npm run release` only when the owner asks for a release (or after a batch of changes is finished).
+- Many small edits: apply them together, run `npm run build` once, check in the preview.
+- Every finished change goes live without asking (owner, 2026-11-02): on `main`, `npm test`, then `npm run release -- --bump --notes="..."` (`--bump=minor` for features, notes in Russian), commit, push, confirm `version.json` is live, report the version. Stop and report instead if a test fails. Never force-push. Changing `firestore.rules` still needs a yes: it is pasted into the Firebase console by hand.
 - Small edits to `src/` files with Edit (unique short strings). Big scripted patches: write the Node script with the Write tool (shell heredocs eat backslashes).
 - Commit in git after each finished change set so any edit can be compared or undone.
 - Pig speed = flow at line conditions / inner area. Physics changes must be checked in Node (see `NOTES.md`) and keep valve times consistent with the pig animation (use `PSC.tAt` / `PSC.xAt` on `r.prof`; never multiply by the position fraction).
