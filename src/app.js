@@ -36,7 +36,7 @@
     try{var s0=JSON.parse(localStorage.getItem(KEY)||'null');if(s0&&!('flowTouched' in s0))S.flowTouched=(String(S.flow)!=='250000'&&String(S.flow)!=='4000')}catch(e){}
     if(!S.flowTouched)flowDefault(S.fluid);
     if(!S.dstyleTouched)S.dstyle=1;
-    S.alert=true;S.pb=1;S.dstyle=1;S.api='35';S.sg='0.65';S.velu=0;S.rvu=0;if(!S.vwv2){S.rview=1;S.view=0;S.vwv2=1}fixTemp(S);                                           // reminders are always on, playback is always real time
+    S.lay=0;S.dsk=1;S.clk=1;S.txt=0;S.alert=true;S.pb=1;S.dstyle=1;S.api='35';S.sg='0.65';S.velu=0;S.rvu=0;if(!S.vwv2){S.rview=1;S.view=0;S.vwv2=1}fixTemp(S);                                           // reminders are always on, playback is always real time
   }
   function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}runsTouch()}
   var VT=['Ball valve','Gate valve','Check valve'];
@@ -79,7 +79,7 @@
     $('fmode').addEventListener('click',function(e){var bt=e.target.closest('button');if(!bt)return;S.fmode=+bt.dataset.m;save();var fb=$('fmlBody');fb.classList.remove('swap');void fb.offsetWidth;fb.classList.add('swap');update()});
   $('fmlBody').addEventListener('click',function(e){var u=e.target.closest('.nv');if(!u)return;var fe=document.querySelector('.field[data-f="'+u.dataset.nf+'"]');if(!fe)return;fe.scrollIntoView({block:'center',behavior:'smooth'});fe.classList.remove('flash');void fe.offsetWidth;fe.classList.add('flash')});
   IDS.forEach(function(id){if(id!=='od')$(id).value=S[id]});
-    setFluid(S.fluid,true);setView(S.view,true);renderValves();$('leadIn').value=S.lead;$('layS').value=S.lay||0;$('dskS').value=S.dsk||1;$('clkS').value=S.clk||1;$('aSound').checked=S.aSound!==false;$('aBanner').checked=S.aBanner!==false;$('aVib').checked=S.aVib!==false;syncUnits();$('toolSel').value=S.toolOn?S.tool:-1;
+    setFluid(S.fluid,true);setView(S.view,true);renderValves();$('leadIn').value=S.lead;$('aSound').checked=S.aSound!==false;$('aBanner').checked=S.aBanner!==false;$('aVib').checked=S.aVib!==false;syncUnits();$('toolSel').value=S.toolOn?S.tool:-1;
   }
   function vwNow(){return S.rview?(+S.view===1?'global':'local'):(isPhone()?'route':'local')}
   function applyVw(){
@@ -436,6 +436,7 @@
   function tr(s){return S.lang==='ru'&&RU[s]||s}
   function trf(s,v){return tr(s).replace('%s',v)}
   function applyLang(){
+    if($('startL'))$('startL').textContent=tr('Start');
     document.documentElement.lang=S.lang;
     [].forEach.call(document.body.querySelectorAll('*'),function(el){
       if(el.closest('svg')||{title:1,flowL:1,vel:1,dur:1,rflow:1,warn:1,startL:1,tArrL:1,pL:1,fmlBody:1,route:1,ideaMine:1,rlo:1,rrange:1,updTxt:1,ver:1,tourT:1,tourX:1,dimNext:1,pSum:1,annTxt:1,annPanel:1,iosGuide:1,whatsnew:1,authMsg:1,acct:1,teamBox:1,runList:1,roTxt:1}[el.id])return;
@@ -880,7 +881,7 @@
   }
   // every header menu is kept inside the visible screen whenever it opens or the screen changes
   (function(){
-    var ids=['gpanel','secPanel','teamPanel','annPanel','repPanel','inpPanel','acctMenu','palPanel','recMenu'];
+    var ids=['gpanel','secPanel','teamPanel','annPanel','repPanel','inpPanel','acctMenu','recMenu'];
     function fitOpen(){ids.forEach(function(id){var p=$(id);if(p&&p.classList.contains('open'))fitPanel(p)})}
     ids.forEach(function(id){var p=$(id);if(!p)return;new MutationObserver(function(){if(p.classList.contains('open'))setTimeout(function(){fitPanel(p)},0)}).observe(p,{attributes:true,attributeFilter:['class']})});
     window.addEventListener('resize',fitOpen);window.addEventListener('scroll',fitOpen,{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',fitOpen);visualViewport.addEventListener('scroll',fitOpen)}
@@ -1105,8 +1106,8 @@
   function authErr(e){var m=AUTHERR[e&&e.code];$('authErr').textContent=m===undefined?tr('Error')+(e&&e.code?' ('+e.code+')':''):tr(m)}
   var ICON={user:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 4-6 8-6s8 2 8 6\"/></svg>"};
   function closeHeaderPanels(except){
-    ['gpanel','secPanel','teamPanel','annPanel','repPanel','inpPanel','acctMenu','palPanel','recMenu'].forEach(function(id){var el=$(id);if(el&&id!==except)el.classList.remove('open')});
-    [['gearBtn',0],['secBtn',0],['parBtn',0],['palBtn',0]].forEach(function(p){var el=$(p[0]);if(el)el.setAttribute('aria-expanded','false')});
+    ['gpanel','secPanel','teamPanel','annPanel','repPanel','inpPanel','acctMenu','recMenu'].forEach(function(id){var el=$(id);if(el&&id!==except)el.classList.remove('open')});
+    [['gearBtn',0],['secBtn',0],['parBtn',0]].forEach(function(p){var el=$(p[0]);if(el)el.setAttribute('aria-expanded','false')});
   }
   function toggleTeam(){var p=$('teamPanel'),on=!p.classList.contains('open');closeHeaderPanels('teamPanel');p.classList.toggle('open',on);if(on){p.style.left='0px';fitPanel(p)}renderTeam()}
   function renderAcct(){
@@ -1184,9 +1185,9 @@
   function applyUi(){
     document.documentElement.dataset.lay=curLay();
     if(+S.ui!==1&&+S.ui!==2)S.ui=2;
-    document.documentElement.dataset.clk=(+S.clk===2?2:1);
+    document.documentElement.dataset.clk=1;
     var u=+S.ui,dg=document.querySelector('.card.diag');document.documentElement.dataset.ui=u;
-    $('uiS').value=String(u);document.documentElement.dataset.txt=(+S.txt===1||+S.txt===2)?+S.txt:0;
+    [].forEach.call($('uiSeg').children,function(b){b.setAttribute('aria-pressed',String(+b.dataset.v===u))});
     applyVw();
     renderRoute();renderLay();applyDsk();
   }
@@ -1206,7 +1207,7 @@
     dskWrapped=on;
   }
   function applyDsk(){
-    var d=isDesk(),v=OV.on||REC.on||+S.dsk!==2?1:2,h=document.documentElement,p=$('inpPanel'),dock=$('dock');
+    var d=isDesk(),v=1,h=document.documentElement,p=$('inpPanel'),dock=$('dock');
     h.dataset.dsk=d?v:0;
     if(d&&v===1&&!OV.on&&!REC.on){if(p.parentNode!==dock){dock.appendChild(p);p.classList.remove('open');p.style.cssText=''}}
     else if(p.parentNode===dock){$('parWrap').appendChild(p);p.style.cssText=''}
@@ -1214,13 +1215,12 @@
     if(d)$('vsec').classList.remove('vc');
     else try{vOpen(localStorage.getItem('pigSpeedCalc.vopen')==='1')}catch(e){}
   }
-  $('dskS').addEventListener('change',function(){var v=+this.value;keepRun(function(){S.dsk=v;save();applyDsk();update()})});
   window.addEventListener('resize',function(){var d=isDesk();if(d!==dskLast){dskLast=d;keepRun(function(){applyDsk();update()})}});
   var dskLast=isDesk();
   // ---- phone layouts: 1 sheet, 2 focus, 3 cards (Standard = 0)
   var layBuilt=false,layLang='',shOpen=false,shSig='',lastPh=null;
   function isPhone(){return window.innerWidth<700}
-  function curLay(){if(OV.on||REC.on)return 0;var l=+S.lay||0;return isPhone()&&l>=1&&l<=2?l:0}
+  function curLay(){return 0}
   function layData(){
     var g=window.__dg,run=window.__run,now=Date.now(),has=!!(g&&g.hours);
     var T=has?effMs(g):0,base=run?run.launch:now,p=run?(run.done?1:(window.__p||0)):0,obs=(run&&run.obs)||{},xf=window.__xf||0;
@@ -1306,19 +1306,7 @@
   ['fc','sh'].forEach(function(id){$(id).addEventListener('click',function(e){
     var row=e.target.closest('.shv');if(row&&!RO){openLog(+row.dataset.i);return}
     var b=e.target.closest('button');if(!b||b.disabled||!b.dataset.a)return;layAct(b.dataset.a,b)})});
-  $('clkS').addEventListener('change',function(){S.clk=+this.value;save();applyUi()});
-  $('layS').addEventListener('change',function(){var v=+this.value;keepRun(function(){S.lay=v;save();applyLay();update()})});
   window.addEventListener('resize',function(){var ph=isPhone();if(ph!==lastPh){lastPh=ph;keepRun(function(){applyLay();update()})}});
-  var layPrev=0;
-  function layOptsHtml(){
-    var opts=[['0','Standard','<i class="w1"></i><i class="w2"></i><i class="w3"></i>'],['1','Sheet','<i class="w4"></i><i class="w5"></i>'],['2','Focus','<i class="w6"></i><i class="w7"></i>']];
-    $('layOpts').innerHTML=opts.map(function(o){return '<button type="button" class="lopt'+(+(S.lay||0)===+o[0]?' on':'')+'" data-v="'+o[0]+'"><span class="wfw"><span class="wf">'+o[2]+'</span></span><b>'+tr(o[1])+'</b></button>'}).join('');
-  }
-  function openLayPicker(){if(OV.on||REC.on)return;layPrev=+(S.lay||0);layOptsHtml();$('layDlg').classList.add('open');document.documentElement.classList.add('lay-picking')}
-  function closeLayPicker(){$('layDlg').classList.remove('open');document.documentElement.classList.remove('lay-picking');setTimeout(tourAuto,700)}
-  $('layOpts').addEventListener('click',function(e){var b=e.target.closest('.lopt');if(!b)return;var v=+b.dataset.v;$('layS').value=v;keepRun(function(){S.lay=v;save();applyLay();update()});layOptsHtml()});
-  $('layKeep').addEventListener('click',function(){S.layAsked=1;save();closeLayPicker()});
-  $('layLater').addEventListener('click',function(){var v=layPrev;S.layAsked=1;$('layS').value=v;keepRun(function(){S.lay=v;save();applyLay();update()});closeLayPicker()});
   // ---- spotlight tour, by role
   var TOURK='pigSpeedCalc.tour',tourSeen={},TOUR=null,tourSession=false;
   try{tourSeen=JSON.parse(localStorage.getItem(TOURK)||'{}')||{}}catch(e){tourSeen={}}
@@ -1341,7 +1329,7 @@
     var acctTeam=function(txt){return {sel:'#acctMenu',before:function(){var m=$('acctMenu');if(!m.classList.contains('open')){var b=document.querySelector('#acct .sqb');if(b)b.click()}},t:L('Team','Команда'),x:txt}};
     var ideas=function(txt){return {sel:'#ideaBtn',t:L('Ideas','Идеи'),x:txt}};
     var sets={sel:'#gearBtn',t:L('Settings','Настройки'),x:L('Units, reminders and alerts, the dim screen for the field, backup of your runs, language and the layout for phones.','Единицы, напоминания и оповещения, затемнение экрана в поле, резервная копия запусков, язык и вид для телефона.')};
-    var theme={sel:'#palBtn',t:L('Customize','Оформление'),x:L('Theme, text style, clock style and the phone layout live here.','Тема, стиль текста, стиль часов и раскладка для телефона находятся здесь.')};
+    var theme={sel:'#gearBtn',t:L('Settings','Настройки'),x:L('Theme, language, units and reminders live here.','Тема, язык, единицы и напоминания находятся здесь.')};
     var end={sel:null,t:L('That is all','Это всё'),x:L('You can replay this tour any time in Settings > Show the tour.','Этот тур можно повторить в Настройках: «Показать обзор».')};
     if(role==='manager')return [welcome,runs(L('Every team run is here. Live runs have a red dot. Open one to watch it in real time (read-only).','Здесь все запуски команды. Идущие отмечены красной точкой. Откройте запуск — смотрите его в реальном времени (только чтение).')),bell,acctTeam(L('Team: see all members and invite engineers. Engineers get access when they sign up with the invited email.','Команда: список участников и приглашение инженеров. Инженер получает доступ, когда регистрируется с приглашённой почтой.')),par,ideas(L('Send ideas or bugs with a screenshot; answers come back here.','Отправляйте идеи и ошибки со снимком экрана — ответы приходят сюда.')),sets,end];
     if(role==='admin')return [welcome,runs(L('You can open, edit and delete any team run. Live runs have a red dot.','Вы можете открывать, править и удалять любые запуски команды. Идущие отмечены красной точкой.')),acctTeam(L('Team: invite people as engineer, manager or admin, then send the invitation by copy, share, Gmail or Outlook. Change roles here too.','Команда: приглашайте как инженера, руководителя или администратора, затем отправляйте приглашение — копией, через «Поделиться», Gmail или Outlook. Здесь же меняются роли.')),ideas(L('Your ideas inbox: reply privately, mark Done or Not doing with a reason, archive. The red number counts new items.','Ваш ящик идей: отвечайте автору лично, отмечайте «Готово» или «Не будем» с причиной, архив. Красное число — новые.')),bell,par,sets,theme,end];
@@ -1384,7 +1372,7 @@
   function tourAuto(){
     if(OV.on||TOUR||tourSession||anim)return;
     var r=tourRole();if(tourSeen[r])return;
-    if($('layDlg').classList.contains('open')||$('authDlg').classList.contains('open')||$('arrDlg').classList.contains('open')||$('vDlg').classList.contains('open'))return;
+    if($('authDlg').classList.contains('open')||$('arrDlg').classList.contains('open')||$('vDlg').classList.contains('open'))return;
     tourSession=true;tourStart(r);
   }
   $('tourNext').addEventListener('click',function(e){e.stopPropagation();if(TOUR)tourGo(1)});
@@ -1419,14 +1407,7 @@
     el.innerHTML=h;
   }
   $('route').addEventListener('click',function(e){var r=e.target.closest('.rs[data-i]');if(r)openLog(+r.dataset.i)});
-  $('uiS').addEventListener('change',function(){var v=+this.value;keepRun(function(){S.ui=v;save();applyUi();update()})});
-  $('txtS').addEventListener('change',function(){S.txt=+this.value;save();applyUi()});
-  function segSync(){[].forEach.call(document.querySelectorAll('#palPanel .seg'),function(sg){var sel=$(sg.dataset.for);if(!sg.firstChild){[].forEach.call(sel.options,function(o){var bt=document.createElement('button');bt.type='button';bt.dataset.v=o.value;bt.textContent=tr(o.textContent);sg.appendChild(bt)})}
-    [].forEach.call(sg.children,function(bt,i){bt.textContent=tr(sel.options[i].textContent);bt.classList.toggle('on',bt.dataset.v===String(sel.value))})})}
-  $('palPanel').addEventListener('click',function(e){var bt=e.target.closest('.seg button');if(!bt)return;var sel=$(bt.parentNode.dataset.for);if(sel.value!==bt.dataset.v){sel.value=bt.dataset.v;sel.dispatchEvent(new Event('change'))}segSync()});
-  $('palBtn').addEventListener('click',function(e){e.stopPropagation();var o=!$('palPanel').classList.contains('open');closeHeaderPanels('palPanel');$('palPanel').classList.toggle('open',o);this.setAttribute('aria-expanded',String(o));if(o){$('clkS').value=S.clk||1;$('layS').value=S.lay||0;$('dskS').value=S.dsk||1;$('txtS').value=S.txt||0;$('uiS').value=String(S.ui);segSync()}});
-  document.addEventListener('click',function(e){if(!e.target.closest('.pal')){$('palPanel').classList.remove('open');$('palBtn').setAttribute('aria-expanded','false')}});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('palPanel').classList.remove('open');$('palBtn').setAttribute('aria-expanded','false')}});
+  $('uiSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=+b.dataset.v;if(v===+S.ui)return;keepRun(function(){S.ui=v;save();applyUi();update()})});
   $('tabbar').addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b)return;var a=b.dataset.a;
     if(a==='run'){window.scrollTo({top:0,behavior:'smooth'});return}
@@ -1624,7 +1605,7 @@
   $('roNew').addEventListener('click',newRun);
   setInterval(function(){if($('secPanel').classList.contains('open'))renderRuns()},2000);
   $('secBtn').addEventListener('click',function(e){e.stopPropagation();var o=$('secPanel').classList.toggle('open');this.setAttribute('aria-expanded',String(o));if(o){renderRuns();fitPanel($('secPanel'))}$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')});
-  $('gearBtn').addEventListener('click',function(e){e.stopPropagation();$('palPanel').classList.remove('open');$('palBtn').setAttribute('aria-expanded','false');var o=$('gpanel').classList.toggle('open');this.setAttribute('aria-expanded',String(o));$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')});
+  $('gearBtn').addEventListener('click',function(e){e.stopPropagation();var o=$('gpanel').classList.toggle('open');this.setAttribute('aria-expanded',String(o));$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')});
   document.addEventListener('click',function(e){if(!e.target.closest('.sec')){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('click',function(e){if(!e.target.closest('.gear')){$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){$('secPanel').classList.remove('open');$('secBtn').setAttribute('aria-expanded','false');$('gpanel').classList.remove('open');$('gearBtn').setAttribute('aria-expanded','false')}});
@@ -1874,8 +1855,7 @@
   if($('ver'))$('ver').textContent='v'+(typeof APP_VERSION==='undefined'?'?':APP_VERSION);
   checkUpdate();setInterval(checkUpdate,3600000);document.addEventListener('visibilitychange',function(){if(!document.hidden)checkUpdate()});
   load();toUI();lastPh=isPhone();applyUi();applyLang();update();initRuns();restoreRun();applyFoldBoot();setInterval(updateValveClocks,500);
-  if(isPhone()&&!S.layAsked)setTimeout(openLayPicker,900);
-  setTimeout(tourAuto,isPhone()&&!S.layAsked?4000:2200);
+  setTimeout(tourAuto,2200);
   // the global view is sized to the screen: redraw when the window width changes (a running pig keeps going)
   (function(){var t=null,w=window.innerWidth;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){if(window.innerWidth===w||S.view!==1)return;w=window.innerWidth;var run=snapRun();update();if(run)resumeAnim(run)},250)})})();
 })();

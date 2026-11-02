@@ -26,8 +26,14 @@ Past its estimate a real run keeps running and counts as overdue, for the engine
 - The button offers the first unrecorded valve beyond the furthest recorded one, even when the estimate says it has passed (`PSC.nextValve`).
 - Once overdue the main button is arrival. Arrival uses the dialog rather than the inline form in the sketch, so there is one confirmation path.
 
+## One look (2026-11-02)
+- White work surface, thin rules, one blue for action, red for trouble, Light and Control room themes. It is the last layer of `src/style.css`, so it wins over the older rules above it.
+- Removed: text style, clock style, Console, Sheet, Focus, the layout picker and the Customize button; old saved choices are ignored. Theme moved into Settings.
+- Rejected: keeping the options and restyling each one (too many combinations to keep working).
+- Code for Sheet, Focus and Console no longer runs and can be deleted in a clean-up, along with the older CSS it uses.
+
 ## Slices
-1. Manager overview (done). 2. Recording mode, stop false finishes (done, pending a try on a real phone). 3. Plan and Runs tabs, run summary. 4. Settings page, Team tab, fewer looks, new tour.
+1. Manager overview (done). 2. Recording mode, stop false finishes (done, pending a try on a real phone). 3. Plan and Runs tabs, run summary. 4. Settings page, Team tab, new tour. Fewer looks is done.
 
 ## Left out of slice 1 on purpose
 - Warning for a valve expected but not recorded: a stuck pig shows On plan until overdue. Top candidate for the next round.

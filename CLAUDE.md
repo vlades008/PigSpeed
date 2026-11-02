@@ -4,7 +4,7 @@ Planner and tracker for in-line inspection runs (Interscan tools: Geometry EGT, 
 
 ## Source layout (edit `src/`, never `index.html`)
 - `src/index.template.html`: page markup. Contains `{{STYLE}}`, `{{CORE}}`, `{{APP}}`, `{{VLAD}}` placeholders.
-- `src/style.css`: all CSS.
+- `src/style.css`: all CSS. The current look is the last layer; change it there, using the palette tokens.
 - `src/cloud.js`: team cloud adapter (Firebase Auth + Firestore, loaded from CDN; `?mock=uid:Name:role` test mode). Config in `tools/config.json` (siteUrl, teamId, firebase). Rules in `firestore.rules`, setup in `FIREBASE.md`, publishing in `PUBLISH.md`.
 - `src/core.js`: physics (`PSC.calc`, correlations, time <-> position profile).
 - `src/app.js`: UI, diagram drawing, valves, run tracking, menus (one IIFE, ~650 lines).
