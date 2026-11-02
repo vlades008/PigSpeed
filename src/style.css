@@ -720,7 +720,7 @@ html[data-clk="1"] .tiles{grid-template-columns:minmax(190px,1.5fr) repeat(3,min
 html[data-clk="1"] .tile.hot{order:-1;grid-column:1;grid-row:1/span 2;grid-template-columns:auto 1fr;align-content:center;background:var(--accentbg,var(--soft))!important;border-color:var(--accent)}
 html[data-clk="1"] .tile.hot b{font-size:36px;color:var(--accent)!important;line-height:1.1}
 html[data-clk="1"] .tile.hot .tic{color:var(--accent)}
-html[data-clk="1"] .tile.hot.live{background:var(--accent)!important}
+html[data-clk="1"][data-ui="2"] .tile.hot.live{background:var(--accent)!important}
 html[data-clk="1"] .tile.hot.live b,html[data-clk="1"] .tile.hot.live span,html[data-clk="1"] .tile.hot.live .tic{color:#fff!important}
 html[data-clk="1"] .tiles>.tile:last-child{grid-column:span 2}
 html[data-clk="1"] .rprog{height:8px;border-radius:4px;margin-top:10px}
@@ -866,3 +866,41 @@ html[data-dsk="2"] .runbar .add.okb{min-height:44px;font-size:15px;border-radius
 html[data-dsk] .tile span{letter-spacing:.02em}
 html[data-dsk="1"] .tiles{grid-template-columns:minmax(170px,1.2fr) repeat(3,minmax(124px,1fr))}
 html[data-dsk="1"] .runbar .add.start,html[data-dsk="1"] .runbar .add.okb{min-width:150px;min-height:56px;border-radius:12px}
+
+/* ===== manager overview: list of team runs beside the read-only run ===== */
+.ovp,.ovbar{display:none}
+body.ov .ovp{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px;margin:0}
+body.ov .parwrap,body.ov .sec,body.ov .robar,body.ov .tabbar,body.ov #tourBtn,body.ov #palPanel .deskonly,body.ov #palPanel .phoneonly,body.ov #vempty,body.ov #runWarn{display:none!important}
+html[data-ui="2"] body.ov{padding-bottom:0}
+body.ovnone .main{display:none}
+.ovchips{display:flex;flex-wrap:wrap;gap:6px}
+.ovchips button{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--muted);font:inherit;font-size:13px;cursor:pointer}
+.ovchips button b{font-weight:600;font-variant-numeric:tabular-nums}
+.ovchips button:hover{border-color:var(--muted);color:var(--ink)}
+.ovchips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.ovlist{display:flex;flex-direction:column;gap:2px}
+.ovr{display:flex;flex-direction:column;gap:3px;width:100%;min-height:52px;justify-content:center;padding:8px 10px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.ovr:hover{background:var(--bg)}
+.ovr.on{background:var(--soft);border-color:var(--accent)}
+.ovchips button:focus-visible,.ovr:focus-visible,#ovBack:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.ovl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;min-width:0}
+.ovl>b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ovl>em{flex:none;font-style:normal;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ovl>em.bad{color:var(--bad);font-weight:600}
+.ovl>em.wrn{color:#a15c00;font-weight:600}
+html[data-ui="1"] .ovl>em.wrn{color:#f4b860}
+@media (prefers-color-scheme:dark){html:not([data-ui]) .ovl>em.wrn{color:#f4b860}}
+.ovs{font-size:12px;color:var(--muted)}
+.ovs>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ovs>i{flex:none;font-style:normal;font-variant-numeric:tabular-nums}
+.ove{padding:14px 10px}
+.ovbar{align-items:center;gap:10px;margin-bottom:10px}
+.ovbar b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ovBack{min-height:44px;flex:none}
+@media(max-width:979px){
+  body.ov .layout{display:block}
+  body.ov .dock{display:block}
+  body.ov:not(.ovd) .main{display:none}
+  body.ov.ovd .dock{display:none}
+  body.ov.ovd .ovbar{display:flex}
+}

@@ -5,6 +5,7 @@
   "description": "Pig speed calculator and in-line inspection run tracker (single-file web app, exe and Android wrapper)",
   "scripts": {
     "build": "node tools/build.js",
+    "test": "node tools/overview-test.js",
     "dev": "node tools/dev.js",
     "release": "node tools/release.js",
     "release:fast": "node tools/release.js --no-apk"

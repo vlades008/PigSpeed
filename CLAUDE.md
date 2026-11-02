@@ -13,8 +13,12 @@ Planner and tracker for in-line inspection runs (Interscan tools: Geometry EGT, 
 
 ## Commands (all from this folder)
 - `npm run dev`: preview at http://localhost:8790, rebuilds on every save in `src/` and reloads the page. In the app use `preview_start` with name "pigspeed" (`.claude/launch.json`).
+- `npm test`: overview status rules (`tools/overview-test.js`).
 - `npm run build`: only `index.html` (about a second). Fails without touching `index.html` if an inline script has a syntax error.
 - `npm run release`: build + `PigSpeedCalc.exe` + `android/` web package + `PigSpeedCalc.apk` (about 10 s). `npm run release:fast` skips the APK.
+
+## Roles
+Role and run state pick the menu (`DECISIONS.md`). Manager and admin start in the read-only Overview (`body.ov`, section "manager overview" in `app.js`); engineers and signed-out users see the classic screen. Test with `?mock=uid:Name:role`.
 
 ## Other files
 - `PigSpeedCalc.exe`: Windows launcher that embeds `index.html` and opens it in an Edge/Chrome app window (`launcher/PigSpeedCalc.cs`, icon `launcher/PigSpeedCalc.ico`, `launcher/make-icon.ps1`).

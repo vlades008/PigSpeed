@@ -97,5 +97,29 @@ var PSC = (function(){
     var a=Math.trunc(h),b=Math.trunc(mm),c=Math.trunc(ss);
     return String(a)+':'+String(b).padStart(2,'0')+':'+String(c).padStart(2,'0');
   }
-  return {calc:calc,velOut:velOut,fmtDur:fmtDur,tAt:tAt,xAt:xAt,vRel:vRel};
+  // ---- manager overview: status of a team run from its synced fields only
+  var ONPLAN_MS=5*60000,UNCONF_MS=24*3600000;
+  function runStatus(r,now){
+    if(r.st==='done'){
+      var f=r.finish||{},auto=!!f.auto;
+      return {group:auto&&now-(f.at||0)<UNCONF_MS?'now':'done',state:auto?'unconfirmed':'done',rank:1,arrival:r.launch?r.launch+(f.actual||0):f.at,at:f.at||0,planned:f.planned||0,actual:f.actual||0};
+    }
+    if(r.st!=='running'||!r.launch)return {group:'planned',state:'planned',rank:0,at:r.updated||0};
+    var planned=(r.hours||0)*3.6e6,dur=r.dur||planned,arrival=r.launch+dur,delay=planned?dur-planned:0;
+    if(now>arrival)return {group:'now',state:'overdue',rank:0,arrival:arrival,over:now-arrival,planned:planned,delay:delay};
+    if(delay>ONPLAN_MS)return {group:'now',state:'late',rank:2,arrival:arrival,planned:planned,delay:delay};
+    return {group:'now',state:'onplan',rank:3,arrival:arrival,planned:planned,delay:delay};
+  }
+  function overview(runs,now){
+    var o={now:[],planned:[],done:[]};
+    runs.forEach(function(r){if(r.team&&r.params){var s=runStatus(r,now);o[s.group].push({run:r,status:s})}});
+    o.now.sort(function(a,b){
+      var s=a.status,t=b.status;if(s.rank!==t.rank)return s.rank-t.rank;
+      return s.state==='overdue'?t.over-s.over:s.state==='unconfirmed'?t.at-s.at:s.state==='late'?t.delay-s.delay:s.arrival-t.arrival;
+    });
+    o.planned.sort(function(a,b){return b.status.at-a.status.at});
+    o.done.sort(function(a,b){return b.status.at-a.status.at});
+    return o;
+  }
+  return {calc:calc,velOut:velOut,fmtDur:fmtDur,tAt:tAt,xAt:xAt,vRel:vRel,runStatus:runStatus,overview:overview};
 })();
