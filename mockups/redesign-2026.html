@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pig Speed — макет 1.27</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --surface:#ffffff; --surface-2:#f8fafc;
+    --ink:#101a28; --muted:#5c6b7e; --faint:#8a97a8;
+    --line:#e3e8ef; --line-strong:#d3dbe5;
+    --accent:#1f5fd0; --accent-2:#164da9; --accent-soft:#eaf1fc;
+    --good:#177a4b; --good-soft:#e9f6ef;
+    --warn:#9a5b00; --warn-soft:#fff4e2;
+    --bad:#b3261e; --bad-soft:#fdeceb;
+    --navy:#13263c;
+    --r:14px; --r-sm:10px;
+    --shadow:0 1px 2px rgba(16,24,40,.05), 0 8px 24px -18px rgba(16,24,40,.25);
+    --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--font); color:var(--ink); background:var(--bg);
+    -webkit-font-smoothing:antialiased; font-size:14px; line-height:1.45;
+  }
+  button{font:inherit; color:inherit}
+  svg{display:block}
+  .num{font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+
+  /* ---------- review chrome (not part of the app) ---------- */
+  .reviewbar{
+    position:sticky; top:0; z-index:80; display:flex; align-items:center; gap:18px;
+    height:52px; padding:0 20px; background:#0e1826; color:#e9eef5;
+    border-bottom:1px solid #223247;
+  }
+  .rb-brand{display:flex; align-items:center; gap:9px; font-size:13px; font-weight:600; white-space:nowrap}
+  .rb-chip{font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    background:#21354c; color:#a9c1dd; border-radius:5px; padding:3px 6px}
+  .rb-tabs{display:flex; gap:2px; padding:3px; background:#172436; border-radius:9px}
+  .rb-tabs button{
+    border:0; background:transparent; color:#a9b6c7; height:30px; padding:0 13px;
+    border-radius:6px; font-size:13px; cursor:pointer;
+  }
+  .rb-tabs button:hover{color:#fff}
+  .rb-tabs button.on{background:#fff; color:#101a28; font-weight:600}
+  .rb-note{margin-left:auto; color:#8fa0b4; font-size:12px; white-space:nowrap}
+
+  /* ---------- app shell ---------- */
+  .view{display:none}
+  body[data-view="plan"] #v-plan,
+  body[data-view="track"] #v-track,
+  body[data-view="ov"] #v-ov{display:block}
+  body[data-view="phone"] #v-phone{display:flex}
+
+  .app{max-width:1360px; margin:0 auto; padding:0 32px 40px}
+  .appbar{
+    background:var(--surface); border-bottom:1px solid var(--line);
+    margin:0 0 26px; padding:0 32px;
+  }
+  .appbar-in{max-width:1296px; margin:0 auto; height:66px; display:flex; align-items:center; gap:16px}
+  .logo{width:34px; height:34px; border-radius:10px; flex:none}
+  .brand{display:flex; align-items:baseline; gap:9px; min-width:0}
+  .brand b{font-size:15.5px; font-weight:650; letter-spacing:-.01em}
+  .brand span{font-size:12.5px; color:var(--faint); white-space:nowrap}
+  .divider{width:1px; height:24px; background:var(--line); margin:0 2px}
+  .crumb{display:flex; align-items:center; gap:9px; min-width:0}
+  .crumb b{font-size:14px; font-weight:600}
+  .crumb span{font-size:12.5px; color:var(--muted); white-space:nowrap}
+  .tabs{display:flex; gap:2px; margin-left:6px}
+  .tabs button{
+    border:0; background:transparent; color:var(--muted); height:36px; padding:0 13px;
+    border-radius:8px; font-size:13.5px; font-weight:500; cursor:pointer;
+  }
+  .tabs button:hover{background:var(--surface-2); color:var(--ink)}
+  .tabs button.on{background:var(--accent-soft); color:var(--accent); font-weight:650}
+  .topright{margin-left:auto; display:flex; align-items:center; gap:8px}
+  .sync{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); padding:0 8px}
+  .dot{width:7px; height:7px; border-radius:50%; background:var(--good)}
+  .dot.live{background:var(--bad); box-shadow:0 0 0 4px rgba(179,38,30,.1)}
+  .iconbtn{
+    width:38px; height:38px; display:grid; place-items:center; border:0; background:transparent;
+    border-radius:9px; color:var(--muted); cursor:pointer;
+  }
+  .iconbtn:hover{background:var(--surface-2); color:var(--ink)}
+  .avatar{
+    width:34px; height:34px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+    display:grid; place-items:center; font-size:12px; font-weight:700; border:1px solid #d8e4f7;
+  }
+
+  .pagehead{display:flex; align-items:flex-end; gap:18px; margin-bottom:20px}
+  .pagehead h1{margin:0; font-size:24px; font-weight:650; letter-spacing:-.02em; line-height:1.2}
+  .pagehead .sub{margin-top:5px; color:var(--muted); font-size:13px}
+  .pagehead .actions{margin-left:auto; display:flex; align-items:center; gap:8px}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    height:40px; padding:0 14px; border-radius:9px; border:1px solid var(--line-strong);
+    background:var(--surface); color:var(--ink); font-size:13.5px; font-weight:550; cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn:hover{background:var(--surface-2)}
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+  .btn.primary:hover{background:var(--accent-2)}
+  .btn.lg{height:48px; padding:0 20px; font-size:14.5px; border-radius:10px}
+  .btn svg{width:17px; height:17px}
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px; height:26px; padding:0 9px;
+    border-radius:7px; font-size:12px; font-weight:600; white-space:nowrap;
+  }
+  .chip.good{background:var(--good-soft); color:var(--good)}
+  .chip.warn{background:var(--warn-soft); color:var(--warn)}
+  .chip.bad{background:var(--bad-soft); color:var(--bad)}
+  .chip.live{background:var(--bad-soft); color:var(--bad)}
+  .chip.live i{width:6px; height:6px; border-radius:50%; background:var(--bad); animation:pulse 1.6s infinite}
+  .chip.neutral{background:var(--surface-2); color:var(--muted); border:1px solid var(--line)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    box-shadow:var(--shadow);
+  }
+  .card-h{display:flex; align-items:center; gap:10px; padding:16px 18px 0}
+  .card-h h2{margin:0; font-size:13px; font-weight:650; letter-spacing:.01em}
+  .card-h .right{margin-left:auto; display:flex; align-items:center; gap:8px}
+  .card-b{padding:16px 18px}
+
+  /* ---------- plan ---------- */
+  .plan-grid{display:grid; grid-template-columns:370px minmax(0,1fr); gap:20px; align-items:start}
+  .left-stack{display:flex; flex-direction:column; gap:16px; min-width:0}
+  .params{padding:6px 18px 14px}
+  .params-top{display:flex; align-items:center; padding:12px 0 4px}
+  .params-top b{font-size:13px; font-weight:650}
+  .params-top a{margin-left:auto; font-size:12.5px; color:var(--accent); text-decoration:none}
+  .prow{
+    display:grid; grid-template-columns:20px 74px minmax(0,1fr) 14px; align-items:center; gap:12px;
+    min-height:58px; border-top:1px solid var(--line); cursor:pointer; padding:7px 0;
+  }
+  .prow:hover .pv{color:var(--ink)}
+  .prow:first-of-type{border-top:0}
+  .prow .pi{color:var(--faint)}
+  .prow .pi svg{width:19px; height:19px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+  .prow .pl{font-size:12.5px; color:var(--muted)}
+  .prow .pv{font-size:13.5px; font-weight:550; text-align:right; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .prow .pv small{font-weight:400; color:var(--faint); font-size:12px}
+  .chev{width:7px; height:7px; border-right:1.5px solid var(--faint); border-bottom:1.5px solid var(--faint); transform:rotate(45deg); margin-left:3px}
+  .param-foot{
+    margin-top:6px; padding:13px 14px; border-radius:10px; background:var(--good-soft);
+    color:var(--good); display:flex; gap:9px; align-items:flex-start; font-size:12.5px; line-height:1.4;
+  }
+  .param-foot svg{width:16px; height:16px; flex:none; margin-top:1px; stroke:currentColor; fill:none; stroke-width:2}
+  .param-foot b{font-weight:650}
+
+  .stack{display:flex; flex-direction:column; gap:16px; min-width:0}
+
+  .hero{}
+  .hero-stats{display:grid; grid-template-columns:1.1fr 1fr 1fr; padding:18px 22px 6px; gap:0}
+  .hs{padding:0 22px; border-left:1px solid var(--line)}
+  .hs:first-child{padding-left:0; border-left:0}
+  .hs .k{font-size:10.5px; font-weight:650; letter-spacing:.08em; text-transform:uppercase; color:var(--faint)}
+  .hs .v{margin-top:8px; font-size:38px; font-weight:620; line-height:1.02; letter-spacing:-.03em; white-space:nowrap}
+  .hs .v.txt{font-size:32px; letter-spacing:-.02em}
+  .hs .v unit{font-size:14px; font-weight:500; color:var(--muted); letter-spacing:0; margin-left:5px}
+  .hs .s{margin-top:7px; font-size:12px; color:var(--muted)}
+  .gauge-wrap{padding:4px 22px 18px}
+  .gauge{position:relative; height:8px; border-radius:4px; margin-top:38px; background:#eef1f5}
+  .gauge .band{position:absolute; left:0; right:0; top:0; bottom:0; background:#d8ecdf; border-radius:4px}
+  .gauge .mark{position:absolute; top:-6px; left:40.5%; width:2px; height:20px; background:var(--accent); border-radius:2px}
+  .gauge .mark:after{
+    content:""; position:absolute; top:-3px; left:-4px; width:10px; height:10px;
+    background:var(--accent); border-radius:50%; box-shadow:0 0 0 3px #fff;
+  }
+  .gauge .mlabel{
+    position:absolute; top:-30px; left:40.5%; transform:translateX(-50%); font-size:11px; font-weight:650;
+    color:var(--accent); background:#fff; padding:0 5px; border-radius:4px; white-space:nowrap;
+  }
+  .gauge .tick{position:absolute; top:13px; font-size:10.5px; color:var(--faint); transform:translateX(-50%)}
+  .gauge .tick.l{left:0; transform:none}
+  .gauge .tick.r{right:0; left:auto; transform:none}
+  .gauge-footer{display:flex; justify-content:space-between; margin-top:26px; font-size:11.5px; color:var(--faint)}
+  .gauge-footer b{color:var(--good); font-weight:600}
+
+  .diagram{padding:0}
+  .seg{display:flex; gap:2px; padding:3px; background:var(--surface-2); border-radius:8px}
+  .seg button{border:0; background:transparent; color:var(--muted); height:29px; padding:0 11px; border-radius:6px; font-size:12.5px; cursor:pointer}
+  .seg button.on{background:#fff; color:var(--ink); font-weight:600; box-shadow:0 0 0 1px var(--line)}
+  .diagram-body{padding:14px 18px 0}
+  .diagram svg{width:100%; height:auto}
+  .diagram-foot{
+    display:flex; align-items:center; gap:14px; padding:12px 18px 15px; border-top:1px solid var(--line); margin-top:10px;
+  }
+  .df-l .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--faint); font-weight:600}
+  .df-l .v{font-size:14px; font-weight:600; margin-top:2px}
+  .df-l .v span{font-weight:400; color:var(--muted); font-size:12.5px}
+  .df-r{margin-left:auto; text-align:right}
+  .df-r .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--faint); font-weight:600}
+  .df-r .v{font-size:14px; font-weight:600; margin-top:2px}
+
+  .bottom-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); gap:20px}
+  .check-list{display:flex; flex-direction:column}
+  .check{display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--line); font-size:13px}
+  .check:first-child{border-top:0; padding-top:2px}
+  .check .ok{width:19px; height:19px; border-radius:50%; background:var(--good-soft); color:var(--good); display:grid; place-items:center; flex:none}
+  .check .ok svg{width:11px; height:11px; stroke:currentColor; fill:none; stroke-width:2.6}
+  .check span{color:var(--muted)}
+  .check b{margin-left:auto; font-weight:600; white-space:nowrap}
+  .check b small{font-weight:400; color:var(--faint)}
+  .check-foot{margin-top:4px; font-size:11.5px; color:var(--faint)}
+
+  .vtable{width:100%; border-collapse:collapse; font-size:13px}
+  .vtable th{
+    text-align:left; font-size:10.5px; font-weight:650; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--faint); padding:0 0 7px; border-bottom:1px solid var(--line);
+  }
+  .vtable th:last-child,.vtable td:last-child{text-align:right}
+  .vtable td{padding:11px 0; border-bottom:1px solid var(--line); white-space:nowrap}
+  .vtable tr:last-child td{border-bottom:0; padding-bottom:2px}
+  .vtable .vname{display:flex; align-items:center; gap:9px; font-weight:600}
+  .vtable .vnum{width:20px; height:20px; border-radius:6px; background:var(--surface-2); color:var(--muted); font-size:11px; display:grid; place-items:center; font-weight:600}
+  .vtable .vname.next .vnum{background:var(--accent); color:#fff}
+  .vtable .muted{color:var(--muted)}
+  .vtable tr.next td{color:var(--accent)}
+  .vtable .delta{font-size:12px; color:var(--faint)}
+
+  /* ---------- track ---------- */
+  .track-grid{display:grid; grid-template-columns:440px minmax(0,1fr); gap:20px; align-items:stretch}
+  .rec{
+    display:flex; flex-direction:column; padding:22px;
+    background:linear-gradient(180deg,#fff 0%,#fff 62%,#fbfcfe 100%);
+  }
+  .rec-head{display:flex; align-items:flex-start; gap:10px}
+  .rec-head .who b{display:block; font-size:16px; font-weight:650; letter-spacing:-.01em}
+  .rec-head .who span{display:block; margin-top:2px; font-size:12.5px; color:var(--muted)}
+  .rec-head .chip{margin-left:auto; margin-top:1px}
+  .rec-next{margin-top:26px; font-size:12px; color:var(--muted); font-weight:550; letter-spacing:.02em}
+  .rec-valve{display:flex; align-items:baseline; gap:10px; margin-top:4px}
+  .rec-valve b{font-size:21px; font-weight:650; letter-spacing:-.01em}
+  .rec-valve span{font-size:12.5px; color:var(--muted)}
+  .countdown{margin-top:12px; font-size:82px; line-height:.95; font-weight:600; letter-spacing:-.045em; color:var(--ink); white-space:nowrap}
+  .countdown small{font-size:15px; font-weight:500; letter-spacing:0; color:var(--faint); margin-left:10px}
+  .rec-sub{margin-top:12px; font-size:13px; color:var(--muted)}
+  .rec-sub b{font-weight:600; color:var(--ink)}
+  .progress{height:8px; border-radius:4px; background:#edf0f4; margin-top:18px; position:relative; overflow:visible}
+  .progress i{display:block; height:100%; border-radius:4px; background:var(--accent)}
+  .progress .marker{position:absolute; top:-4px; width:2px; height:16px; background:var(--accent); border-radius:2px}
+  .plabels{display:flex; justify-content:space-between; margin-top:8px; font-size:11.5px; color:var(--faint)}
+  .rec-btn{
+    margin-top:auto; width:100%; border:0; border-radius:14px; background:var(--accent); color:#fff;
+    padding:0 18px; height:92px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    box-shadow:0 10px 24px -12px rgba(31,95,208,.55);
+  }
+  .rec-btn:hover{background:var(--accent-2)}
+  .rec-btn b{font-size:22px; font-weight:650; letter-spacing:-.01em}
+  .rec-btn span{font-size:12px; opacity:.8}
+  .rec-2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+  .rec-2 .btn{height:44px}
+  .rec-last{display:flex; align-items:center; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted)}
+  .rec-last b{color:var(--ink); font-weight:600}
+  .rec-last a{margin-left:auto; color:var(--accent); text-decoration:none; font-weight:550}
+  .rec-sync{display:flex; align-items:center; gap:7px; margin-top:10px; font-size:11.5px; color:var(--faint)}
+  .rec-sync svg{width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2}
+
+  .track-right{display:flex; flex-direction:column; gap:20px; min-width:0}
+  .mini-stats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); padding:4px 0 2px}
+  .ms{padding:0 18px; border-left:1px solid var(--line)}
+  .ms:first-child{padding-left:0; border-left:0}
+  .ms .k{font-size:10.5px; font-weight:650; letter-spacing:.07em; text-transform:uppercase; color:var(--faint)}
+  .ms .v{font-size:20px; font-weight:620; margin-top:6px; letter-spacing:-.02em; white-space:nowrap}
+  .ms .v small{font-size:11.5px; font-weight:400; color:var(--faint); letter-spacing:0}
+  .ms .s{font-size:11px; color:var(--faint); margin-top:2px}
+  .track-right .vtable td{padding:10px 0}
+  .event-foot{display:flex; align-items:center; gap:8px; padding:11px 18px 14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--faint)}
+  .event-foot svg{width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2}
+  .event-foot b{color:var(--good); font-weight:600}
+
+  /* ---------- overview ---------- */
+  .ov-toolbar{display:flex; align-items:center; gap:10px; margin-bottom:16px}
+  .search{
+    display:flex; align-items:center; gap:9px; height:40px; padding:0 12px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; color:var(--faint); width:270px;
+  }
+  .search svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8}
+  .search span{font-size:13px; color:var(--faint)}
+  .seg.lg button{height:34px; padding:0 12px; font-size:12.5px}
+  .seg.lg button b{font-size:11px; color:var(--faint); margin-left:4px; font-variant-numeric:tabular-nums}
+  .seg.lg button.on b{color:var(--accent)}
+  .ov-grid{display:grid; grid-template-columns:408px minmax(0,1fr); gap:20px; align-items:start}
+  .runlist{padding:4px 0 6px}
+  .runlist-head{display:flex; align-items:center; padding:10px 16px 8px; font-size:11px; color:var(--faint)}
+  .runlist-head b{color:var(--ink); font-size:12px; font-weight:650; margin-right:6px}
+  .runlist-head span{margin-left:auto}
+  .run{
+    display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6px 14px; padding:13px 16px;
+    border-top:1px solid var(--line); cursor:pointer; position:relative;
+  }
+  .run:hover{background:var(--surface-2)}
+  .run.on{background:var(--accent-soft); box-shadow:inset 3px 0 0 var(--accent)}
+  .run .rn{font-size:14px; font-weight:650; display:flex; align-items:center; gap:8px}
+  .run .rsub{font-size:12px; color:var(--muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .run .rright{text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:3px}
+  .run .rstatus{font-size:12px; font-weight:600; white-space:nowrap}
+  .run .rstatus.bad{color:var(--bad)}
+  .run .rstatus.warn{color:var(--warn)}
+  .run .rstatus.good{color:var(--muted)}
+  .run .reta{font-size:11.5px; color:var(--faint); white-space:nowrap; font-variant-numeric:tabular-nums}
+  .run .rbar{grid-column:1/-1; display:flex; align-items:center; gap:8px; margin-top:2px}
+  .run .rbar .track{height:4px; flex:1; border-radius:2px; background:#edf0f4; overflow:hidden}
+  .run .rbar .track i{display:block; height:100%; background:var(--accent); border-radius:2px}
+  .run.g6 .track i{background:var(--bad)}
+  .run.f1 .track i{background:var(--warn)}
+  .run .rbar em{font-size:10.5px; font-style:normal; color:var(--faint); min-width:52px; text-align:right}
+
+  .ovdetail{padding:20px 22px}
+  .od-head{display:flex; align-items:flex-start; gap:12px}
+  .od-head h1{margin:0; font-size:21px; font-weight:650; letter-spacing:-.01em}
+  .od-head .sub{font-size:12.5px; color:var(--muted); margin-top:3px}
+  .od-head .actions{margin-left:auto; display:flex; gap:8px}
+  .od-main{display:grid; grid-template-columns:1.15fr 1fr; gap:22px; margin-top:18px; align-items:center}
+  .od-big .k{font-size:10.5px; font-weight:650; letter-spacing:.07em; text-transform:uppercase; color:var(--faint)}
+  .od-big .v{font-size:44px; font-weight:620; letter-spacing:-.04em; line-height:1.05; margin-top:4px; white-space:nowrap}
+  .od-big .s{font-size:12.5px; color:var(--muted); margin-top:5px}
+  .od-kpis{display:flex; flex-direction:column; gap:9px}
+  .od-kpi{display:flex; justify-content:space-between; gap:10px; padding-bottom:9px; border-bottom:1px solid var(--line); font-size:13px}
+  .od-kpi:last-child{border-bottom:0; padding-bottom:0}
+  .od-kpi span{color:var(--muted)}
+  .od-kpi b{font-weight:600; font-variant-numeric:tabular-nums}
+  .od-kpi b.good{color:var(--good)}
+  .od-route{margin-top:18px; border-top:1px solid var(--line); padding-top:10px}
+  .od-route svg{width:100%; height:auto}
+  .timeline{margin-top:16px; border-top:1px solid var(--line); padding-top:2px}
+  .tl-row{display:grid; grid-template-columns:74px 22px minmax(0,1fr) auto; align-items:center; gap:10px; padding:10px 0; font-size:13px; border-bottom:1px solid var(--line)}
+  .tl-row:last-child{border-bottom:0}
+  .tl-row .tt{font-variant-numeric:tabular-nums; color:var(--muted); font-size:12.5px}
+  .tl-dot{width:11px; height:11px; border-radius:50%; border:2px solid var(--line-strong); background:#fff; margin-left:5px}
+  .tl-dot.done{border-color:var(--good); background:var(--good)}
+  .tl-dot.next{border-color:var(--accent); background:#fff; box-shadow:0 0 0 4px var(--accent-soft)}
+  .tl-dot.plan{border-color:var(--line-strong); background:#fff}
+  .tl-row .tl-name{font-weight:550}
+  .tl-row .tl-name small{display:block; font-weight:400; color:var(--faint); font-size:11.5px; margin-top:1px}
+  .tl-row .tl-right{font-size:12px; color:var(--faint); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .tl-row .tl-right b{font-weight:600; color:var(--good)}
+  .tl-row.next .tl-name{color:var(--accent)}
+  .od-foot{display:flex; gap:8px; margin-top:18px; padding-top:16px; border-top:1px solid var(--line)}
+
+  /* ---------- phone ---------- */
+  #v-phone{gap:44px; justify-content:center; padding:38px 24px 60px; background:#e9edf2}
+  .phone-wrap{display:flex; flex-direction:column; align-items:center; gap:14px}
+  .phone-label{font-size:12px; color:var(--muted); font-weight:600}
+  .phone{
+    width:402px; height:844px; padding:9px; border-radius:52px; background:#0d1622;
+    box-shadow:0 40px 80px -40px rgba(13,22,34,.55), 0 0 0 1px rgba(255,255,255,.08) inset;
+    flex:none;
+  }
+  .screen{
+    width:100%; height:100%; border-radius:44px; overflow:hidden; background:var(--bg);
+    position:relative; display:flex; flex-direction:column;
+  }
+  .statusbar{height:44px; display:flex; align-items:center; padding:0 22px; font-size:12px; font-weight:650; color:var(--ink); flex:none}
+  .statusbar .sig{margin-left:auto; display:flex; align-items:center; gap:5px}
+  .statusbar svg{width:15px; height:11px; fill:currentColor}
+  .pbar{display:flex; align-items:center; gap:8px; padding:4px 16px 10px; flex:none}
+  .pbar .pt{font-size:17px; font-weight:650; letter-spacing:-.01em}
+  .pbar .ps{font-size:11.5px; color:var(--muted); margin-top:1px}
+  .pbar .avatar{width:30px; height:30px; font-size:11px; margin-left:auto}
+  .pcontent{flex:1; overflow:hidden; padding:0 14px}
+  .pcard{background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); margin-bottom:12px}
+  .p-hero{padding:15px 16px 12px}
+  .p-hero .row{display:grid; grid-template-columns:1.1fr 1fr; gap:12px}
+  .p-hero .k{font-size:10px; font-weight:650; letter-spacing:.07em; text-transform:uppercase; color:var(--faint)}
+  .p-hero .v{font-size:29px; font-weight:620; letter-spacing:-.03em; line-height:1.1; margin-top:3px; white-space:nowrap}
+  .p-hero .v unit{font-size:12px; font-weight:500; color:var(--muted); margin-left:3px; letter-spacing:0}
+  .p-hero .s{font-size:11px; color:var(--muted); margin-top:2px}
+  .p-gauge{margin-top:12px}
+  .p-gauge .track{position:relative; height:8px; border-radius:4px; background:#edf0f4}
+  .p-gauge .band{position:absolute; left:9%; right:9%; top:0; bottom:0; background:#d3ebdd; border-radius:4px}
+  .p-gauge .mark{position:absolute; left:40.5%; top:-5px; width:2px; height:18px; background:var(--accent); border-radius:2px}
+  .p-gauge .mark:after{content:""; position:absolute; top:-2px; left:-3px; width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 0 2px #fff}
+  .p-gauge .lbl{display:flex; justify-content:space-between; margin-top:6px; font-size:9.5px; color:var(--faint)}
+  .p-sec-h{display:flex; align-items:center; padding:12px 16px 0}
+  .p-sec-h b{font-size:12px; font-weight:650}
+  .p-sec-h span{margin-left:auto; font-size:11px; color:var(--faint)}
+  .p-diagram{padding:6px 10px 10px}
+  .p-diagram svg{width:100%; height:auto}
+  .p-next{display:flex; align-items:center; gap:8px; padding:9px 16px 12px; border-top:1px solid var(--line); font-size:11.5px}
+  .p-next b{font-weight:600}
+  .p-next span{color:var(--faint)}
+  .p-next em{margin-left:auto; font-style:normal; color:var(--accent); font-weight:600}
+  .p-rows{padding:0 16px 4px}
+  .p-row{display:flex; align-items:center; gap:10px; min-height:44px; border-top:1px solid var(--line); font-size:12.5px}
+  .p-row:first-child{border-top:0}
+  .p-row span{color:var(--muted)}
+  .p-row b{margin-left:auto; font-weight:550; white-space:nowrap; font-size:12px}
+  .p-row .chev{margin-left:6px}
+  .p-cta{
+    position:absolute; left:0; right:0; bottom:64px; padding:12px 16px 14px;
+    background:linear-gradient(180deg,rgba(244,246,249,0) 0%,#f4f6f9 38%,#f4f6f9 100%);
+  }
+  .p-cta .btn{width:100%; height:50px; font-size:15px; border-radius:12px; box-shadow:0 10px 22px -12px rgba(31,95,208,.6)}
+  .ptabs{
+    height:64px; border-top:1px solid var(--line); background:#fff; display:grid; grid-template-columns:repeat(3,1fr);
+    padding:5px 10px 10px; flex:none;
+  }
+  .ptab{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:10px; color:var(--faint)}
+  .ptab svg{width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+  .ptab.on{color:var(--accent); font-weight:600}
+
+  /* phone recording */
+  .prec .pbar{padding-top:0}
+  .prec .pbar .pt{font-size:15px}
+  .prec-content{flex:1; display:flex; flex-direction:column; padding:0 16px 18px}
+  .prec-top{display:flex; align-items:center; gap:8px; padding:6px 0 0}
+  .prec-note{display:flex; align-items:center; gap:8px; padding:9px 11px; border-radius:10px; background:var(--good-soft); color:var(--good); font-size:11.5px; margin-top:10px}
+  .prec-note svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2.5; flex:none}
+  .prec-note span{margin-left:auto; font-size:10.5px; opacity:.75}
+  .prec-next{margin-top:24px; font-size:11.5px; color:var(--muted); font-weight:550}
+  .prec-valve{font-size:19px; font-weight:650; margin-top:2px; display:flex; align-items:baseline; gap:8px}
+  .prec-valve span{font-size:11.5px; color:var(--faint); font-weight:400}
+  .prec-count{margin-top:8px; font-size:76px; font-weight:600; letter-spacing:-.05em; line-height:.95; white-space:nowrap}
+  .prec-sub{font-size:12px; color:var(--muted); margin-top:10px}
+  .prec-sub b{color:var(--ink); font-weight:600}
+  .prec-progress{height:7px; border-radius:4px; background:#e9edf2; margin-top:14px; overflow:hidden}
+  .prec-progress i{display:block; height:100%; width:30%; background:var(--accent)}
+  .prec-plabels{display:flex; justify-content:space-between; margin-top:6px; font-size:10.5px; color:var(--faint)}
+  .prec-btn{
+    margin-top:auto; width:100%; height:104px; border:0; border-radius:16px; background:var(--accent); color:#fff;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
+    box-shadow:0 14px 28px -14px rgba(31,95,208,.6); cursor:pointer;
+  }
+  .prec-btn b{font-size:23px; font-weight:650; letter-spacing:-.01em}
+  .prec-btn span{font-size:11.5px; opacity:.8}
+  .prec-2{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:9px}
+  .prec-2 .btn{height:46px; font-size:12.5px; border-radius:11px}
+  .prec-note a{margin-left:auto; color:var(--accent); text-decoration:none; font-weight:600; font-size:10.5px}
+  .prec-vitals{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:22px}
+  .prec-vitals div{background:#fff; border:1px solid var(--line); border-radius:11px; padding:9px 11px}
+  .prec-vitals span{display:block; font-size:9.5px; font-weight:650; letter-spacing:.06em; text-transform:uppercase; color:var(--faint)}
+  .prec-vitals b{display:block; margin-top:2px; font-size:16px; font-weight:620; font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+  .prec-rail{display:flex; align-items:flex-start; gap:7px; margin-top:16px; padding:0 2px}
+  .prec-rail .step{display:flex; flex-direction:column; align-items:center; gap:5px; font-size:9px; color:var(--faint); flex:none; width:34px}
+  .prec-rail .dotx{width:20px; height:20px; border-radius:50%; border:1.5px solid var(--line-strong); display:grid; place-items:center; font-size:9px; font-weight:650; color:var(--muted); background:#fff}
+  .prec-rail .done .dotx{background:var(--good); border-color:var(--good); color:#fff}
+  .prec-rail .now .dotx{background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 0 0 3px var(--accent-soft)}
+  .prec-rail i{flex:1; height:1.5px; background:var(--line); margin-top:10px}
+  .prec-last{display:flex; align-items:center; gap:8px; margin-top:14px; font-size:11.5px; color:var(--muted)}
+  .prec-last b{color:var(--ink); font-weight:600}
+  .prec-last span{margin-left:auto; color:var(--accent); font-weight:600}
+  .prec-sync{display:flex; align-items:center; gap:6px; margin-top:8px; font-size:10.5px; color:var(--faint)}
+  .prec-sync svg{width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2}
+
+  .mockfoot{max-width:1360px; margin:0 auto; padding:0 32px 30px; color:var(--faint); font-size:11.5px; display:flex; gap:10px; align-items:center}
+  .mockfoot b{color:var(--muted)}
+
+  @media(max-width:1180px){
+    .plan-grid{grid-template-columns:330px minmax(0,1fr)}
+    .track-grid{grid-template-columns:390px minmax(0,1fr)}
+    .ov-grid{grid-template-columns:360px minmax(0,1fr)}
+    .od-main{grid-template-columns:1fr}
+    .bottom-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:900px){
+    .brand span,.crumb span,.sync{display:none}
+    .plan-grid,.track-grid,.ov-grid{grid-template-columns:1fr}
+    .hero-stats{grid-template-columns:1fr 1fr}
+    .hs:nth-child(3){display:none}
+    #v-phone{flex-direction:column; align-items:center}
+  }
+</style>
+</head>
+<body data-view="plan">
+
+<!-- review chrome -->
+<div class="reviewbar">
+  <div class="rb-brand"><span class="rb-chip">Макет</span> Pig Speed · новый вид</div>
+  <div class="rb-tabs" role="tablist" aria-label="Экраны макета">
+    <button type="button" data-go="plan" class="on">План</button>
+    <button type="button" data-go="track">Прогон</button>
+    <button type="button" data-go="ov">Обзор</button>
+    <button type="button" data-go="phone">Телефон</button>
+  </div>
+  <div class="rb-note">Данные примера: A-12 · газ · Ø 1020 · 42 км</div>
+</div>
+
+<!-- ================= PLAN ================= -->
+<section class="view" id="v-plan">
+  <header class="appbar">
+    <div class="appbar-in">
+      <svg class="logo" viewBox="0 0 34 34" aria-hidden="true">
+        <rect width="34" height="34" rx="10" fill="#13263c"/>
+        <rect x="5" y="12" width="24" height="10" rx="5" fill="#dbe8fb"/>
+        <rect x="11" y="9" width="7" height="16" rx="3.5" fill="#1f5fd0"/>
+        <circle cx="22" cy="17" r="2" fill="#13263c"/>
+        <path d="M7 17h4" stroke="#8fb4ea" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <div class="brand"><b>Pig Speed</b><span>in-line inspection</span></div>
+      <span class="divider"></span>
+      <div class="crumb"><b>A-12</b><span>Ø 1020 · газ · 42 км</span></div>
+      <nav class="tabs" aria-label="Экраны">
+        <button type="button" class="on" aria-current="page">План</button>
+        <button type="button">Прогон</button>
+        <button type="button">Запуски</button>
+      </nav>
+      <div class="topright">
+        <span class="sync"><i class="dot"></i>Сохранено</span>
+        <button class="iconbtn" aria-label="Новости">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        </button>
+        <span class="avatar">EA</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app">
+  <div class="pagehead">
+    <div>
+      <h1>План запуска</h1>
+      <div class="sub">Северный газопровод · 42,0 км · Ø 1020 × 12 мм · пуск 14:13 · приём 20:55</div>
+    </div>
+    <div class="actions">
+      <button class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/></svg>
+        Экспорт
+      </button>
+      <button class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 9V3h12v6"/><rect x="6" y="13" width="12" height="8" rx="1.5"/><path d="M6 17H4v-4h2"/></svg>
+        Печать / PDF
+      </button>
+      <button class="btn primary lg">Начать запуск
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="plan-grid">
+    <div class="left-stack">
+    <aside class="card params">
+      <div class="params-top"><b>Параметры</b><a href="#">Изменить</a></div>
+      <div class="prow">
+        <span class="pi"><svg viewBox="0 0 24 24"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3M19 9v3"/></svg></span>
+        <span class="pl">Труба</span>
+        <span class="pv">Ø 1020 × 12 мм · 42,0 км</span><i class="chev"></i>
+      </div>
+      <div class="prow">
+        <span class="pi"><svg viewBox="0 0 24 24"><path d="M12 3c3 4.5 6 7.4 6 11a6 6 0 0 1-12 0c0-3.6 3-6.5 6-11z"/></svg></span>
+        <span class="pl">Среда</span>
+        <span class="pv">Природный газ</span><i class="chev"></i>
+      </div>
+      <div class="prow">
+        <span class="pi"><svg viewBox="0 0 24 24"><path d="M10 4v10a4 4 0 1 0 4 0V4a2 2 0 0 0-4 0z"/><path d="M12 9v6"/></svg></span>
+        <span class="pl">Условия</span>
+        <span class="pv">35 бар · 40 °C</span><i class="chev"></i>
+      </div>
+      <div class="prow">
+        <span class="pi"><svg viewBox="0 0 24 24"><path d="M4 8h11l-2.5-2.5M4 16h11l-2.5 2.5"/><path d="M20 8h-4M20 16h-4"/></svg></span>
+        <span class="pl">Расход</span>
+        <span class="pv">4 000 000 м³/сут</span><i class="chev"></i>
+      </div>
+      <div class="prow">
+        <span class="pi"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3"/><circle cx="9" cy="12" r="1.4"/><circle cx="14" cy="12" r="1.4"/></svg></span>
+        <span class="pl">Снаряд</span>
+        <span class="pv">MFL (AMFD) <small>· авто</small></span><i class="chev"></i>
+      </div>
+      <div class="prow">
+        <span class="pi"><svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M8 3h8"/><circle cx="12" cy="13" r="4"/><path d="M3 13h5M16 13h5"/></svg></span>
+        <span class="pl">Задвижки</span>
+        <span class="pv">3 · КР-1, КР-2, КР-3</span><i class="chev"></i>
+      </div>
+      <div class="param-foot">
+        <svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>
+        <span><b>Все параметры в допуске.</b> Скорость, давление, температура и проход — в пределах каталога.</span>
+      </div>
+    </aside>
+
+    <section class="card">
+      <div class="card-h"><h2>Проверки каталога</h2><div class="right"><span class="chip good">4 из 4</span></div></div>
+      <div class="card-b" style="padding-top:10px">
+        <div class="check-list">
+          <div class="check"><span class="ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span>Скорость</span><b>1,74 м/с <small>0,2–4,0</small></b></div>
+          <div class="check"><span class="ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span>Давление</span><b>35 бар <small>5–100</small></b></div>
+          <div class="check"><span class="ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span>Температура</span><b>40 °C <small>−20…+80</small></b></div>
+          <div class="check"><span class="ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span>Проход</span><b>996 мм <small>≥ 867</small></b></div>
+        </div>
+        <div class="check-foot">Газ не ниже 20 бар · минимальный проход 85 % OD</div>
+      </div>
+    </section>
+    </div>
+
+    <div class="stack">
+      <section class="card hero">
+        <div class="hero-stats">
+          <div class="hs">
+            <div class="k">Скорость снаряда</div>
+            <div class="v num">1,74<unit>м/с</unit></div>
+            <div class="s">цель 1,70 · отклонение +2,4 %</div>
+          </div>
+          <div class="hs">
+            <div class="k">Время в линии</div>
+            <div class="v num txt">6 ч 42 мин</div>
+            <div class="s">42,0 км при 1,74 м/с</div>
+          </div>
+          <div class="hs">
+            <div class="k">Прибытие</div>
+            <div class="v num">20:55</div>
+            <div class="s">сегодня · приёмный узел</div>
+          </div>
+        </div>
+        <div class="gauge-wrap">
+          <div class="gauge">
+            <span class="band"></span>
+            <span class="mark"></span>
+            <span class="mlabel">1,74</span>
+            <span class="tick l">0,2</span>
+            <span class="tick" style="left:21%">1,0</span>
+            <span class="tick" style="left:47.5%">2,0</span>
+            <span class="tick" style="left:74%">3,0</span>
+            <span class="tick r">4,0 м/с</span>
+          </div>
+          <div class="gauge-footer"><span>Рабочий диапазон снаряда 0,2–4,0 м/с</span><span><b>в допуске</b> · до границы 1,54 м/с</span></div>
+        </div>
+      </section>
+
+      <section class="card diagram">
+        <div class="card-h">
+          <h2>Схема линии</h2>
+          <div class="right">
+            <div class="seg"><button class="on">Маршрут</button><button>Локально</button></div>
+            <button class="iconbtn" aria-label="Реальный масштаб" title="Реальный масштаб">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3M19 9v3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="diagram-body">
+          <svg viewBox="0 0 920 176" role="img" aria-label="Маршрут 42 км с тремя задвижками">
+            <defs>
+              <linearGradient id="pipe" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#e8f0fb"/><stop offset=".5" stop-color="#dce9fa"/><stop offset="1" stop-color="#eaf2fc"/>
+              </linearGradient>
+            </defs>
+            <!-- ruler -->
+            <g stroke="#c9d3df" stroke-width="1">
+              <path d="M52 148v5M167 148v5M283 148v5M398 148v5M513 148v5M629 148v5M744 148v5M860 148v5"/>
+            </g>
+            <g fill="#8a97a8" font-size="11" font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+              <text x="52" y="169">0</text><text x="167" y="169">6</text><text x="283" y="169">12</text>
+              <text x="398" y="169">18</text><text x="513" y="169">24</text><text x="629" y="169">30</text>
+              <text x="744" y="169">36</text><text x="860" y="169" fill="#101a28" font-weight="600">42 км</text>
+            </g>
+
+            <!-- pipe -->
+            <rect x="52" y="62" width="808" height="42" rx="8" fill="url(#pipe)" stroke="#c9d7e8"/>
+            <rect x="52" y="69" width="808" height="4" rx="2" fill="#ffffff" opacity=".65"/>
+            <rect x="52" y="92" width="808" height="3" rx="1.5" fill="#b8cbe3" opacity=".55"/>
+
+            <!-- launcher -->
+            <rect x="20" y="48" width="34" height="70" rx="7" fill="#13263c"/>
+            <rect x="27" y="55" width="20" height="56" rx="4" fill="#1d3a59"/>
+            <rect x="52" y="58" width="7" height="50" fill="#13263c"/>
+            <text x="37" y="38" fill="#5c6b7e" font-size="10" font-weight="600" letter-spacing=".06em" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">ЗАПУСК</text>
+
+            <!-- receiver -->
+            <rect x="860" y="48" width="34" height="70" rx="7" fill="#13263c"/>
+            <rect x="867" y="55" width="20" height="56" rx="4" fill="#1d3a59"/>
+            <rect x="853" y="58" width="7" height="50" fill="#13263c"/>
+            <text x="877" y="38" fill="#5c6b7e" font-size="10" font-weight="600" letter-spacing=".06em" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">ПРИЁМ</text>
+
+            <!-- valves at 6, 18, 30 km -->
+            <g font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+              <g>
+                <path d="M167 44v62" stroke="#1f5fd0" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M157 44h20" stroke="#1f5fd0" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="167" cy="106" r="6" fill="#fff" stroke="#1f5fd0" stroke-width="3"/>
+                <text x="167" y="130" fill="#1f5fd0" font-size="11.5" font-weight="650">КР-1</text>
+                <text x="167" y="144" fill="#1f5fd0" font-size="10.5">15:11</text>
+              </g>
+              <g>
+                <path d="M398 48v58" stroke="#7d8da1" stroke-width="3" stroke-linecap="round"/>
+                <path d="M388 48h20" stroke="#13263c" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="398" cy="106" r="6" fill="#fff" stroke="#7d8da1" stroke-width="3"/>
+                <text x="398" y="130" fill="#101a28" font-size="11.5" font-weight="600">КР-2</text>
+                <text x="398" y="144" fill="#5c6b7e" font-size="10.5">17:05</text>
+              </g>
+              <g>
+                <path d="M629 48v58" stroke="#7d8da1" stroke-width="3" stroke-linecap="round"/>
+                <path d="M619 48h20" stroke="#13263c" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="629" cy="106" r="6" fill="#fff" stroke="#7d8da1" stroke-width="3"/>
+                <text x="629" y="130" fill="#101a28" font-size="11.5" font-weight="600">КР-3</text>
+                <text x="629" y="144" fill="#5c6b7e" font-size="10.5">19:00</text>
+              </g>
+            </g>
+
+            <!-- pig at launcher -->
+            <g transform="translate(74 58)">
+              <rect x="0" y="3" width="48" height="22" rx="11" fill="#1f5fd0"/>
+              <rect x="7" y="7" width="20" height="14" rx="7" fill="#5b8fe3"/>
+              <circle cx="34" cy="14" r="4.5" fill="#fff"/>
+              <path d="M46 8c6 2 6 10 0 12z" fill="#173f8f"/>
+            </g>
+            <text x="98" y="44" fill="#1f5fd0" font-size="10.5" font-weight="600" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">A-12</text>
+          </svg>
+        </div>
+        <div class="diagram-foot">
+          <div class="df-l">
+            <div class="k">Ближайшая задвижка</div>
+            <div class="v">КР-1 · 6,0 км <span>· 15:11 · через 57 мин после старта</span></div>
+          </div>
+          <div class="df-r">
+            <div class="k">Приём</div>
+            <div class="v">20:55 · 42,0 км</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+          <div class="card-h"><h2>Задвижки</h2><div class="right"><button class="btn" style="height:30px;font-size:12px">+ Добавить</button></div></div>
+          <div class="card-b" style="padding-top:12px">
+            <table class="vtable">
+              <thead><tr><th>Задвижка</th><th>Км</th><th>Время</th><th>От старта</th></tr></thead>
+              <tbody>
+                <tr><td><span class="vname"><span class="vnum">1</span>КР-1</span></td><td class="muted">6,0</td><td class="num">15:11</td><td class="delta">0:57</td></tr>
+                <tr class="next"><td><span class="vname next"><span class="vnum">2</span>КР-2</span></td><td>18,0</td><td class="num">17:05</td><td class="delta">2:52</td></tr>
+                <tr><td><span class="vname"><span class="vnum">3</span>КР-3</span></td><td class="muted">30,0</td><td class="num">19:00</td><td class="delta">4:47</td></tr>
+                <tr><td><span class="vname"><span class="vnum" style="background:#fff;border:1px solid var(--line)">→</span>Приём</span></td><td class="muted">42,0</td><td class="num">20:55</td><td class="delta">6:42</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ================= TRACK ================= -->
+<section class="view" id="v-track">
+  <header class="appbar">
+    <div class="appbar-in">
+      <svg class="logo" viewBox="0 0 34 34" aria-hidden="true">
+        <rect width="34" height="34" rx="10" fill="#13263c"/><rect x="5" y="12" width="24" height="10" rx="5" fill="#dbe8fb"/><rect x="11" y="9" width="7" height="16" rx="3.5" fill="#1f5fd0"/><circle cx="22" cy="17" r="2" fill="#13263c"/><path d="M7 17h4" stroke="#8fb4ea" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <div class="brand"><b>Pig Speed</b><span>in-line inspection</span></div>
+      <span class="divider"></span>
+      <div class="crumb"><b>A-12</b><span>Ø 1020 · газ · 42 км</span></div>
+      <nav class="tabs" aria-label="Экраны">
+        <button type="button">План</button>
+        <button type="button" class="on" aria-current="page">Прогон</button>
+        <button type="button">Запуски</button>
+      </nav>
+      <div class="topright">
+        <span class="chip live"><i></i>Идёт запись · 2:00:46</span>
+        <button class="iconbtn" aria-label="Новости">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        </button>
+        <span class="avatar">EA</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app">
+  <div class="pagehead">
+    <div>
+      <h1>Прогон A-12</h1>
+      <div class="sub">Engineer A · пуск 14:13 · 12,6 из 42,0 км · последняя запись 15:11</div>
+    </div>
+    <div class="actions">
+      <button class="btn">Параметры</button>
+      <button class="btn">Отчёт</button>
+    </div>
+  </div>
+
+  <div class="track-grid">
+    <section class="card rec">
+      <div class="rec-head">
+        <div class="who"><b>Следующая задвижка</b><span>КР-2 · 18,0 км от запуска</span></div>
+        <span class="chip live"><i></i>Запись</span>
+      </div>
+      <div class="rec-valve"><b>КР-2</b><span>осталось 5,38 км</span></div>
+      <div class="countdown num">0:51:29<small>до прохода</small></div>
+      <div class="rec-sub">Прибытие в <b>17:05</b> · по скорости 1,74 м/с</div>
+      <div class="progress"><i style="width:30%"></i><span class="marker" style="left:30%"></span></div>
+      <div class="plabels"><span>12,6 км пройдено</span><span>42,0 км</span></div>
+
+      <button class="rec-btn" type="button">
+        <b>✓ КР-2 пройдена</b>
+        <span>Запишет 17:05:12 · одна кнопка, без подтверждения</span>
+      </button>
+      <div class="rec-2">
+        <button class="btn">Ввести время</button>
+        <button class="btn">Прибыл в приёмник</button>
+      </div>
+      <div class="rec-last"><span>Последняя запись:</span><b>КР-1 · 15:11:07</b><a href="#">Изменить</a></div>
+      <div class="rec-sync">
+        <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+        Сохранено на устройстве · синхронизировано 2 с назад
+      </div>
+    </section>
+
+    <div class="track-right">
+      <section class="card diagram">
+        <div class="card-h">
+          <h2>Положение снаряда</h2>
+          <div class="right"><span class="chip neutral">Маршрут</span></div>
+        </div>
+        <div class="diagram-body" style="padding-top:8px">
+          <svg viewBox="0 0 920 122" role="img" aria-label="Снаряд на 12,6 км, следующая задвижка КР-2">
+            <rect x="52" y="46" width="808" height="34" rx="7" fill="url(#pipe)" stroke="#c9d7e8"/>
+            <rect x="52" y="52" width="808" height="3" rx="1.5" fill="#fff" opacity=".65"/>
+            <g font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+              <g opacity=".45">
+                <path d="M167 38v50" stroke="#7d8da1" stroke-width="3"/><path d="M157 38h20" stroke="#13263c" stroke-width="4" stroke-linecap="round"/>
+                <text x="167" y="108" fill="#7d8da1" font-size="10.5" font-weight="600">КР-1 ✓</text>
+              </g>
+              <g>
+                <path d="M398 32v56" stroke="#1f5fd0" stroke-width="3.5" stroke-linecap="round"/><path d="M388 32h20" stroke="#1f5fd0" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="398" cy="88" r="6" fill="#fff" stroke="#1f5fd0" stroke-width="3"/>
+                <text x="398" y="110" fill="#1f5fd0" font-size="11" font-weight="650">КР-2 · 17:05</text>
+              </g>
+              <g opacity=".45">
+                <path d="M629 38v50" stroke="#7d8da1" stroke-width="3"/><path d="M619 38h20" stroke="#13263c" stroke-width="4" stroke-linecap="round"/>
+                <text x="629" y="108" fill="#7d8da1" font-size="10.5" font-weight="600">КР-3</text>
+              </g>
+            </g>
+            <rect x="20" y="40" width="34" height="46" rx="6" fill="#13263c"/><text x="37" y="30" fill="#5c6b7e" font-size="9" font-weight="600" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">ЗАПУСК</text>
+            <rect x="860" y="40" width="34" height="46" rx="6" fill="#13263c"/><text x="877" y="30" fill="#5c6b7e" font-size="9" font-weight="600" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">ПРИЁМ</text>
+            <g transform="translate(294 39)">
+              <rect x="0" y="2" width="46" height="20" rx="10" fill="#1f5fd0"/><rect x="7" y="6" width="19" height="12" rx="6" fill="#5b8fe3"/><circle cx="33" cy="12" r="4" fill="#fff"/>
+            </g>
+            <text x="317" y="76" fill="#1f5fd0" font-size="10" font-weight="600" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">12,6 км</text>
+          </svg>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-b" style="padding-top:14px;padding-bottom:14px">
+          <div class="mini-stats">
+            <div class="ms"><div class="k">Скорость</div><div class="v num">1,74 <small>м/с</small></div><div class="s">план 1,74</div></div>
+            <div class="ms"><div class="k">Пройдено</div><div class="v num">12,6 <small>/ 42,0 км</small></div><div class="s">30 %</div></div>
+            <div class="ms"><div class="k">Прошло</div><div class="v num">2:00:46</div><div class="s">с 14:13</div></div>
+            <div class="ms"><div class="k">До приёма</div><div class="v num">4:41:12</div><div class="s">в 20:55</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-h"><h2>Задвижки и приём</h2><div class="right"><span class="chip good">1 из 3</span></div></div>
+        <div class="card-b" style="padding-top:12px">
+          <table class="vtable">
+            <thead><tr><th>Точка</th><th>Км</th><th>План</th><th>Факт</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><span class="vname"><span class="vnum" style="background:var(--good-soft);color:var(--good)">✓</span>КР-1</span></td><td class="muted">6,0</td><td class="num muted">15:11</td><td class="num">15:11:07</td><td><span class="chip good">записана</span></td></tr>
+              <tr class="next"><td><span class="vname next"><span class="vnum">2</span>КР-2</span></td><td>18,0</td><td class="num">17:05</td><td class="delta">через 0:51:29</td><td><span class="chip neutral">следующая</span></td></tr>
+              <tr><td><span class="vname"><span class="vnum">3</span>КР-3</span></td><td class="muted">30,0</td><td class="num muted">19:00</td><td class="delta">—</td><td><span class="chip neutral">—</span></td></tr>
+              <tr><td><span class="vname"><span class="vnum" style="background:#fff;border:1px solid var(--line)">→</span>Приём</span></td><td class="muted">42,0</td><td class="num muted">20:55</td><td class="delta">—</td><td><span class="chip neutral">—</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="event-foot">
+          <svg viewBox="0 0 24 24"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+          <span>Журнал: 15:11:07 КР-1 записана · 15:11:09 синхронизирована</span>
+        </div>
+      </section>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ================= OVERVIEW ================= -->
+<section class="view" id="v-ov">
+  <header class="appbar">
+    <div class="appbar-in">
+      <svg class="logo" viewBox="0 0 34 34" aria-hidden="true">
+        <rect width="34" height="34" rx="10" fill="#13263c"/><rect x="5" y="12" width="24" height="10" rx="5" fill="#dbe8fb"/><rect x="11" y="9" width="7" height="16" rx="3.5" fill="#1f5fd0"/><circle cx="22" cy="17" r="2" fill="#13263c"/><path d="M7 17h4" stroke="#8fb4ea" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <div class="brand"><b>Pig Speed</b><span>in-line inspection</span></div>
+      <span class="divider"></span>
+      <div class="crumb"><b>Команда</b><span>7 человек · 7 запусков</span></div>
+      <nav class="tabs" aria-label="Экраны">
+        <button type="button" class="on" aria-current="page">Обзор</button>
+        <button type="button">Команда</button>
+      </nav>
+      <div class="topright">
+        <span class="sync"><i class="dot"></i>Обновлено 12 с назад</span>
+        <button class="iconbtn" aria-label="Новости">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        </button>
+        <span class="avatar">PM</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app">
+  <div class="pagehead">
+    <div>
+      <h1>Обзор запусков</h1>
+      <div class="sub">Проблемные сверху · данные обновляются каждые 15 секунд</div>
+    </div>
+    <div class="actions">
+      <div class="seg lg"><button class="on">Список</button><button>Таймлайн</button></div>
+    </div>
+  </div>
+
+  <div class="ov-toolbar">
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Поиск: линия или инженер</span>
+    </div>
+    <div class="seg lg"><button class="on">Сейчас <b>5</b></button><button>Запланированы <b>1</b></button><button>Завершены <b>1</b></button></div>
+  </div>
+
+  <div class="ov-grid">
+    <section class="card runlist">
+      <div class="runlist-head"><b>Сейчас</b> 5 запусков <span>Сначала проблемные</span></div>
+
+      <div class="run g6">
+        <div><div class="rn">G-6</div><div class="rsub">Engineer D · Ø 820 · 28 км · записей пока нет</div></div>
+        <div class="rright"><span class="rstatus bad">Просрочен 0:14</span><span class="reta">ожидался 16:00</span></div>
+        <div class="rbar"><span class="track"><i style="width:100%"></i></span><em>100 %</em></div>
+      </div>
+      <div class="run f1">
+        <div><div class="rn">F-1</div><div class="rsub">Engineer E · Ø 720 · 19 км · 14:14</div></div>
+        <div class="rright"><span class="rstatus warn">Прибытие не подтверждено</span><span class="reta">ожидался 14:14</span></div>
+        <div class="rbar"><span class="track"><i style="width:100%"></i></span><em>100 %</em></div>
+      </div>
+      <div class="run">
+        <div><div class="rn">D-4</div><div class="rsub">Engineer B · Ø 1020 · 36 км · КР-1 13:53</div></div>
+        <div class="rright"><span class="rstatus bad">+0:22 к плану</span><span class="reta">прибытие 19:57</span></div>
+        <div class="rbar"><span class="track"><i style="width:54%"></i></span><em>54 %</em></div>
+      </div>
+      <div class="run on">
+        <div><div class="rn">A-12</div><div class="rsub">Engineer A · Ø 1020 · 42 км · КР-1 15:11</div></div>
+        <div class="rright"><span class="rstatus good">По плану</span><span class="reta">прибытие 20:55</span></div>
+        <div class="rbar"><span class="track"><i style="width:30%"></i></span><em>30 %</em></div>
+      </div>
+      <div class="run">
+        <div><div class="rn">E-2</div><div class="rsub">Engineer C · Ø 530 · 12 км · записей пока нет</div></div>
+        <div class="rright"><span class="rstatus good">По плану</span><span class="reta">прибытие 22:13</span></div>
+        <div class="rbar"><span class="track"><i style="width:6%"></i></span><em>6 %</em></div>
+      </div>
+    </section>
+
+    <section class="card ovdetail">
+      <div class="od-head">
+        <div><h1>A-12</h1><div class="sub">Engineer A · Северный газопровод · Ø 1020 · 42 км</div></div>
+        <span class="chip good" style="margin-top:4px">По плану</span>
+        <div class="actions">
+          <button class="btn">Схема и задвижки</button>
+          <button class="btn">Печать</button>
+        </div>
+      </div>
+
+      <div class="od-main">
+        <div class="od-big">
+          <div class="k">Осталось до приёма</div>
+          <div class="v num">4:41:00</div>
+          <div class="s">Прибытие в 20:55 · пройдено 12,6 из 42,0 км</div>
+          <div class="progress" style="margin-top:14px"><i style="width:30%"></i></div>
+          <div class="plabels"><span>14:13 пуск</span><span>30 %</span><span>20:55 приём</span></div>
+        </div>
+        <div class="od-kpis">
+          <div class="od-kpi"><span>Скорость</span><b>1,74 м/с · план 1,74</b></div>
+          <div class="od-kpi"><span>Последняя запись</span><b>КР-1 · 15:11:07</b></div>
+          <div class="od-kpi"><span>Отклонение</span><b class="good">+3 с</b></div>
+          <div class="od-kpi"><span>Следующая задвижка</span><b>КР-2 · 17:05</b></div>
+        </div>
+      </div>
+
+      <div class="od-route">
+        <svg viewBox="0 0 880 92" role="img" aria-label="Маршрут A-12">
+          <rect x="46" y="34" width="788" height="26" rx="6" fill="#edf3fb" stroke="#d5e1f0"/>
+          <g font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+            <g opacity=".45"><path d="M160 26v42" stroke="#7d8da1" stroke-width="2.5"/><path d="M151 26h18" stroke="#13263c" stroke-width="3.5" stroke-linecap="round"/><text x="160" y="84" fill="#7d8da1" font-size="10">КР-1 ✓</text></g>
+            <g><path d="M384 24v46" stroke="#1f5fd0" stroke-width="3"/><path d="M375 24h18" stroke="#1f5fd0" stroke-width="3.5" stroke-linecap="round"/><text x="384" y="86" fill="#1f5fd0" font-size="10" font-weight="600">КР-2 · 17:05</text></g>
+            <g opacity=".45"><path d="M609 26v42" stroke="#7d8da1" stroke-width="2.5"/><path d="M600 26h18" stroke="#13263c" stroke-width="3.5" stroke-linecap="round"/><text x="609" y="84" fill="#7d8da1" font-size="10">КР-3</text></g>
+          </g>
+          <rect x="18" y="28" width="28" height="38" rx="5" fill="#13263c"/><rect x="834" y="28" width="28" height="38" rx="5" fill="#13263c"/>
+          <g transform="translate(282 31)"><rect width="42" height="18" rx="9" fill="#1f5fd0"/><circle cx="30" cy="9" r="3.5" fill="#fff"/></g>
+          <text x="303" y="64" fill="#1f5fd0" font-size="9.5" font-weight="600" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif">12,6 км</text>
+        </svg>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-row"><span class="tt">14:13</span><span class="tl-dot done"></span><span class="tl-name">Пуск снаряда<small>камера запуска · Engineer A</small></span><span class="tl-right"><b>✓</b></span></div>
+        <div class="tl-row"><span class="tt">15:11</span><span class="tl-dot done"></span><span class="tl-name">КР-1 пройдена<small>6,0 км · запись инженера</small></span><span class="tl-right"><b>+0:03</b></span></div>
+        <div class="tl-row next"><span class="tt">17:05</span><span class="tl-dot next"></span><span class="tl-name">КР-2<small>18,0 км · следующая</small></span><span class="tl-right">через 0:51:29</span></div>
+        <div class="tl-row"><span class="tt">20:55</span><span class="tl-dot plan"></span><span class="tl-name">Приём<small>42,0 км · прогноз</small></span><span class="tl-right">через 4:41:00</span></div>
+      </div>
+
+      <div class="od-foot">
+        <button class="btn">Открыть полный отчёт</button>
+        <button class="btn">Скачать CSV</button>
+      </div>
+    </section>
+  </div>
+  </div>
+</section>
+
+<!-- ================= PHONE ================= -->
+<section class="view" id="v-phone">
+  <div class="phone-wrap">
+    <div class="phone-label">План · телефон</div>
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar">9:41
+          <span class="sig">
+            <svg viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4" y="4" width="3" height="8" rx="1"/><rect x="8" y="2" width="3" height="10" rx="1"/><rect x="12" y="0" width="3" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 24 12" style="width:22px"><rect x="0" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="2" y="3" width="14" height="6" rx="1.5"/><path d="M21.5 4.5v3" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+        </div>
+        <div class="pbar">
+          <div><div class="pt">A-12</div><div class="ps">План · Северный газопровод</div></div>
+          <span class="avatar">EA</span>
+        </div>
+        <div class="pcontent">
+          <div class="pcard p-hero">
+            <div class="row">
+              <div><div class="k">Скорость</div><div class="v num">1,74<unit>м/с</unit></div><div class="s">цель 1,70</div></div>
+              <div><div class="k">В линии</div><div class="v num">6:42</div><div class="s">42,0 км</div></div>
+            </div>
+            <div class="p-gauge">
+              <div class="track"><span class="band"></span><span class="mark"></span></div>
+              <div class="lbl"><span>0,2</span><span>в допуске</span><span>4,0 м/с</span></div>
+            </div>
+          </div>
+
+          <div class="pcard">
+            <div class="p-sec-h"><b>Схема линии</b><span>Маршрут</span></div>
+            <div class="p-diagram">
+              <svg viewBox="0 0 340 92" role="img" aria-label="Маршрут A-12">
+                <rect x="26" y="34" width="288" height="24" rx="6" fill="#e8f0fb" stroke="#d0dded"/>
+                <g font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+                  <g opacity=".45"><path d="M67 27v38" stroke="#7d8da1" stroke-width="2"/><path d="M60 27h14" stroke="#13263c" stroke-width="3" stroke-linecap="round"/><text x="67" y="80" fill="#7d8da1" font-size="8.5">КР-1</text></g>
+                  <g><path d="M150 23v44" stroke="#1f5fd0" stroke-width="2.5"/><path d="M143 23h14" stroke="#1f5fd0" stroke-width="3" stroke-linecap="round"/><text x="150" y="80" fill="#1f5fd0" font-size="8.5" font-weight="600">КР-2</text></g>
+                  <g opacity=".45"><path d="M232 27v38" stroke="#7d8da1" stroke-width="2"/><path d="M225 27h14" stroke="#13263c" stroke-width="3" stroke-linecap="round"/><text x="232" y="80" fill="#7d8da1" font-size="8.5">КР-3</text></g>
+                </g>
+                <rect x="8" y="28" width="20" height="36" rx="4" fill="#13263c"/><rect x="312" y="28" width="20" height="36" rx="4" fill="#13263c"/>
+                <rect x="40" y="37" width="30" height="18" rx="9" fill="#1f5fd0"/><rect x="46" y="41" width="12" height="10" rx="5" fill="#5b8fe3"/><circle cx="63" cy="46" r="3" fill="#fff"/>
+              </svg>
+            </div>
+            <div class="p-next"><b>КР-1 · 6,0 км</b><span>15:11</span><em>через 0:57</em></div>
+          </div>
+
+          <div class="pcard p-rows">
+            <div class="p-row"><span>Труба</span><b>Ø 1020 × 12 · 42 км</b><i class="chev"></i></div>
+            <div class="p-row"><span>Условия</span><b>35 бар · 40 °C</b><i class="chev"></i></div>
+            <div class="p-row"><span>Расход</span><b>4,00 млн м³/сут</b><i class="chev"></i></div>
+            <div class="p-row"><span>Снаряд и задвижки</span><b>MFL · 3</b><i class="chev"></i></div>
+          </div>
+        </div>
+
+        <div class="p-cta"><button class="btn primary">Начать запуск</button></div>
+        <div class="ptabs">
+          <div class="ptab on">
+            <svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>План</div>
+          <div class="ptab">
+            <svg viewBox="0 0 24 24"><rect x="3" y="9" width="20" height="6" rx="3"/><path d="M7 9v6M17 9v6"/></svg>Прогон</div>
+          <div class="ptab">
+            <svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>Запуски</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-wrap">
+    <div class="phone-label">Прогон · телефон, режим записи</div>
+    <div class="phone">
+      <div class="screen prec">
+        <div class="statusbar">9:41
+          <span class="sig">
+            <svg viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4" y="4" width="3" height="8" rx="1"/><rect x="8" y="2" width="3" height="10" rx="1"/><rect x="12" y="0" width="3" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 24 12" style="width:22px"><rect x="0" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="2" y="3" width="14" height="6" rx="1.5"/><path d="M21.5 4.5v3" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+        </div>
+        <div class="pbar" style="padding-bottom:4px">
+          <div><div class="pt">A-12</div><div class="ps">Идёт запись · 2:00:46</div></div>
+          <button class="iconbtn" style="margin-left:auto;width:34px;height:34px" aria-label="Ещё">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+          </button>
+        </div>
+        <div class="prec-content">
+          <div class="prec-note">
+            <svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>
+            КР-1 записана · 15:11:07
+            <a href="#">Отменить</a>
+          </div>
+
+          <div class="prec-next">Следующая задвижка</div>
+          <div class="prec-valve">КР-2 <span>· 18,0 км</span></div>
+          <div class="prec-count num">0:51:29</div>
+          <div class="prec-sub">через 5,38 км · прибытие в <b>17:05</b></div>
+          <div class="prec-progress"><i></i></div>
+          <div class="prec-plabels"><span>12,6 км пройдено</span><span>42,0 км</span></div>
+
+          <div class="prec-vitals">
+            <div><span>До приёма</span><b>4:41:12</b></div>
+            <div><span>Скорость</span><b>1,74 м/с</b></div>
+          </div>
+          <div class="prec-rail">
+            <div class="step done"><span class="dotx">✓</span><span>КР-1</span></div>
+            <i></i>
+            <div class="step now"><span class="dotx">2</span><span>КР-2</span></div>
+            <i></i>
+            <div class="step"><span class="dotx">3</span><span>КР-3</span></div>
+            <i></i>
+            <div class="step"><span class="dotx">→</span><span>Приём</span></div>
+          </div>
+
+          <button class="prec-btn" type="button"><b>✓ КР-2 пройдена</b><span>Запишет 17:05:12</span></button>
+          <div class="prec-2"><button class="btn">Ввести время</button><button class="btn">Прибыл в приёмник</button></div>
+          <div class="prec-sync">
+            <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+            Сохранено на устройстве · синхронизировано 2 с назад
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mockfoot">
+  <b>Макет</b> · не рабочее приложение · числа из примера A-12 · предложение к v1.27
+</div>
+
+<script>
+  (function(){
+    var buttons = [].slice.call(document.querySelectorAll('.rb-tabs button'));
+    function go(v){
+      document.body.dataset.view = v;
+      buttons.forEach(function(b){ b.classList.toggle('on', b.dataset.go === v); });
+      try { history.replaceState(null, '', '#' + v); } catch(e) {}
+      window.scrollTo(0, 0);
+    }
+    buttons.forEach(function(b){ b.addEventListener('click', function(){ go(b.dataset.go); }); });
+    var initial = (location.hash || '').slice(1);
+    if(buttons.some(function(b){ return b.dataset.go === initial; })) go(initial);
+    document.addEventListener('keydown', function(e){
+      var i = buttons.findIndex(function(b){ return b.classList.contains('on'); });
+      if(e.key === 'ArrowRight' && e.altKey){ go(buttons[(i+1)%buttons.length].dataset.go); }
+      if(e.key === 'ArrowLeft' && e.altKey){ go(buttons[(i-1+buttons.length)%buttons.length].dataset.go); }
+    });
+  })();
+</script>
+</body>
+</html>
