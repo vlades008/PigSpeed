@@ -1130,13 +1130,13 @@
     if(s==='team'){$('teamHome').appendChild(tp);tp.classList.add('open','page');tp.style.cssText='';renderTeam()}
     else if(tp.classList.contains('page')){tp.classList.remove('open','page');document.querySelector('.hacctwrap').appendChild(tp);renderTeam()}
     closeHeaderPanels();syncRec();renderTabs();updShell();renderOv();
-    if(UI.ready)update();
+    if(UI.ready&&!anim)update();
     window.scrollTo(0,0);
     if(UI.ready&&!quiet){try{history.pushState({st:s},'')}catch(e){}}
   }
   function bootStage(){
     var c=curRun(),s=OV.on?'overview':REC.on?'track':(c&&c.st==='done'&&c.params)?'track':'plan';
-    setStage(s,true);UI.ready=true;update();
+    setStage(s,true);UI.ready=true;if(!anim)update();
     try{history.replaceState({st:s},'')}catch(e){}
   }
   window.addEventListener('popstate',function(e){
