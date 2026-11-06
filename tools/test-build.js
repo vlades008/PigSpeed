@@ -83,7 +83,7 @@ fs.mkdirSync(work, { recursive: true });
 let html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 html = swap(html, 'var mock = /[?&]mock=([^&]+)/.exec(location.search);',
   "var mock = [0, encodeURIComponent((function () { try { return localStorage.getItem('psc.demo.spec'); } catch (e) { return ''; } })() || 'pm:Project Manager:manager')];", 'mock switch');
-html = swap(html, '<h1>Pig Speed Calculator</h1>', '<h1>Pig Speed TEST</h1>', 'title');
+html = swap(html, '<h1>Pig Speed</h1>', '<h1>Pig Speed TEST</h1>', 'title');
 html = swap(html, '</body>', DEMO + '\n</body>', 'end of page');
 fs.writeFileSync(path.join(out, 'index.html'), html);
 console.log('test-build/index.html ... ok');

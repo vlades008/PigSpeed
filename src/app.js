@@ -9,7 +9,7 @@
   var OD_MM={6:168,8:219,10:273,12:325,14:377,16:426,18:457.2,20:530,22:558.8,24:630,26:660.4,28:720,30:762,32:820,34:863.6,36:914.4,38:965.2,40:1020,42:1067,44:1117.6,46:1168.4,48:1220,56:1422.4};
   var OD_LIST=[[4,114],[6,159]].concat(Object.keys(OD_MM).map(function(k){return [+k,OD_MM[k]]}));
   var DEF={fluid:0,name:'Pipeline Name',od:'1020',wt:'12',wtu:0,len:'42',lenu:0,p:'35',pu:3,t:'40',tu:0,gor:'500',
-           sg:'0.65',api:'35',flow:'4000000',gasu:0,oilu:2,rv:'2',rvu:0,velu:0,pout:'',slip:'100',atm:false,std:0,alert:true,aSound:true,aBanner:true,aVib:true,lead:5,dstyle:1,dstyleTouched:false,ui:2,rview:1,lay:0,dsk:1,layAsked:0,pfold:-1,view:0,pb:1,tscale:(window.innerWidth<520?150:100),valves:[],vnames:[],vt:[],flowTouched:false,vtype:0,tool:1,toolOn:false,lang:'ru',rgasu:0,roilu:0};
+           sg:'0.65',api:'35',flow:'4000000',gasu:0,oilu:2,rv:'2',rvu:0,velu:0,pout:'',slip:'100',atm:false,std:0,alert:true,aSound:true,aBanner:true,aVib:true,lead:5,dstyle:1,dstyleTouched:false,ui:2,rview:0,lay:0,dsk:1,layAsked:0,pfold:-1,view:0,pb:1,tscale:(window.innerWidth<520?150:100),valves:[],vnames:[],vt:[],flowTouched:false,vtype:0,tool:1,toolOn:false,lang:'ru',rgasu:0,roilu:0};
   var FD={0:{flow:'4000000',gasu:0},1:{flow:'2800',oilu:2},2:{flow:'1200',oilu:2}};
   function flowDefault(f){var d=FD[f];S.flow=d.flow;if(d.gasu!==undefined)S.gasu=d.gasu;if(d.oilu!==undefined)S.oilu=d.oilu}
   var KEY='pigSpeedCalc.v2', S={};
@@ -37,7 +37,7 @@
     try{var s0=JSON.parse(localStorage.getItem(KEY)||'null');if(s0&&!('flowTouched' in s0))S.flowTouched=(String(S.flow)!=='250000'&&String(S.flow)!=='4000')}catch(e){}
     if(!S.flowTouched)flowDefault(S.fluid);
     if(!S.dstyleTouched)S.dstyle=1;
-    S.lay=0;S.dsk=1;S.clk=1;S.txt=0;S.alert=true;S.pb=1;S.dstyle=1;S.api='35';S.sg='0.65';S.velu=0;S.rvu=0;if(!S.vwv2){S.rview=1;S.view=0;S.vwv2=1}fixTemp(S);                                           // reminders are always on, playback is always real time
+    S.lay=0;S.dsk=1;S.clk=1;S.txt=0;S.alert=true;S.pb=1;S.dstyle=1;S.api='35';S.sg='0.65';S.velu=0;S.rvu=0;if(!S.vwv2){S.rview=0;S.view=0;S.vwv2=1}fixTemp(S);                                           // reminders are always on, playback is always real time
   }
   function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}runsTouch()}
   var VT=['Ball valve','Gate valve','Check valve'];
@@ -82,7 +82,11 @@
   IDS.forEach(function(id){if(id!=='od')$(id).value=S[id]});
     setFluid(S.fluid,true);setView(S.view,true);renderValves();$('leadIn').value=S.lead;$('aSound').checked=S.aSound!==false;$('aBanner').checked=S.aBanner!==false;$('aVib').checked=S.aVib!==false;syncUnits();$('toolSel').value=S.toolOn?S.tool:-1;
   }
-  function vwNow(){return S.rview?(+S.view===1?'global':'local'):(isPhone()?'route':'local')}
+  function vwNow(){
+    if(S.rview)return +S.view===1?'global':'local';
+    if(isPhone())return UI.stage==='track'?'local':'route';
+    return UI.stage==='plan'||UI.stage==='overview'?'global':'local';
+  }
   function applyVw(){
     var d=document.querySelector('.card.diag'),w=vwNow();if(!d)return;
     d.classList.toggle('showpipe',w!=='route');d.classList.toggle('lc-on',w==='local'&&!+S.lscale);$('lscBtn').setAttribute('aria-pressed',String(!!+S.lscale));['route','local','global'].forEach(function(x){d.classList.toggle('vw-'+x,x===w)});
@@ -454,7 +458,7 @@
     var WF=[],WA=-1e18,WB=1e18,WH=2600;
     function wg(fn){var i=WF.push(fn)-1;return '<g class="wg" data-w="'+i+'">'+fn(WA,WB)+'</g>'}
     var ds=(+S.ui===1)?2:(+S.dstyle||0);
-    var f=S.fluid,svg=$('dg'),nV=(vals.valves||[]).filter(function(v){return v.ok}).length,W=(+S.view===1?Math.max(480,Math.min(880,Math.round((svg.clientWidth||900)*1.05))):880),gl=(+S.view===1),lenMm=(vals.len>0?vals.len*[1,0.001][+S.lenu]*1e6:0),cy=gl?105:150,H=gl?Math.max(1.6,(lenMm>0&&vals.od>0)?W*vals.od/lenMm:1.6):130,tsf=Math.max(1,(+S.tscale||100)/100),ro=nV?(22*nV+10)*tsf:0,od=vals.od,wt=vals.wt,o=[];
+    var f=S.fluid,svg=$('dg'),nV=(vals.valves||[]).filter(function(v){return v.ok}).length,gl=vwNow()==='global',W=(gl?Math.max(480,Math.min(880,Math.round((svg.clientWidth||900)*1.05))):880),lenMm=(vals.len>0?vals.len*[1,0.001][+S.lenu]*1e6:0),cy=gl?105:150,H=gl?Math.max(1.6,(lenMm>0&&vals.od>0)?W*vals.od/lenMm:1.6):130,tsf=Math.max(1,(+S.tscale||100)/100),ro=nV?(22*nV+10)*tsf:0,od=vals.od,wt=vals.wt,o=[];
     if(!gl){WA=-WH/2;WB=WH*1.5}
     var okG=od>0&&wt>=0&&od-2*wt>=1;
     var wpx=gl?0:(okG?Math.max(3,Math.min(16,wt/od*H)):6), ih=H-2*wpx, top=cy-H/2, bot=cy+H/2;
@@ -704,7 +708,7 @@
       rv:noRv?1:num('rv'),rvu:+S.rvu,rgasu:+S.rgasu,roilu:+S.roilu});
     if(r.error){blank();setValves(vals,null);drawDiagram(null,vals);renderFormulas(null,vals);w.textContent=r.error==='out_gt_in'?tr('Outlet pressure cannot be higher than inlet pressure.'):tr(r.error)+tr(': the inner diameter must be at least 1 mm.');w.style.display='block';return}
     var vu=tr(['m/s','mph','km/h'][S.velu]);
-    $('vel').innerHTML=r.v>0?fmt(PSC.velOut(r.v,+S.velu),3)+' <small>'+vu+'</small>':'–';
+    $('vel').innerHTML=r.v>0?fmt(PSC.velOut(r.v,+S.velu),2)+' <small>'+vu+'</small>':'–';
     $('dur').textContent=r.hours!==null?PSC.fmtDur(r.hours):'–';
     setValves(vals,r);drawDiagram(r,vals);renderFormulas(r,vals);
     var ru=tr((f===0?GAS_U:OIL_U)[f===0?S.rgasu:S.roilu]);
@@ -733,7 +737,17 @@
       if(W.length){
         var cb=document.createElement('button');cb.type='button';cb.className='wn';cb.textContent='⚠ '+W[0]+(W.length>1?'  +'+(W.length-1):'');box.appendChild(cb);
         if(W.length>1){var wl=document.createElement('div');wl.className='wl';wl.style.display=catOpen?'':'none';W.slice(1).forEach(function(t){var d=document.createElement('div');d.textContent='⚠ '+t;wl.appendChild(d)});box.appendChild(wl);cb.onclick=function(){catOpen=!catOpen;wl.style.display=catOpen?'':'none'}}
-      }else if(!WS.length)one('ok','✓ '+tr('Within equipment limits'));
+      }else if(!WS.length){
+        var pmin=Math.min(pin,pout),pmax=Math.max(pin,pout),minB=Math.round(odm*L.minId[toolKind()]);
+        var ck=function(label,val,range,ok){
+          var d=document.createElement('div');d.className='ck'+(ok?'':' bad');
+          d.innerHTML='<span>'+label+'</span><b>'+val+' <small>'+range+'</small></b>';box.appendChild(d);
+        };
+        ck(tr('Speed'),fmt(vavg,2)+' '+tr('m/s'),fmt(L.vmin,1)+'–'+fmt(L.vmax,1),!spdBad);
+        ck(tr('Pressure'),fmt(pmax,0)+' '+tr('bar'),L.pmin+'–'+L.pmax,pmax>=L.pmin&&pmax<=L.pmax);
+        ck(tr('Temperature'),fmt(tc,0)+' °C',L.tmin+'…+'+L.tmax,tc>=L.tmin&&tc<=L.tmax);
+        ck(S.lang==='ru'?'Проход':'Bore',fmt(idm,0)+' '+tr('mm'),'≥ '+minB,idm>=minB);
+      }
       var hint='',tgtBad=false;
       if(!noRv&&r.rq>0){var rvm=num('rv')*[1,1.609344/3.6,1/3.6][+S.rvu];if(rvm>0){var q0=r.rq*L.vmin/rvm,q1=r.rq*L.vmax/rvm;hint=tr('Allowed flow')+': '+fmt(q0,q0<10?2:0)+' – '+fmt(q1,q1<10?2:0)+' '+ru;tgtBad=(rvm<L.vmin||rvm>L.vmax)}}
       $('rrange').textContent=hint;
@@ -908,10 +922,26 @@
     if(over>0){lab=tr('Overdue at receiver by');big=fmtRem(over);sub=trf('Expected %s',at);cls='bad'}
     else if(nx){var r=(nx.tf-d.p)*d.T,nm=vName(nx.i);
       if(r>=0){lab=trf('Next: %s in',nm);big=fmtRem(r)}else{lab=trf('%s expected, late by',nm);big=fmtRem(-r);cls='wrn'}
-      sub=tr('Receiver in %s, at %s').replace('%s',fmtRem(rem)).replace('%s',at)}
+      sub=trf('Arrives %s',at)+' · '+fmt(d.LL,d.LL<10?2:1)+' '+d.unit}
     else{lab=tr('Receiver in');big=fmtRem(rem);sub=trf('Arrives %s',at)}
     setTx('recName',S.name||'');setTx('recLab',lab);setTx('recBig',big);setTx('recSub',sub);$('recBig').className='recbig '+cls;
     $('recBar').style.width=Math.min(100,d.p*100)+'%';
+    setTx('recRem',fmtRem(rem));setTx('recCov',fmt(d.dd,1)+' '+d.unit);
+    var rail='',vs=d.g.valves.filter(function(v){return v.ok}).sort(function(a,b){return a.frac-b.frac});
+    vs.forEach(function(v,i){
+      var done=!!d.obs[v.i],next=!!(nx&&nx.i===v.i);
+      rail+=(i?'<i></i>':'')+'<div class="rst'+(done?' done':'')+(next?' next':'')+'"><span class="rd">'+(done?'✓':next?'●':'')+'</span><small>'+esc(vName(v.i))+'</small></div>';
+    });
+    rail+='<i></i><div class="rst'+(d.p>=1?' done':'')+'"><span class="rd">→</span><small>'+tr('Receiver')+'</small></div>';
+    $('recRail').innerHTML=rail;
+    var rr='',rx0=16,rx1=324,ry=24,rxp=rx0+(rx1-rx0)*d.p;
+    rr='<svg viewBox="0 0 340 60" role="img" aria-label="'+esc(S.name||'')+'"><line x1="'+rx0+'" y1="'+ry+'" x2="'+rx1+'" y2="'+ry+'" stroke="var(--line)" stroke-width="3" stroke-linecap="round"/><line x1="'+rx0+'" y1="'+ry+'" x2="'+rxp.toFixed(1)+'" y2="'+ry+'" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>';
+    vs.forEach(function(v){
+      var x=rx0+(rx1-rx0)*v.frac,next=!!(nx&&nx.i===v.i),done=!!d.obs[v.i];
+      rr+='<circle cx="'+x.toFixed(1)+'" cy="'+ry+'" r="4" fill="'+(done?'var(--good)':next?'var(--accent)':'var(--card)')+'" stroke="'+(done?'var(--good)':next?'var(--accent)':'var(--muted)')+'" stroke-width="1.5"/><text x="'+x.toFixed(1)+'" y="49" text-anchor="middle" font-size="8.5" fill="'+(next?'var(--accent)':'var(--muted)')+'" font-family="Segoe UI,system-ui,sans-serif">'+esc(vName(v.i))+'</text>';
+    });
+    rr+='<g transform="translate('+rxp.toFixed(1)+' '+(ry-7)+')"><rect x="-9" y="-2" width="18" height="5" rx="2.5" fill="var(--accent)"/><circle cx="0" cy="0" r="6" fill="var(--accent)" opacity=".18"/></g></svg>';
+    $('recRoute').innerHTML=rr;
     var k=null;Object.keys(obs).forEach(function(i){if(k===null||obs[i]>obs[k])k=i});
     setTx('recLastL',tr(k===null?'Launched':'Last recorded'));setTx('recLast',k===null?ovClk(d.base):vName(+k)+', '+ovClk(obs[k]));
     var ed=$('recEdit');ed.hidden=k===null;ed.dataset.i=k===null?'':k;
@@ -965,6 +995,7 @@
   }
   function applyOv(){
     var on=ovWanted(),was=OV.on;OV.on=on;document.body.classList.toggle('ov',on);
+    if(!on)document.body.classList.remove('ovnone');
     if(on!==was){
       OV.detail=false;document.body.classList.remove('ovd');closeHeaderPanels();applyDsk();applyLay();
       var c=curRun();
@@ -1002,7 +1033,9 @@
     var r=it.run,s=it.status,who=r.owner?r.owner.name:'',t=ovTag(r,s),sub=who;
     if(s.group==='now'&&s.state!=='unconfirmed')sub=(who?who+' · ':'')+ovLast(r);
     else if(s.state==='planned')sub=(who?who+' · ':'')+runDesc(r);
-    var h='<div class="ovw"><button type="button" class="ovr'+(r.id===CUR?' on':'')+'" data-id="'+esc2(r.id)+'"'+(r.id===CUR?' aria-current="true"':'')+'><span class="ovl"><b>'+esc2(r.name)+'</b><em class="'+t.cls+'">'+esc2(t.tag)+'</em></span><span class="ovl ovs"><span>'+esc2(sub)+'</span><i>'+esc2(t.right)+'</i></span></button>';
+    var pr=0,dur=r.dur||s.planned||0;
+    if(r.st==='done')pr=1;else if(r.st==='running'&&r.launch&&dur>0)pr=Math.max(0,Math.min(1,(Date.now()-r.launch)/dur));
+    var h='<div class="ovw"><button type="button" class="ovr'+(r.id===CUR?' on':'')+'" data-id="'+esc2(r.id)+'"'+(r.id===CUR?' aria-current="true"':'')+'><span class="ovl"><b>'+esc2(r.name)+'</b><em class="'+t.cls+'">'+esc2(t.tag)+'</em></span><span class="ovl ovs"><span>'+esc2(sub)+'</span><i>'+esc2(t.right)+'</i></span><span class="ovbar"><i style="width:'+(pr*100).toFixed(1)+'%"></i></span></button>';
     if(!OV.on&&r.params)h+='<button type="button" class="ovk" data-k="'+esc2(r.id)+'" aria-label="'+esc2(tr('More actions'))+'" aria-expanded="'+(OV.keb===r.id)+'">⋯</button>';
     if(!OV.on&&OV.keb===r.id){
       var mine=!r.team||(canWrite()&&(r.owner&&r.owner.uid===ME.uid||ROLE==='admin'));
@@ -1025,6 +1058,7 @@
     if(!list)list='<div class="hint ove">'+esc2(tr(q?'Nothing found.':none?(OV.on?'No team runs yet. They appear here as soon as an engineer creates one.':'No runs yet.'):OV.tab==='now'?'No runs in progress.':OV.tab==='planned'?'No planned runs.':'No finished runs.'))+'</div>';
     var chips=tabs.map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(OV.tab===t[0])+'">'+esc2(tr(t[1]))+' <b>'+o[t[0]].length+'</b></button>'}).join('');
     $('ovQ').placeholder=tr('Search runs');
+    var mt=$('ovMeta');if(mt)mt.textContent=(S.lang==='ru'?'Обновлено ':'Updated ')+new Date().toLocaleTimeString(S.lang==='ru'?'ru-RU':'en-GB',{hour:'2-digit',minute:'2-digit'});
     if(chips+list===ovSig)return;ovSig=chips+list;
     var ae=document.activeElement,foc=ae&&ae.closest&&ae.closest('#ovChips,#ovList')?(ae.dataset.id?'[data-id="'+ae.dataset.id+'"]':ae.dataset.tab?'[data-tab="'+ae.dataset.tab+'"]':null):null;
     $('ovChips').innerHTML=chips;$('ovList').innerHTML=list;
@@ -1074,24 +1108,35 @@
     setStage(s);
   });
   function syncRec(){document.body.classList.toggle('rec',REC.on&&UI.stage==='track')}
+  function placeStageBits(){
+    var s=UI.stage,dia=document.querySelector('.card.diag'),vs=$('vsec');
+    var home=s==='plan'?(isDesk()?dia:$('secValves')):dia;
+    if(home&&vs.parentNode!==home)home.appendChild(vs);
+    var main=document.querySelector('.main'),info=document.querySelector('.planp .info');
+    if(info&&main){
+      if(s==='plan'&&isDesk()){if(info.parentNode!==main)main.appendChild(info)}
+      else if(info.parentNode!==$('planPanel'))$('planPanel').insertBefore(info,$('inpPanel'));
+    }
+  }
   function setStage(s,quiet){
     if(!s)return;
     UI.stage=s;document.body.dataset.stage=s;document.body.classList.remove('dgv');
-    var dia=document.querySelector('.card.diag'),vs=$('vsec'),home=s==='plan'?$('secValves'):dia;
-    if(home&&vs.parentNode!==home)home.appendChild(vs);
+    placeStageBits();applyVw();
     if(s==='plan')vOpen(true);
-    var det=$('detPanel'),main=document.querySelector('.main'),dhome=s==='overview'?main:$('dock');
+    var main=document.querySelector('.main');
+    var det=$('detPanel'),dhome=s==='overview'?main:$('dock');
     if(det.parentNode!==dhome){if(s==='overview')main.insertBefore(det,main.firstChild);else dhome.appendChild(det)}
     var tp=$('teamPanel');
     if(s==='team'){$('teamHome').appendChild(tp);tp.classList.add('open','page');tp.style.cssText='';renderTeam()}
     else if(tp.classList.contains('page')){tp.classList.remove('open','page');document.querySelector('.hacctwrap').appendChild(tp);renderTeam()}
     closeHeaderPanels();syncRec();renderTabs();updShell();renderOv();
+    if(UI.ready)update();
     window.scrollTo(0,0);
     if(UI.ready&&!quiet){try{history.pushState({st:s},'')}catch(e){}}
   }
   function bootStage(){
     var c=curRun(),s=OV.on?'overview':REC.on?'track':(c&&c.st==='done'&&c.params)?'track':'plan';
-    setStage(s,true);UI.ready=true;
+    setStage(s,true);UI.ready=true;update();
     try{history.replaceState({st:s},'')}catch(e){}
   }
   window.addEventListener('popstate',function(e){
@@ -1120,6 +1165,15 @@
   function updPlan(){
     var v=$('vel').innerHTML;if($('plV').innerHTML!==v)$('plV').innerHTML=v;
     setTx('plD',$('dur').textContent);setTx('plA',$('tArrL').textContent+' '+$('tArr').textContent);
+    var g=window.__dg,L=CAT.lim,vv=g&&g.vavg;
+    if(vv>0){
+      var lo=L.vmin,hi=L.vmax,pc=Math.max(0,Math.min(100,(vv-lo)/(hi-lo)*100));
+      $('plG').hidden=false;$('plGMark').style.left=pc+'%';$('plGVal').style.left=pc+'%';setTx('plGVal',fmt(vv,2));
+      setTx('plGRange',fmt(lo,1)+'–'+fmt(hi,1)+' '+tr('m/s'));
+      var ok=vv>=lo&&vv<=hi;
+      setTx('plGFloat',ok?(S.lang==='ru'?'в допуске':'within limits'):(S.lang==='ru'?'вне допуска':'outside limits'));
+      $('plGFloat').className=ok?'':'bad';
+    }else $('plG').hidden=true;
     setTx('sum_pipe','Ø '+S.od+' '+tr('mm')+' × '+S.wt+' '+tr(['mm','inch'][+S.wtu]||'mm')+', '+S.len+' '+tr(['km','m'][+S.lenu]||'km'));
     setTx('sum_fluid',tr(['Gas','Oil','Oil + gas'][+S.fluid]||'Gas'));
     setTx('sum_cond',S.p+' '+tr(['kPa','MPa','psi','bar'][+S.pu]||'')+', '+S.t+' °C');
@@ -1162,6 +1216,19 @@
       rows+=detRow(tr('Last recorded'),ovLast(r));
       if(d.has){var nx=PSC.nextValve(d.g.valves,r.obs||{});if(nx)rows+=detRow(tr('Next valve'),vName(nx.i)+', '+ovClk(r.launch+nx.tf*dur))}
     }
+    var route='';
+    if(d.has){
+      var p= r.st==='done'?1:Math.max(0,Math.min(1,(now-r.launch)/(r.dur||s.planned||1)));
+      var x0=24,x1=776,y=32,xp=x0+(x1-x0)*p;
+      route='<svg viewBox="0 0 800 64" role="img" aria-label="'+esc2(r.name)+'"><line x1="'+x0+'" y1="'+y+'" x2="'+x1+'" y2="'+y+'" stroke="var(--line)" stroke-width="4" stroke-linecap="round"/><line x1="'+x0+'" y1="'+y+'" x2="'+xp.toFixed(1)+'" y2="'+y+'" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>';
+      d.g.valves.filter(function(v){return v.ok}).forEach(function(v){
+        var x=x0+(x1-x0)*v.frac,nx=d.nx&&d.nx.i===v.i;
+        route+='<line x1="'+x.toFixed(1)+'" y1="'+(y-10)+'" x2="'+x.toFixed(1)+'" y2="'+(y+10)+'" stroke="'+(nx?'var(--accent)':'var(--muted)')+'" stroke-width="2"/><circle cx="'+x.toFixed(1)+'" cy="'+y+'" r="5" fill="'+(nx?'var(--accent)':'#fff')+'" stroke="'+(nx?'var(--accent)':'var(--muted)')+'" stroke-width="2"/><text x="'+x.toFixed(1)+'" y="56" text-anchor="middle" font-size="9" fill="'+(nx?'var(--accent)':'var(--muted)')+'" font-family="Segoe UI,system-ui,sans-serif">'+esc2(vName(v.i))+'</text>';
+      });
+      route+='<g transform="translate('+xp.toFixed(1)+' '+(y-10)+')"><rect x="-11" y="-3" width="22" height="6" rx="3" fill="var(--accent)"/><circle cx="0" cy="0" r="7" fill="var(--accent)" opacity=".18"/></g></svg>';
+    }
+    if($('detRoute').dataset.sig!==route){$('detRoute').dataset.sig=route;$('detRoute').innerHTML=route}
+    $('detRoute').hidden=!route;
     if($('detRows').dataset.sig!==rows){$('detRows').dataset.sig=rows;$('detRows').innerHTML=rows}
     var isDone=r.st==='done';
     go.hidden=!(isDone&&!OV.on&&r.params);go.dataset.mode='new';if(!go.hidden)setTx('detGo',tr('New run from this'));
@@ -1171,7 +1238,8 @@
     if(!UI.stage)return;
     var st=UI.stage;
     renderTabs();
-    setTx('stT',st==='plan'||st==='track'?(S.name||''):tr({runs:'Runs',overview:'Overview',team:'Team'}[st]));
+    var mobHead=window.innerWidth<980;
+    setTx('stT',st==='plan'||st==='track'?(mobHead?(S.name||''):''):tr({runs:'Runs',overview:'Overview',team:'Team'}[st]));
     if(st==='plan')updPlan();
     updDet();
     var tk=$('tabTrk');if(tk){var run=window.__run,over=overMs();setTx('tabTrk',REC.on&&run&&!run.done?(over>0?'+'+ovHM(over):ovHM(run.launch+run.dur-Date.now())):'')}
@@ -1362,6 +1430,7 @@
     var d=isDesk(),v=1,h=document.documentElement;
     h.dataset.dsk=d?v:0;
     dskWrap(d&&v===2);
+    placeStageBits();
     if(d)$('vsec').classList.remove('vc');
     else try{vOpen(localStorage.getItem('pigSpeedCalc.vopen')==='1')}catch(e){}
   }

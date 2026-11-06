@@ -40,6 +40,13 @@ Past its estimate a real run keeps running and counts as overdue, for the engine
 ## Slices
 Done: manager overview, recording mode, confirmed arrivals, one look, rebuilt screens. Left: Settings as a page, clean-up of old layout code.
 
+## 1.27 workbench (2026-11-06)
+- **Chosen:** Plan opens on the whole line (Global; Route on phones), Track stays Local. The result carries a speed gauge and the catalogue checks become four readable rows: beside the diagram on desktop, under the result on phones.
+- **Recording:** next valve, one big action, two vitals (to receiver, covered), a valve rail, and a phone-only route strip. "Saved on this device" is shown, never a sync claim.
+- **Overview:** every run row gets a progress bar; the list says when it was updated; the detail gets a compact route.
+- **Phone:** the start button sits above the tab bar, the update banner is one line with a dismiss ×, and banners are hidden during a run.
+- **Rejected:** keeping Local as the Plan default (hides the line being planned); one long catalogue-check sentence; a third of the phone screen for the update banner.
+
 ## Left out of slice 1 on purpose
 - Warning for a valve expected but not recorded: a stuck pig shows On plan until overdue. Top candidate for the next round.
 - Project or customer grouping: runs have no such field.

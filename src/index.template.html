@@ -12,7 +12,12 @@
 <div class="updbar" id="updBar"><div class="updt"><b id="updTxt"></b><span id="updNotes"></span></div><div class="updb"><a class="add" id="updGo" href="#"><span>Update</span></a><button type="button" class="add" id="updLog">What's new</button><button type="button" class="link" id="updNo">Later</button></div></div>
 <div class="app">
   <header class="bar">
-    <div class="brand"><h1>Pig Speed Calculator</h1><span class="sub" id="title"></span><span class="stt" id="stT"></span></div>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="10" fill="#13263c"/><rect x="5" y="12" width="24" height="10" rx="5" fill="#dbe8fb"/><rect x="11" y="9" width="7" height="16" rx="3.5" fill="#1f5fd0"/><circle cx="22" cy="17" r="2" fill="#13263c"/><path d="M7 17h4" stroke="#8fb4ea" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span class="btxt"><h1>Pig Speed</h1><span class="tagline">in-line inspection</span></span>
+      <span class="bdiv"></span>
+      <span class="sub" id="title"></span><span class="stt" id="stT"></span>
+    </div>
     <nav class="tabbar" id="tabbar" aria-label="Screens"></nav>
     <div class="hacctwrap"><div id="acct" class="hacct"></div><div class="gpanel" id="acctMenu"></div><div class="gpanel wide" id="teamPanel"><div id="teamBox" class="teambox open"></div></div></div>
     <div class="annwrap"><button type="button" id="annBtn" class="sqb" style="display:none" title="Announcements" aria-label="Announcements"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="lb">News</span><i class="fabn" id="annN"></i></button><div class="gpanel wide" id="annPanel"></div></div>
@@ -66,8 +71,13 @@
     <aside class="dock" id="dock"><section class="card planp" id="planPanel">
       <div class="plres"><div><small>Pig speed</small><b id="plV">–</b></div><div><small>Estimated duration</small><b id="plD">–</b></div></div>
       <div class="plat" id="plA"></div>
+      <div class="plg" id="plG" hidden>
+        <div class="plg-track"><span class="plg-band"></span><b class="plg-val" id="plGVal"></b><span class="plg-mark" id="plGMark"></span></div>
+        <div class="plg-scale"><span>0,2</span><span>1,0</span><span>2,0</span><span>3,0</span><span>4,0 м/с</span></div>
+        <div class="plg-foot"><span id="plGRange"></span><b id="plGFloat"></b></div>
+      </div>
       <div class="warn" id="warn"></div>
-      <div class="info"><div class="cat" id="cat"></div></div>
+      <div class="info"><div class="cathead" data-en="Catalogue checks">Проверки каталога</div><div class="cat" id="cat"></div></div>
       <section class="card inp" id="inpPanel">
         <div class="prow" data-sec="pipe"><button type="button" class="prh" aria-expanded="false"><span class="prl">Pipe</span><span class="prv" id="sum_pipe"></span><i class="prc" aria-hidden="true"></i></button><div class="prb"><div class="fg">
         <div class="field full"><label for="name">Line name</label><input id="name" autocomplete="off"></div>
@@ -103,6 +113,7 @@
       <div class="dthd"><div><b id="detName"></b><small id="detWho"></small></div><span class="dttag" id="detTag"></span></div>
       <div class="reclab" id="detLab"></div><div class="recbig" id="detBig"></div><div class="recsub" id="detSub"></div>
       <div class="recbar" id="detBarW"><i id="detBar"></i></div>
+      <div class="detroute" id="detRoute"></div>
       <div class="dtrows" id="detRows"></div>
       <div class="dtbtns"><button type="button" class="plgo" id="detGo"></button><button type="button" class="add" id="detDiag"><span>Diagram and valves</span></button><button type="button" class="add" id="detPrint"><span>Print / PDF</span></button><button type="button" class="add" id="detCsv"><span>Download CSV</span></button></div>
     </section>
@@ -110,11 +121,18 @@
       <div class="rechd"><b id="recName"></b><div class="recmore"><button type="button" id="recMore" aria-expanded="false" aria-haspopup="true">⋯</button><div class="gpanel" id="recMenu"><button type="button" class="add rsm" data-m="diag"><span>Diagram and valves</span></button><button type="button" class="add rsm" data-m="par"><span>Parameters</span></button><button type="button" class="add rsm" data-m="runs"><span>Runs</span></button><button type="button" class="add rsm" data-m="set"><span>Settings</span></button><button type="button" class="add" data-m="dim"><span>Dim screen</span></button><button type="button" class="add recstop" data-m="stop"><span>Stop run</span></button></div></div></div>
       <div class="reclab" id="recLab"></div><div class="recbig" id="recBig"></div><div class="recsub" id="recSub"></div>
       <div class="recbar"><i id="recBar"></i></div>
+      <div class="recvitals">
+        <div><span data-en="To receiver">До приёмника</span><b id="recRem">–</b></div>
+        <div><span data-en="Covered">Пройдено</span><b id="recCov">–</b></div>
+      </div>
+      <div class="recrail" id="recRail"></div>
+      <div class="recroute" id="recRoute"></div>
       <div class="reclast"><div><small id="recLastL"></small><b id="recLast"></b></div><button type="button" class="link" id="recEdit">Edit</button></div>
+      <div class="recsync"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span data-en="Saved on this device">Сохранено на устройстве</span></div>
       <div class="recundo" id="recUndo" role="status"><span id="recUndoT"></span><button type="button" class="link" id="recUndoB">Undo</button></div>
       <button type="button" class="recgo" id="recGo"><b id="recGoL"></b><small id="recGoS"></small></button>
       <div class="rec2" id="rec2"><button type="button" class="add" id="recTime"><span id="recTimeL"></span></button><button type="button" class="add" id="recArr"><span>Arrived at receiver</span></button></div>
-    </section><section class="card ovp" id="ovPanel"><div class="ovtop"><input id="ovQ" type="search" autocomplete="off" aria-label="Search runs"><button type="button" class="add okb2" id="ovNew"><span>+ New run</span></button></div><div class="ovchips" id="ovChips"></div><div class="ovlist" id="ovList"></div></section></aside>
+    </section><section class="card ovp" id="ovPanel"><div class="ovtop"><input id="ovQ" type="search" autocomplete="off" aria-label="Search runs"><button type="button" class="add okb2" id="ovNew"><span>+ New run</span></button></div><div class="ovchips" id="ovChips"></div><div class="ovmeta" id="ovMeta"></div><div class="ovlist" id="ovList"></div></section></aside>
 
     <main class="main">
       
@@ -122,6 +140,7 @@
       <section class="card diag">
         <div class="fcus" id="fc"></div>
         <div class="dhead vbar">
+          <span class="dtitle" data-en="Line diagram">Схема линии</span>
           <div class="seg vsel" id="vsel"><button type="button" data-w="route">Route</button><button type="button" data-w="local">Local</button><button type="button" data-w="global">Global</button></div>
           
           <button type="button" id="lscBtn" class="lscb" aria-pressed="false" title="Real scale" aria-label="Real scale"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v6H3z"/><path d="M7 9v3M11 9v4M15 9v3M19 9v3"/></svg></button>
